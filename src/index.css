@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary-950: #021a13;
+  --color-primary-900: #062e24;
+  --color-primary-850: #063d30;
+  --color-primary-800: #064e3b;
+  --color-primary-700: #047857;
+  --color-primary-600: #059669;
+  --color-primary-500: #10b981;
+
+  --color-navy-950: #060d17;
+  --color-navy-900: #0b192c;
+  --color-navy-800: #13243c;
+
+  --color-gold-300: #fde68a;
+  --color-gold-400: #fbbf24;
+  --color-gold-500: #f59e0b;
+  --color-gold-600: #d4af37;
+  --color-gold-700: #b45309;
+
+  --color-cream-50: #fdfbf7;
+  --color-cream-100: #fbf7ee;
+  --color-cream-200: #f4ecdc;
+  --color-cream-300: #e8dbbf;
+  --color-cream-400: #d5c29a;
+
+  --font-amiri: 'Amiri', serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: #FDFBF7;
+    color: #1E293B;
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+  }
+}
+
+/* Islamic Geometric & Motif CSS Patterns */
+.bg-islamic-pattern {
+  background-image: radial-gradient(rgba(212, 175, 55, 0.12) 1px, transparent 1px), radial-gradient(rgba(6, 78, 59, 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+  background-position: 0 0, 12px 12px;
+}
+
+.bg-islamic-pattern-dark {
+  background-image: radial-gradient(rgba(212, 175, 55, 0.18) 1.2px, transparent 1.2px), radial-gradient(rgba(16, 185, 129, 0.1) 1.2px, transparent 1.2px);
+  background-size: 28px 28px;
+  background-position: 0 0, 14px 14px;
+}
+
+.bg-stars-pattern {
+  background-image: radial-gradient(#d4af37 0.75px, transparent 0.75px);
+  background-size: 18px 18px;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #FDFBF7;
+}
+::-webkit-scrollbar-thumb {
+  background: #064E3B;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #047857;
+}
