@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, MapPin, Phone, GraduationCap, ChevronRight } from 'lucide-react';
+import { Menu, X, GraduationCap, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SCHOOL_INFO } from '../data/schoolInfo';
 
@@ -11,6 +11,8 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ onOpenAdmissionModal }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [headerHeight, setHeaderHeight] = useState(64);
+  const headerRef = useRef<HTMLElement>(null);
   const location = useLocation();
 
   // Close mobile menu on route change
@@ -18,19 +20,54 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAdmissionModal }) => {
     setIsMobileMenuOpen(false);
   }, [location.pathname]);
 
-  // Track scroll for clean header shadow
+  // Update header height when scrolled or resized
+  useEffect(() => {
+    const updateHeight = () => {
+      if (headerRef.current) {
+        setHeaderHeight(headerRef.current.offsetHeight);
+      }
+    };
+    updateHeight();
+    window.addEventListener('resize', updateHeight);
+    return () => window.removeEventListener('resize', updateHeight);
+  }, [isScrolled]);
+
+  // Track scroll position for header background transition
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 15);
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Prevent background scrolling when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobileMenuOpen]);
+
+  // Close mobile menu on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isMobileMenuOpen) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isMobileMenuOpen]);
+
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'About', path: '/about' },
-    { name: 'Departments', path: '/departments' },
+    { name: 'Academics', path: '/departments', alias: ['/academics', '/departments'] },
     { name: 'Teachers', path: '/teachers' },
     { name: 'Students', path: '/students' },
     { name: 'Events', path: '/events' },
@@ -38,162 +75,179 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAdmissionModal }) => {
     { name: 'Contact', path: '/contact' },
   ];
 
+  const isLinkActive = (path: string, alias?: string[]) => {
+    if (path === '/') {
+      return location.pathname === '/';
+    }
+    if (alias && alias.some((a) => location.pathname === a || location.pathname.startsWith(a + '/'))) {
+      return true;
+    }
+    return location.pathname === path || location.pathname.startsWith(path + '/');
+  };
+
   return (
-    <header className="sticky top-0 z-40 w-full">
-      {/* 1. Sleek Top Notification / Location Strip */}
-      <div className="bg-[#0f3829] text-slate-200 text-[11px] py-1.5 px-4 sm:px-6 border-b border-[#1b5038]">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
-          <div className="flex items-center gap-2 text-emerald-200 truncate">
-            <MapPin className="w-3 h-3 text-[#c59b27] shrink-0" />
-            <span className="truncate">
-              {SCHOOL_INFO.location.area}, {SCHOOL_INFO.location.city}, Malappuram, Kerala (PIN: 676101)
-            </span>
+    <header
+      ref={headerRef}
+      className={`sticky top-0 z-50 w-full transition-all duration-300 ease-in-out ${
+        isScrolled
+          ? 'bg-white/98 backdrop-blur-md border-b border-[#ded8cc] shadow-[0_2px_12px_-2px_rgba(15,35,28,0.06)] py-2.5'
+          : 'bg-[#fbfaf7] border-b border-[#e5e0d5] py-3 sm:py-3.5'
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
+        {/* LEFT: School Logo & Institutional Identity */}
+        <Link
+          to="/"
+          aria-label={`${SCHOOL_INFO.officialName} (${SCHOOL_INFO.localName}) Home`}
+          className="flex items-center gap-3 group shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#164e37] rounded-lg p-1 -m-1"
+        >
+          {/* School Logo Placeholder Crest */}
+          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-lg bg-[#164e37] text-white flex items-center justify-center shrink-0 border border-[#c59b27]/60 shadow-2xs relative overflow-hidden transition-transform duration-300 group-hover:scale-105">
+            <svg viewBox="0 0 100 100" className="w-7 h-7 sm:w-8 sm:h-8" aria-hidden="true">
+              <circle cx="50" cy="50" r="46" fill="none" stroke="#c59b27" strokeWidth="2.5" strokeDasharray="3 2" />
+              <path
+                d="M24 64 C36 58, 45 61, 50 67 C55 61, 64 58, 76 64 L76 38 C64 34, 55 37, 50 43 C45 37, 36 34, 24 38 Z"
+                fill="#ffffff"
+              />
+              <circle cx="50" cy="27" r="5" fill="#c59b27" />
+              <circle cx="52" cy="26" r="4" fill="#164e37" />
+              <line x1="50" y1="43" x2="50" y2="67" stroke="#164e37" strokeWidth="2.5" />
+            </svg>
           </div>
 
-          <div className="hidden sm:flex items-center gap-4 text-slate-300 text-[11px]">
-            <span className="flex items-center gap-1">
-              <Phone className="w-2.5 h-2.5 text-[#c59b27]" />
-              <span>Office Desk: {SCHOOL_INFO.contact.phone}</span>
+          {/* School Name & Local Identifier */}
+          <div className="flex flex-col">
+            <span className="text-sm sm:text-base font-extrabold text-[#0f231c] tracking-tight leading-snug group-hover:text-[#164e37] transition-colors">
+              {SCHOOL_INFO.officialName}
             </span>
-            <span className="text-slate-500">•</span>
-            <Link
-              to="/students"
-              className="text-[#fde68a] hover:text-white font-medium flex items-center gap-1 transition-colors"
-            >
-              <GraduationCap className="w-3 h-3" />
-              <span>Student Portal</span>
-            </Link>
+            <span className="text-[11px] sm:text-xs text-[#164e37] font-medium leading-none tracking-wide mt-0.5">
+              {SCHOOL_INFO.localName}
+            </span>
           </div>
+        </Link>
+
+        {/* CENTER: Desktop Navigation */}
+        <nav
+          className="hidden lg:flex items-center gap-1 xl:gap-1.5"
+          aria-label="Main Navigation"
+          role="menubar"
+        >
+          {navLinks.map((link) => {
+            const active = isLinkActive(link.path, link.alias);
+            return (
+              <Link
+                key={link.name}
+                to={link.path}
+                role="menuitem"
+                aria-current={active ? 'page' : undefined}
+                className={`relative px-2.5 xl:px-3 py-1.5 rounded-md text-xs font-semibold tracking-wide transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#164e37] focus-visible:ring-offset-1 ${
+                  active
+                    ? 'text-[#164e37] bg-[#164e37]/8 font-bold'
+                    : 'text-slate-700 hover:text-[#164e37] hover:bg-[#164e37]/5'
+                }`}
+              >
+                <span>{link.name}</span>
+                {active && (
+                  <span
+                    aria-hidden="true"
+                    className="absolute bottom-0 left-2.5 right-2.5 h-[2px] bg-[#c59b27] rounded-full"
+                  />
+                )}
+              </Link>
+            );
+          })}
+        </nav>
+
+        {/* RIGHT: Primary Action & Mobile Toggle */}
+        <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+          {/* Admission Enquiry Primary Button */}
+          <button
+            type="button"
+            onClick={onOpenAdmissionModal}
+            className="hidden sm:inline-flex items-center gap-2 px-3.5 xl:px-4 py-2 bg-[#164e37] hover:bg-[#0f3b29] text-white text-xs font-bold rounded-lg border border-[#c59b27]/30 shadow-2xs hover:shadow-xs transition-all duration-200 group active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c59b27] focus-visible:ring-offset-2"
+          >
+            <GraduationCap className="w-3.5 h-3.5 text-[#c59b27] transition-transform duration-200 group-hover:scale-110" />
+            <span>Admission Enquiry</span>
+          </button>
+
+          {/* Mobile Hamburger Menu Toggle */}
+          <button
+            type="button"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-nav-panel"
+            className="lg:hidden p-2 rounded-lg text-slate-700 hover:text-[#164e37] hover:bg-[#164e37]/5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#164e37] focus-visible:ring-offset-1"
+          >
+            {isMobileMenuOpen ? <X className="w-6 h-6 text-[#164e37]" /> : <Menu className="w-6 h-6" />}
+          </button>
         </div>
       </div>
 
-      {/* 2. Unified Modern Navigation Bar */}
-      <nav
-        className={`w-full bg-white/95 backdrop-blur-md border-b border-[#e5e0d5] transition-all duration-300 ${
-          isScrolled ? 'shadow-sm py-2.5' : 'py-3.5'
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between gap-4">
-          {/* Modern Institutional Logo & Name Area */}
-          <Link to="/" className="flex items-center gap-3 group shrink-0">
-            {/* School Crest */}
-            <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-[#164e37] text-white flex items-center justify-center shrink-0 border border-[#c59b27] shadow-xs relative overflow-hidden transition-transform duration-300 group-hover:scale-105">
-              <svg viewBox="0 0 100 100" className="w-8 h-8">
-                <circle cx="50" cy="50" r="46" fill="none" stroke="#c59b27" strokeWidth="2" strokeDasharray="3 2" />
-                <path d="M24 64 C36 58, 45 61, 50 67 C55 61, 64 58, 76 64 L76 38 C64 34, 55 37, 50 43 C45 37, 36 34, 24 38 Z" fill="#ffffff" />
-                <circle cx="50" cy="27" r="5" fill="#c59b27" />
-                <circle cx="52" cy="26" r="4" fill="#164e37" />
-                <line x1="50" y1="43" x2="50" y2="67" stroke="#164e37" strokeWidth="2" />
-              </svg>
-            </div>
-
-            <div className="flex flex-col">
-              <span className="text-base sm:text-lg font-extrabold text-[#0f231c] tracking-tight leading-tight group-hover:text-[#164e37] transition-colors">
-                {SCHOOL_INFO.officialName}
-              </span>
-              <div className="flex items-center gap-1.5 text-[11px] text-[#164e37] font-medium leading-none mt-0.5">
-                <span>{SCHOOL_INFO.localName}</span>
-                <span className="text-slate-300">•</span>
-                <span className="text-slate-500 font-normal">ഷറഫിയ്യ കോരങ്ങത്ത്</span>
-              </div>
-            </div>
-          </Link>
-
-          {/* Desktop Navigation Links */}
-          <div className="hidden lg:flex items-center gap-1 xl:gap-2">
-            {navLinks.map((link) => {
-              const isActive = location.pathname === link.path;
-              return (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wide transition-all ${
-                    isActive
-                      ? 'text-[#164e37] bg-[#f4f1ea] font-bold'
-                      : 'text-slate-700 hover:text-[#164e37] hover:bg-slate-50'
-                  }`}
-                >
-                  {link.name}
-                </Link>
-              );
-            })}
-          </div>
-
-          {/* Header Action: Admission Enquiry Button */}
-          <div className="hidden sm:flex items-center gap-3">
-            <button
-              onClick={onOpenAdmissionModal}
-              className="px-4 py-2 bg-[#164e37] hover:bg-[#0f3b29] text-white text-xs font-bold rounded-lg shadow-xs transition-all flex items-center gap-2 group hover:shadow-sm"
-            >
-              <GraduationCap className="w-4 h-4 text-[#c59b27] transition-transform group-hover:scale-110" />
-              <span>Admission Enquiry</span>
-            </button>
-          </div>
-
-          {/* Mobile Menu Trigger Button */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle navigation menu"
-            className="lg:hidden p-2 rounded-lg text-slate-700 hover:text-[#164e37] hover:bg-slate-100 transition-colors focus:outline-none focus:ring-2 focus:ring-[#164e37]"
-          >
-            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
-        </div>
-      </nav>
-
-      {/* 3. Modern Animated Mobile Navigation Sheet */}
+      {/* MOBILE NAVIGATION DRAWER */}
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.25, ease: 'easeInOut' }}
-            className="lg:hidden w-full bg-white border-b border-[#e5e0d5] shadow-lg overflow-hidden"
+          <div
+            id="mobile-nav-panel"
+            style={{ top: `${headerHeight}px` }}
+            className="lg:hidden fixed inset-x-0 bottom-0 z-40 bg-black/40 backdrop-blur-none"
+            onClick={() => setIsMobileMenuOpen(false)}
           >
-            <div className="max-w-7xl mx-auto px-4 py-5 space-y-4">
-              {/* Mobile Navigation Links */}
-              <div className="grid grid-cols-2 gap-1.5">
-                {navLinks.map((link) => {
-                  const isActive = location.pathname === link.path;
-                  return (
-                    <Link
-                      key={link.path}
-                      to={link.path}
-                      className={`px-3 py-2.5 rounded-lg text-xs font-semibold flex items-center justify-between transition-colors ${
-                        isActive
-                          ? 'bg-[#164e37] text-white'
-                          : 'bg-[#fbfaf7] text-slate-700 hover:bg-[#f4f1ea]'
-                      }`}
-                    >
-                      <span>{link.name}</span>
-                      <ChevronRight className={`w-3 h-3 ${isActive ? 'text-white' : 'text-slate-400'}`} />
-                    </Link>
-                  );
-                })}
-              </div>
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
+              className="w-full bg-[#fbfaf7] border-b border-[#e5e0d5] shadow-xl max-h-[calc(100vh-64px)] overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5 space-y-4">
+                {/* Navigation Links list */}
+                <nav className="grid grid-cols-1 sm:grid-cols-2 gap-1.5" aria-label="Mobile Navigation">
+                  {navLinks.map((link) => {
+                    const active = isLinkActive(link.path, link.alias);
+                    return (
+                      <Link
+                        key={link.name}
+                        to={link.path}
+                        aria-current={active ? 'page' : undefined}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className={`px-3.5 py-3 rounded-lg text-xs font-semibold flex items-center justify-between transition-colors min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#164e37] ${
+                          active
+                            ? 'bg-[#164e37] text-white shadow-2xs font-bold'
+                            : 'bg-white text-slate-800 hover:bg-[#f4f1ea] border border-[#eee9df]'
+                        }`}
+                      >
+                        <span>{link.name}</span>
+                        <ChevronRight className={`w-3.5 h-3.5 ${active ? 'text-[#c59b27]' : 'text-slate-400'}`} />
+                      </Link>
+                    );
+                  })}
+                </nav>
 
-              {/* Mobile Admission Button */}
-              <div className="pt-2 border-t border-[#e5e0d5]">
-                <button
-                  onClick={() => {
-                    setIsMobileMenuOpen(false);
-                    onOpenAdmissionModal();
-                  }}
-                  className="w-full py-3 bg-[#164e37] hover:bg-[#0f3b29] text-white text-xs font-bold rounded-lg shadow-xs flex items-center justify-center gap-2"
-                >
-                  <GraduationCap className="w-4 h-4 text-[#c59b27]" />
-                  <span>Online Admission Enquiry</span>
-                </button>
-              </div>
+                {/* Admission Button in Drawer */}
+                <div className="pt-2 border-t border-[#e5e0d5] space-y-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      onOpenAdmissionModal();
+                    }}
+                    className="w-full py-3 px-4 bg-[#164e37] hover:bg-[#0f3b29] text-white text-xs font-bold rounded-lg border border-[#c59b27]/30 shadow-xs flex items-center justify-center gap-2 active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c59b27]"
+                  >
+                    <GraduationCap className="w-4 h-4 text-[#c59b27]" />
+                    <span>Admission Enquiry</span>
+                  </button>
 
-              {/* Quick Contact info in mobile drawer */}
-              <div className="pt-2 text-[11px] text-slate-500 flex justify-between items-center px-1">
-                <span>Office: {SCHOOL_INFO.contact.phone}</span>
-                <span>Korangath, Tirur</span>
+                  {/* Institution Location Subtitle */}
+                  <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1 px-1">
+                    <span className="font-medium text-slate-700">Sharafiyya Korangath</span>
+                    <span>Korangath, Tirur, Malappuram</span>
+                  </div>
+                </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </header>

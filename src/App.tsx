@@ -61,6 +61,7 @@ export function App() {
             <Route path="/" element={<Home onOpenAdmissionModal={handleOpenAdmissionModal} />} />
             <Route path="/about" element={<About onOpenAdmissionModal={handleOpenAdmissionModal} />} />
             <Route path="/departments" element={<Departments onOpenAdmissionModal={handleOpenAdmissionModal} />} />
+            <Route path="/academics" element={<Departments onOpenAdmissionModal={handleOpenAdmissionModal} />} />
             <Route path="/teachers" element={<Teachers />} />
             <Route path="/students" element={<Students onOpenAdmissionModal={handleOpenAdmissionModal} />} />
             <Route path="/events" element={<Events />} />
