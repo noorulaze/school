@@ -36,7 +36,7 @@ export const Contact: React.FC<ContactProps> = ({ onOpenAdmissionModal }) => {
     <div className="w-full flex flex-col bg-[#fbfaf7] text-slate-800">
       {/* 1. Page Header */}
       <section className="bg-white border-b border-[#e5e0d5] py-6 sm:py-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
           <div className="flex items-center gap-2 text-xs text-slate-500 mb-2">
             <Link to="/" className="hover:text-[#164e37]">Home</Link>
             <span>/</span>
@@ -55,7 +55,7 @@ export const Contact: React.FC<ContactProps> = ({ onOpenAdmissionModal }) => {
       </section>
 
       {/* 2. Main Content (Two-Column Layout) */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-8 sm:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-10">
           {/* Left Column: Official Administrative Details & Placeholders */}
           <div className="lg:col-span-5 space-y-4 sm:space-y-6">

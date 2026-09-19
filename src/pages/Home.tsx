@@ -110,14 +110,14 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
           </svg>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
-            {/* LEFT SIDE: Modern Editorial Content */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 relative z-10">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10 lg:gap-12 xl:gap-14 items-center">
+            {/* LEFT SIDE: Modern Editorial Content (~45% on desktop) */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease: 'easeOut' }}
-              className="lg:col-span-7 space-y-4 sm:space-y-6"
+              className="md:col-span-6 lg:col-span-5 space-y-4 sm:space-y-6"
             >
               {/* Eyebrow */}
               <div className="flex items-center gap-2">
@@ -128,7 +128,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
               </div>
 
               {/* Large Responsive Heading */}
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#0f231c] tracking-tight leading-[1.14]">
+              <h1 className="text-3xl sm:text-4xl md:text-3xl lg:text-5xl xl:text-5xl font-extrabold text-[#0f231c] tracking-tight leading-[1.14]">
                 Learning. Character. <span className="text-[#164e37]">Faith.</span>
               </h1>
 
@@ -137,7 +137,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
                 Dedicated to providing authentic Quranic recitation, Islamic studies, and disciplined moral education for young learners in a welcoming, character-building environment at Korangath, Tirur.
               </p>
 
-              {/* Action Buttons with comfortable touch UX */}
+              {/* Action Buttons with comfortable touch & desktop UX */}
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 pt-1 sm:pt-2">
                 <Link
                   to="/about"
@@ -158,15 +158,15 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
               </div>
             </motion.div>
 
-            {/* RIGHT SIDE: Natural Rectangular Image with Safe Floating Info Element */}
+            {/* RIGHT SIDE: Natural Rectangular Image (~55% on desktop) with Safe Floating Info Element */}
             <motion.div
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.55, delay: 0.15, ease: 'easeOut' }}
-              className="lg:col-span-5 relative mt-2 lg:mt-0 pb-6 sm:pb-8 lg:pb-0"
+              className="md:col-span-6 lg:col-span-7 relative mt-2 md:mt-0 pb-6 sm:pb-8 lg:pb-0"
             >
               {/* Natural Image Composition */}
-              <div className="max-h-[260px] sm:max-h-none overflow-hidden rounded-xl">
+              <div className="max-h-[260px] sm:max-h-[340px] md:max-h-none overflow-hidden rounded-xl">
                 <RealisticImageSlot
                   scene="campus"
                   aspectRatio="16/10"
@@ -181,7 +181,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.45, delay: 0.3, ease: 'easeOut' }}
-                className="absolute -bottom-3 left-2 sm:-bottom-5 sm:-left-4 bg-white border border-[#d2cabb] rounded-xl px-3 sm:px-4 py-2 sm:py-3 shadow-md z-20 flex items-center gap-2.5 sm:gap-3 max-w-[calc(100%-16px)]"
+                className="absolute -bottom-3 left-2 sm:-bottom-4 sm:left-2 md:-bottom-4 md:-left-3 lg:-bottom-5 lg:-left-4 bg-white border border-[#d2cabb] rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 lg:py-3 shadow-md z-20 flex items-center gap-2.5 sm:gap-3 max-w-[calc(100%-16px)]"
               >
                 <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-[#f4f1ea] border border-[#d2cabb] flex items-center justify-center shrink-0 text-[#164e37]">
                   <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#c59b27]" />
@@ -202,8 +202,8 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
 
       {/* 3. QUICK INFORMATION SECTION (Clean 5-Item Grid without dangling card) */}
       <section className="bg-[#f4f1ea] border-b border-[#e5e0d5] py-4 sm:py-5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-2 sm:gap-3">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-2 sm:gap-3 lg:gap-4">
             {[
               {
                 title: 'About Institution',
@@ -245,7 +245,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
               // 5th item spans full width on 2-col mobile to prevent single dangling element
               const spanClass = idx === 4 ? 'col-span-2 md:col-span-1' : 'col-span-1';
               const content = (
-                <div className="p-2.5 sm:p-3.5 bg-white rounded-xl border border-[#e5e0d5] hover:border-[#164e37] hover:shadow-xs transition-all flex items-center gap-2.5 sm:gap-3 text-left min-h-[44px]">
+                <div className="p-2.5 sm:p-3.5 bg-white rounded-xl border border-[#e5e0d5] hover:border-[#164e37] hover:shadow-xs transition-all flex items-center gap-2.5 sm:gap-3 text-left min-h-[44px] h-full">
                   <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-[#f4f1ea] text-[#164e37] flex items-center justify-center shrink-0">
                     <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#164e37]" />
                   </div>
@@ -284,10 +284,10 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
       </section>
 
       {/* 4. ABOUT PREVIEW (Modern Editorial 2-Column Section) */}
-      <section className="py-14 lg:py-20 bg-white border-b border-[#e5e0d5]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-            {/* Left: Large School/Classroom Image Placeholder (stacks on top on mobile) */}
+      <section className="py-12 md:py-16 lg:py-20 bg-white border-b border-[#e5e0d5]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-10 lg:gap-14 items-center">
+            {/* Left: Large School/Classroom Image Placeholder */}
             <motion.div
               initial={{ opacity: 0, y: 14 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -310,7 +310,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.45, delay: 0.12, ease: 'easeOut' }}
-              className="lg:col-span-6 space-y-6"
+              className="lg:col-span-6 space-y-5 sm:space-y-6"
             >
               {/* Eyebrow */}
               <div className="flex items-center gap-2">
@@ -331,7 +331,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
               </p>
 
               {/* Three Information Points */}
-              <div className="space-y-4 pt-1">
+              <div className="space-y-3.5 sm:space-y-4 pt-1">
                 <div className="border-l-2 border-[#164e37] pl-3.5 py-0.5">
                   <h3 className="text-xs sm:text-sm font-bold text-slate-900">
                     Islamic Education
@@ -364,7 +364,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
               <div className="pt-2">
                 <Link
                   to="/about"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#164e37] hover:bg-[#0f3b29] text-white text-xs sm:text-sm font-bold rounded-lg transition-colors group shadow-xs"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#164e37] hover:bg-[#0f3b29] text-white text-xs sm:text-sm font-bold rounded-lg transition-colors group shadow-xs min-h-[44px]"
                 >
                   <span>Learn More</span>
                   <ArrowRight className="w-3.5 h-3.5 text-[#c59b27] transition-transform group-hover:translate-x-1" />
@@ -376,7 +376,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
       </section>
 
       {/* 5. ACADEMIC PROGRAMS & LEARNING AREAS (Modern Editorial Layout) */}
-      <section className="relative overflow-hidden py-14 lg:py-20 bg-[#fbfaf7] border-b border-[#e5e0d5]">
+      <section className="relative overflow-hidden py-12 md:py-16 lg:py-20 bg-[#fbfaf7] border-b border-[#e5e0d5]">
         {/* Subtle Islamic geometric pattern in the background only */}
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none select-none overflow-hidden">
           <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
@@ -391,9 +391,9 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
           </svg>
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
           {/* Section Header */}
-          <div className="max-w-3xl mb-10 sm:mb-12">
+          <div className="max-w-3xl mb-8 sm:mb-10 lg:mb-12">
             <div className="flex items-center gap-2 mb-2">
               <span className="h-px w-5 bg-[#c59b27]"></span>
               <span className="text-[11px] font-bold uppercase tracking-widest text-[#164e37]">
@@ -406,7 +406,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
             <p className="text-sm sm:text-base text-slate-600 mt-2.5 font-normal leading-relaxed">
               An educational environment that brings together Islamic learning, language, knowledge and student development.
             </p>
-            <div className="mt-4 flex flex-wrap items-center gap-2">
+            <div className="mt-3.5 flex flex-wrap items-center gap-2">
               <PlaceholderBadge label="Editable Placeholder Categories" size="sm" />
               <span className="text-xs text-slate-500 italic">
                 These are editable placeholder categories. Official syllabus and departments will be updated upon institutional confirmation.
@@ -414,7 +414,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
             </div>
           </div>
 
-          {/* 4 Learning Areas - Modern Editorial Layout */}
+          {/* 4 Learning Areas - 2 cols on tablet, 4 cols on desktop */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
             {[
               {
@@ -445,11 +445,11 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
               <Link
                 key={item.number}
                 to="/departments"
-                className="group relative flex flex-col justify-between p-6 sm:p-7 bg-white/80 hover:bg-white rounded-lg border border-[#e5e0d5] hover:border-[#164e37]/40 hover:shadow-xs transition-all duration-200"
+                className="group relative flex flex-col justify-between p-5 sm:p-6 lg:p-7 bg-white/80 hover:bg-white rounded-xl border border-[#e5e0d5] hover:border-[#164e37]/40 hover:shadow-xs transition-all duration-200 h-full"
               >
                 <div>
                   {/* Top Bar: Number & Subtle Small Visual Mark */}
-                  <div className="flex items-center justify-between pb-4 mb-4 border-b border-[#eee9df]">
+                  <div className="flex items-center justify-between pb-3.5 mb-3.5 border-b border-[#eee9df]">
                     <span className="text-2xl sm:text-3xl font-serif font-bold text-[#164e37] tracking-tight">
                       {item.number}
                     </span>
@@ -469,8 +469,8 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
                   </p>
                 </div>
 
-                {/* Subtle Hover Interaction: Revealing small "Explore" indicator */}
-                <div className="pt-4 mt-6 border-t border-[#f0ece3] flex items-center justify-between text-xs font-semibold">
+                {/* Subtle Hover Interaction */}
+                <div className="pt-3.5 mt-5 border-t border-[#f0ece3] flex items-center justify-between text-xs font-semibold">
                   <span className="text-slate-500 group-hover:text-[#164e37] transition-colors">
                     Curriculum Area
                   </span>
@@ -486,10 +486,10 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
           </div>
 
           {/* Button Below */}
-          <div className="mt-10 sm:mt-12 text-center">
+          <div className="mt-8 sm:mt-10 lg:mt-12 text-center">
             <Link
               to="/departments"
-              className="inline-flex items-center gap-2 px-6 py-2.5 bg-[#164e37] hover:bg-[#0f3b29] text-white text-xs sm:text-sm font-semibold rounded-lg transition-colors group shadow-xs"
+              className="inline-flex items-center gap-2 px-6 py-2.5 bg-[#164e37] hover:bg-[#0f3b29] text-white text-xs sm:text-sm font-semibold rounded-lg transition-colors group shadow-xs min-h-[44px]"
             >
               <span>Explore Academics</span>
               <ArrowRight className="w-3.5 h-3.5 text-[#c59b27] transition-transform group-hover:translate-x-1" />
@@ -499,8 +499,8 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
       </section>
 
       {/* 6. NOTICE BOARD / LATEST UPDATES (Modern Horizontal Editorial Notice Section) */}
-      <section className="py-14 lg:py-18 bg-white border-b border-[#e5e0d5]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+      <section className="py-12 md:py-16 lg:py-18 bg-white border-b border-[#e5e0d5]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
           {/* Section Header */}
           <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 sm:mb-10 gap-4">
             <div>
@@ -522,7 +522,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
               <PlaceholderBadge label="Editable Notices" size="sm" />
               <Link
                 to="/events"
-                className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 bg-[#f4f1ea] hover:bg-[#eae5d9] text-[#164e37] text-xs font-bold rounded-lg border border-[#d2cabb] transition-colors group"
+                className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 bg-[#f4f1ea] hover:bg-[#eae5d9] text-[#164e37] text-xs font-bold rounded-lg border border-[#d2cabb] transition-colors group min-h-[40px]"
               >
                 <span>View All Notices</span>
                 <ArrowRight className="w-3.5 h-3.5 text-[#c59b27] transition-transform group-hover:translate-x-1" />
@@ -530,7 +530,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
             </div>
           </div>
 
-          {/* Horizontal Editorial Notice Grid: Desktop (3-col horizontal), Tablet (2-col), Mobile (vertical list) */}
+          {/* Horizontal Editorial Notice Grid: Desktop (3-col horizontal), Tablet (2-col balanced), Mobile (vertical list) */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
             {[
               {
@@ -540,6 +540,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
                 title: 'Academic Notice',
                 description: 'Important academic announcements will appear here. Regular examination timetables, syllabus progressions, and term schedules are posted by the office.',
                 badgeStyle: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+                colSpan: 'col-span-1',
               },
               {
                 id: 'notice-2',
@@ -548,6 +549,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
                 title: 'Admission Update',
                 description: 'Admission-related information will be updated here. Application forms, intake schedules, and enrollment guidelines for upcoming batches will be confirmed here.',
                 badgeStyle: 'bg-blue-50 text-blue-800 border-blue-200',
+                colSpan: 'col-span-1',
               },
               {
                 id: 'notice-3',
@@ -556,12 +558,13 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
                 title: 'Institution Notice',
                 description: 'Important notices and announcements will appear here. General circulars, institutional schedules, and parent-teacher updates will be communicated here.',
                 badgeStyle: 'bg-amber-50 text-amber-800 border-amber-200',
+                colSpan: 'col-span-1 md:col-span-2 lg:col-span-1',
               },
             ].map((notice) => (
               <Link
                 key={notice.id}
                 to="/events"
-                className="group relative flex flex-col justify-between p-5 sm:p-6 bg-[#fbfaf7] hover:bg-white rounded-lg border border-[#e5e0d5] hover:border-[#164e37]/40 hover:shadow-xs transition-all duration-200"
+                className={`group relative flex flex-col justify-between p-5 sm:p-6 bg-[#fbfaf7] hover:bg-white rounded-xl border border-[#e5e0d5] hover:border-[#164e37]/40 hover:shadow-xs transition-all duration-200 h-full ${notice.colSpan}`}
               >
                 <div>
                   {/* Category & Date Placeholder Header */}
@@ -586,7 +589,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
                 </div>
 
                 {/* Arrow / Read More Indicator */}
-                <div className="pt-4 mt-5 border-t border-[#eee9df] flex items-center justify-between text-xs font-semibold">
+                <div className="pt-3.5 mt-5 border-t border-[#eee9df] flex items-center justify-between text-xs font-semibold">
                   <span className="text-slate-500 group-hover:text-[#164e37] transition-colors">
                     Official Notice
                   </span>
@@ -603,7 +606,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
           <div className="mt-8 sm:mt-10 text-center sm:hidden">
             <Link
               to="/events"
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#f4f1ea] hover:bg-[#eae5d9] text-[#164e37] text-xs sm:text-sm font-bold rounded-lg border border-[#d2cabb] transition-colors group shadow-xs"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#f4f1ea] hover:bg-[#eae5d9] text-[#164e37] text-xs sm:text-sm font-bold rounded-lg border border-[#d2cabb] transition-colors group shadow-xs min-h-[44px]"
             >
               <span>View All Notices</span>
               <ArrowRight className="w-3.5 h-3.5 text-[#c59b27] transition-transform group-hover:translate-x-1" />
@@ -613,8 +616,8 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
       </section>
 
       {/* 7. EVENTS & PROGRAMS (Modern Editorial Asymmetric Layout) */}
-      <section className="py-14 lg:py-20 bg-[#fbfaf7] border-b border-[#e5e0d5]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+      <section className="py-12 md:py-16 lg:py-20 bg-[#fbfaf7] border-b border-[#e5e0d5]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
           {/* Header Row */}
           <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 sm:mb-10 gap-4">
             <div>
@@ -636,7 +639,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
               <PlaceholderBadge label="Editable Events" size="sm" />
               <Link
                 to="/events"
-                className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 bg-white hover:bg-[#f4f1ea] text-[#164e37] text-xs font-bold rounded-lg border border-[#d2cabb] transition-colors group shadow-2xs"
+                className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 bg-white hover:bg-[#f4f1ea] text-[#164e37] text-xs font-bold rounded-lg border border-[#d2cabb] transition-colors group shadow-2xs min-h-[40px]"
               >
                 <span>View All Events</span>
                 <ArrowRight className="w-3.5 h-3.5 text-[#c59b27] transition-transform group-hover:translate-x-1" />
@@ -645,12 +648,12 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
           </div>
 
           {/* Editorial Asymmetric Layout: Left = 1 Large Featured, Right = 2 Smaller Stacked */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
             {/* Left: Featured Event Placeholder (Large) */}
             <div className="lg:col-span-7 flex">
               <Link
                 to="/events"
-                className="group relative w-full flex flex-col justify-between bg-white rounded-lg border border-[#e5e0d5] hover:border-[#164e37]/40 hover:shadow-xs transition-all duration-200 overflow-hidden"
+                className="group relative w-full flex flex-col justify-between bg-white rounded-xl border border-[#e5e0d5] hover:border-[#164e37]/40 hover:shadow-xs transition-all duration-200 overflow-hidden"
               >
                 {/* Image Container with Subtle Zoom */}
                 <div className="overflow-hidden bg-[#f4f1ea]">
@@ -665,7 +668,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
                 </div>
 
                 {/* Content Details */}
-                <div className="p-6 sm:p-7 flex-1 flex flex-col justify-between">
+                <div className="p-5 sm:p-6 lg:p-7 flex-1 flex flex-col justify-between">
                   <div>
                     {/* Metadata */}
                     <div className="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b border-[#eee9df]">
@@ -703,25 +706,25 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
               </Link>
             </div>
 
-            {/* Right: 2 Smaller Secondary Event Items */}
-            <div className="lg:col-span-5 flex flex-col justify-between gap-5 sm:gap-6">
+            {/* Right: 2 Smaller Secondary Event Items (side by side on tablet, stacked on desktop) */}
+            <div className="lg:col-span-5 flex flex-col sm:flex-row lg:flex-col justify-between gap-5 sm:gap-6">
               {/* Secondary Event 1: Student Activity */}
               <Link
                 to="/events"
-                className="group relative flex-1 flex flex-col sm:flex-row bg-white rounded-lg border border-[#e5e0d5] hover:border-[#164e37]/40 hover:shadow-xs transition-all duration-200 overflow-hidden"
+                className="group relative flex-1 flex flex-col bg-white rounded-xl border border-[#e5e0d5] hover:border-[#164e37]/40 hover:shadow-xs transition-all duration-200 overflow-hidden"
               >
-                <div className="sm:w-2/5 overflow-hidden bg-[#f4f1ea] shrink-0">
+                <div className="overflow-hidden bg-[#f4f1ea] shrink-0">
                   <div className="h-full transform transition-transform duration-500 ease-out group-hover:scale-[1.03]">
                     <RealisticImageSlot
                       scene="activities"
-                      aspectRatio="4/3"
+                      aspectRatio="16/10"
                       label="Student Activity Photo Placeholder"
                       caption="Student co-curricular activity and study circle"
                     />
                   </div>
                 </div>
 
-                <div className="p-4 sm:p-5 sm:w-3/5 flex flex-col justify-between">
+                <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
                   <div>
                     <div className="flex items-center justify-between gap-2 pb-2 mb-2 border-b border-[#eee9df]">
                       <span className="text-[10px] font-semibold px-2 py-0.5 rounded border bg-blue-50 text-blue-800 border-blue-200">
@@ -753,20 +756,20 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
               {/* Secondary Event 2: Islamic Learning Program */}
               <Link
                 to="/events"
-                className="group relative flex-1 flex flex-col sm:flex-row bg-white rounded-lg border border-[#e5e0d5] hover:border-[#164e37]/40 hover:shadow-xs transition-all duration-200 overflow-hidden"
+                className="group relative flex-1 flex flex-col bg-white rounded-xl border border-[#e5e0d5] hover:border-[#164e37]/40 hover:shadow-xs transition-all duration-200 overflow-hidden"
               >
-                <div className="sm:w-2/5 overflow-hidden bg-[#f4f1ea] shrink-0">
+                <div className="overflow-hidden bg-[#f4f1ea] shrink-0">
                   <div className="h-full transform transition-transform duration-500 ease-out group-hover:scale-[1.03]">
                     <RealisticImageSlot
                       scene="quran_study"
-                      aspectRatio="4/3"
+                      aspectRatio="16/10"
                       label="Educational Event Photo Placeholder"
                       caption="Structured Islamic study session and Quranic learning circle"
                     />
                   </div>
                 </div>
 
-                <div className="p-4 sm:p-5 sm:w-3/5 flex flex-col justify-between">
+                <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
                   <div>
                     <div className="flex items-center justify-between gap-2 pb-2 mb-2 border-b border-[#eee9df]">
                       <span className="text-[10px] font-semibold px-2 py-0.5 rounded border bg-amber-50 text-amber-800 border-amber-200">
@@ -798,10 +801,10 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
           </div>
 
           {/* View All Events Button Below */}
-          <div className="mt-10 sm:mt-12 text-center">
+          <div className="mt-8 sm:mt-10 lg:mt-12 text-center">
             <Link
               to="/events"
-              className="inline-flex items-center gap-2 px-6 py-2.5 bg-[#164e37] hover:bg-[#0f3b29] text-white text-xs sm:text-sm font-semibold rounded-lg transition-colors group shadow-xs"
+              className="inline-flex items-center gap-2 px-6 py-2.5 bg-[#164e37] hover:bg-[#0f3b29] text-white text-xs sm:text-sm font-semibold rounded-lg transition-colors group shadow-xs min-h-[44px]"
             >
               <span>View All Events</span>
               <ArrowRight className="w-3.5 h-3.5 text-[#c59b27] transition-transform group-hover:translate-x-1" />
@@ -812,7 +815,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
 
       {/* 8. GALLERY SECTION (Modern Asymmetric Editorial Gallery) */}
       <section className="py-14 lg:py-20 bg-white border-b border-[#e5e0d5]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
           {/* Header Row */}
           <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 sm:mb-10 gap-4">
             <div>
@@ -1097,7 +1100,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
           </svg>
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
             {/* LEFT COLUMN: Headings, Description, CTA */}
             <motion.div
@@ -1310,7 +1313,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
 
       {/* 10. CONTACT & ADMISSION ENQUIRY SECTION (Modern Two-Column Area) */}
       <section className="py-16 lg:py-24 bg-white border-b border-[#e5e0d5]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
             {/* Left Column: Heading, Context, Placeholders, Map Slot */}
             <div className="lg:col-span-5 space-y-6">

@@ -16,7 +16,7 @@ export const Teachers: React.FC = () => {
     <div className="w-full flex flex-col bg-[#fbfaf7] text-slate-800">
       {/* 1. Page Header */}
       <section className="bg-white border-b border-[#e5e0d5] py-6 sm:py-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
           <div className="flex items-center gap-2 text-xs text-slate-500 mb-2">
             <Link to="/" className="hover:text-[#164e37]">Home</Link>
             <span>/</span>
@@ -35,7 +35,7 @@ export const Teachers: React.FC = () => {
       </section>
 
       {/* 2. Institutional Compliance & Non-Fabrication Notice */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-5 sm:pt-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 pt-5 sm:pt-8">
         <div className="p-3.5 sm:p-4 bg-amber-50/80 border border-amber-200 rounded-xl flex items-start gap-3 text-xs text-amber-950">
           <ShieldAlert className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
           <div className="space-y-1">
@@ -51,12 +51,12 @@ export const Teachers: React.FC = () => {
 
       {/* 3. Modern Faculty Directory Layout */}
       <section className="py-6 sm:py-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 items-stretch">
             {TEACHERS.map((slot) => (
               <div
                 key={slot.id}
-                className="bg-white rounded-xl sm:rounded-2xl border border-[#e5e0d5] p-4 sm:p-6 shadow-2xs hover:border-[#164e37] transition-all flex flex-col justify-between space-y-4"
+                className="bg-white rounded-xl sm:rounded-2xl border border-[#e5e0d5] p-4 sm:p-6 shadow-2xs hover:border-[#164e37] transition-all flex flex-col justify-between h-full space-y-4"
               >
                 <div className="space-y-3.5 sm:space-y-4">
                   {/* Portrait Placeholder with Dignified Silhouette */}
@@ -101,7 +101,7 @@ export const Teachers: React.FC = () => {
 
       {/* 4. Faculty Standards & Pedagogical Governance */}
       <section className="py-8 sm:py-12 bg-white border-t border-[#e5e0d5]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
           <div className="max-w-3xl mb-6 sm:mb-8">
             <span className="text-xs font-bold text-[#164e37] uppercase tracking-wider block mb-1">
               Teaching Governance
@@ -114,29 +114,35 @@ export const Teachers: React.FC = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-4 text-xs">
-            <div className="p-4 sm:p-5 rounded-xl bg-[#fbfaf7] border border-[#e5e0d5] space-y-2">
-              <Award className="w-5 h-5 text-[#164e37]" />
-              <h4 className="text-sm font-bold text-slate-900">Recognized Certification</h4>
-              <p className="text-slate-600 leading-relaxed">
-                Faculty holds formal credentials from recognized Islamic education boards in Kerala with verified Sanad.
-              </p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-4 text-xs items-stretch">
+            <div className="p-4 sm:p-5 rounded-xl bg-[#fbfaf7] border border-[#e5e0d5] flex flex-col justify-between h-full space-y-2">
+              <div>
+                <Award className="w-5 h-5 text-[#164e37] mb-2" />
+                <h4 className="text-sm font-bold text-slate-900">Recognized Certification</h4>
+                <p className="text-slate-600 leading-relaxed mt-1">
+                  Faculty holds formal credentials from recognized Islamic education boards in Kerala with verified Sanad.
+                </p>
+              </div>
             </div>
 
-            <div className="p-4 sm:p-5 rounded-xl bg-[#fbfaf7] border border-[#e5e0d5] space-y-2">
-              <BookOpen className="w-5 h-5 text-[#164e37]" />
-              <h4 className="text-sm font-bold text-slate-900">Tajweed Proficiency</h4>
-              <p className="text-slate-600 leading-relaxed">
-                Thorough grounding in Qira’at rules to train children in correct, melodious Quranic articulation.
-              </p>
+            <div className="p-4 sm:p-5 rounded-xl bg-[#fbfaf7] border border-[#e5e0d5] flex flex-col justify-between h-full space-y-2">
+              <div>
+                <BookOpen className="w-5 h-5 text-[#164e37] mb-2" />
+                <h4 className="text-sm font-bold text-slate-900">Tajweed Proficiency</h4>
+                <p className="text-slate-600 leading-relaxed mt-1">
+                  Thorough grounding in Qira’at rules to train children in correct, melodious Quranic articulation.
+                </p>
+              </div>
             </div>
 
-            <div className="p-4 sm:p-5 rounded-xl bg-[#fbfaf7] border border-[#e5e0d5] space-y-2">
-              <Calendar className="w-5 h-5 text-[#164e37]" />
-              <h4 className="text-sm font-bold text-slate-900">Parental Consultations</h4>
-              <p className="text-slate-600 leading-relaxed">
-                Muallims are accessible to parents for quarterly feedback during designated consultation hours.
-              </p>
+            <div className="p-4 sm:p-5 rounded-xl bg-[#fbfaf7] border border-[#e5e0d5] flex flex-col justify-between h-full space-y-2">
+              <div>
+                <Calendar className="w-5 h-5 text-[#164e37] mb-2" />
+                <h4 className="text-sm font-bold text-slate-900">Parental Consultations</h4>
+                <p className="text-slate-600 leading-relaxed mt-1">
+                  Muallims are accessible to parents for quarterly feedback during designated consultation hours.
+                </p>
+              </div>
             </div>
           </div>
         </div>

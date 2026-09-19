@@ -19,7 +19,7 @@ export const Events: React.FC = () => {
     <div className="w-full flex flex-col bg-[#fbfaf7] text-slate-800">
       {/* 1. Page Header */}
       <section className="bg-white border-b border-[#e5e0d5] py-6 sm:py-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
           <div className="flex items-center gap-2 text-xs text-slate-500 mb-2">
             <Link to="/" className="hover:text-[#164e37]">Home</Link>
             <span>/</span>
@@ -38,7 +38,7 @@ export const Events: React.FC = () => {
       </section>
 
       {/* 2. Transparency & Non-fabrication Notice */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-5 sm:pt-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 pt-5 sm:pt-8">
         <div className="p-3.5 sm:p-4 bg-amber-50/80 border border-amber-200 rounded-xl flex items-start gap-3 text-xs text-amber-950">
           <ShieldAlert className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
           <div className="space-y-0.5">
@@ -52,7 +52,7 @@ export const Events: React.FC = () => {
 
       {/* 3. Category Filter Tabs */}
       <section className="py-6 sm:py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
           <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-2 mb-6 sm:mb-8 -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap">
             {categories.map((cat) => (
               <button
@@ -127,7 +127,7 @@ export const Events: React.FC = () => {
 
       {/* 4. Annual Academic Milestones Table */}
       <section className="py-8 sm:py-12 bg-white border-t border-[#e5e0d5]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
           <div className="max-w-3xl mb-6 sm:mb-8">
             <span className="text-xs font-bold text-[#164e37] uppercase tracking-wider block mb-1">
               Annual Milestones

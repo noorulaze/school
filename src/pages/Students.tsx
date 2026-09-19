@@ -37,7 +37,7 @@ export const Students: React.FC<StudentsProps> = ({ onOpenAdmissionModal }) => {
     <div className="w-full flex flex-col bg-[#fbfaf7] text-slate-800">
       {/* 1. Page Header */}
       <section className="bg-white border-b border-[#e5e0d5] py-6 sm:py-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
           <div className="flex items-center gap-2 text-xs text-slate-500 mb-2">
             <Link to="/" className="hover:text-[#164e37]">Home</Link>
             <span>/</span>
@@ -57,7 +57,7 @@ export const Students: React.FC<StudentsProps> = ({ onOpenAdmissionModal }) => {
 
       {/* 2. SECTION 1: Student Portal (Marked 'Coming Soon') */}
       <section className="py-6 sm:py-10 border-b border-[#e5e0d5]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
           <div className="bg-[#123628] text-white rounded-xl sm:rounded-2xl p-4 sm:p-8 lg:p-10 border border-[#1b5038] shadow-sm relative overflow-hidden">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center">
               <div className="lg:col-span-7 space-y-4">
@@ -147,7 +147,7 @@ export const Students: React.FC<StudentsProps> = ({ onOpenAdmissionModal }) => {
 
       {/* 3. SECTION 2: Notices & Circulars Timeline */}
       <section className="py-8 sm:py-12 bg-white border-b border-[#e5e0d5]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 sm:mb-8 gap-3">
             <div>
               <span className="text-xs font-bold text-[#164e37] uppercase tracking-wider block mb-1">
@@ -160,41 +160,47 @@ export const Students: React.FC<StudentsProps> = ({ onOpenAdmissionModal }) => {
             <PlaceholderBadge label="Official Notice Board" size="sm" />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 text-xs">
-            <div className="p-4 sm:p-5 rounded-xl bg-[#fbfaf7] border border-[#e5e0d5] space-y-2">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-900 bg-emerald-100 px-2 py-0.5 rounded inline-block">
-                Enrolment
-              </span>
-              <h4 className="text-sm font-bold text-slate-900">Academic Session 2025–2026 Admissions</h4>
-              <p className="text-slate-600 leading-relaxed">
-                Registration for primary classes and transfer students is open at the administrative office in Korangath.
-              </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 text-xs items-stretch">
+            <div className="p-4 sm:p-5 rounded-xl bg-[#fbfaf7] border border-[#e5e0d5] flex flex-col justify-between h-full space-y-3">
+              <div className="space-y-2">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-900 bg-emerald-100 px-2 py-0.5 rounded inline-block">
+                  Enrolment
+                </span>
+                <h4 className="text-sm font-bold text-slate-900">Academic Session 2025–2026 Admissions</h4>
+                <p className="text-slate-600 leading-relaxed">
+                  Registration for primary classes and transfer students is open at the administrative office in Korangath.
+                </p>
+              </div>
               <div className="pt-2 text-[11px] text-slate-400 border-t border-[#e5e0d5]">
                 Status: Applications accepted in office
               </div>
             </div>
 
-            <div className="p-4 sm:p-5 rounded-xl bg-[#fbfaf7] border border-[#e5e0d5] space-y-2">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-blue-900 bg-blue-100 px-2 py-0.5 rounded inline-block">
-                Timetable
-              </span>
-              <h4 className="text-sm font-bold text-slate-900">Morning Assembly & Daily Azkar</h4>
-              <p className="text-slate-600 leading-relaxed">
-                All students must arrive 10 minutes prior to 6:45 AM for morning Azkar recitation and line assembly.
-              </p>
+            <div className="p-4 sm:p-5 rounded-xl bg-[#fbfaf7] border border-[#e5e0d5] flex flex-col justify-between h-full space-y-3">
+              <div className="space-y-2">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-blue-900 bg-blue-100 px-2 py-0.5 rounded inline-block">
+                  Timetable
+                </span>
+                <h4 className="text-sm font-bold text-slate-900">Morning Assembly & Daily Azkar</h4>
+                <p className="text-slate-600 leading-relaxed">
+                  All students must arrive 10 minutes prior to 6:45 AM for morning Azkar recitation and line assembly.
+                </p>
+              </div>
               <div className="pt-2 text-[11px] text-slate-400 border-t border-[#e5e0d5]">
                 Compliance: Mandatory for all classes
               </div>
             </div>
 
-            <div className="p-4 sm:p-5 rounded-xl bg-[#fbfaf7] border border-[#e5e0d5] space-y-2">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-amber-900 bg-amber-100 px-2 py-0.5 rounded inline-block">
-                Consultation
-              </span>
-              <h4 className="text-sm font-bold text-slate-900">Parent-Teacher Progress Meeting</h4>
-              <p className="text-slate-600 leading-relaxed">
-                Consultative sessions will be circularized via student diaries. Parents are encouraged to meet the class muallim.
-              </p>
+            <div className="p-4 sm:p-5 rounded-xl bg-[#fbfaf7] border border-[#e5e0d5] flex flex-col justify-between h-full space-y-3">
+              <div className="space-y-2">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-amber-900 bg-amber-100 px-2 py-0.5 rounded inline-block">
+                  Consultation
+                </span>
+                <h4 className="text-sm font-bold text-slate-900">Parent-Teacher Progress Meeting</h4>
+                <p className="text-slate-600 leading-relaxed">
+                  Consultative sessions will be circularized via student diaries. Parents are encouraged to meet the class muallim.
+                </p>
+              </div>
               <div className="pt-2 text-[11px] text-slate-400 border-t border-[#e5e0d5]">
                 Coordination: Via Student Communication Diary
               </div>
@@ -205,7 +211,7 @@ export const Students: React.FC<StudentsProps> = ({ onOpenAdmissionModal }) => {
 
       {/* 4. SECTION 3: Academic Information & Batch Schedules */}
       <section className="py-8 sm:py-12 border-b border-[#e5e0d5]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
           <div className="max-w-3xl mb-6 sm:mb-8">
             <span className="text-xs font-bold text-[#164e37] uppercase tracking-wider block mb-1">
               Section 3 • Daily Timetables
@@ -218,9 +224,9 @@ export const Students: React.FC<StudentsProps> = ({ onOpenAdmissionModal }) => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 items-stretch">
             {/* Morning Batch */}
-            <div className="bg-white rounded-xl sm:rounded-2xl border border-[#e5e0d5] p-4 sm:p-7 space-y-4 shadow-2xs">
+            <div className="bg-white rounded-xl sm:rounded-2xl border border-[#e5e0d5] p-4 sm:p-7 flex flex-col justify-between h-full space-y-4 shadow-2xs">
               <div className="flex items-center justify-between gap-2">
                 <span className="text-[10px] font-bold text-[#164e37] bg-[#f4f1ea] px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full uppercase tracking-wider border border-[#d2cabb]">
                   Primary Schedule
@@ -261,7 +267,7 @@ export const Students: React.FC<StudentsProps> = ({ onOpenAdmissionModal }) => {
             </div>
 
             {/* Evening Batch */}
-            <div className="bg-white rounded-xl sm:rounded-2xl border border-[#e5e0d5] p-4 sm:p-7 space-y-4 shadow-2xs">
+            <div className="bg-white rounded-xl sm:rounded-2xl border border-[#e5e0d5] p-4 sm:p-7 flex flex-col justify-between h-full space-y-4 shadow-2xs">
               <div className="flex items-center justify-between gap-2">
                 <span className="text-[10px] font-bold text-amber-900 bg-amber-50 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full uppercase tracking-wider border border-amber-200">
                   Supplementary Session
@@ -306,7 +312,7 @@ export const Students: React.FC<StudentsProps> = ({ onOpenAdmissionModal }) => {
 
       {/* 5. SECTION 4: Student Activities & Co-Curriculars */}
       <section className="py-8 sm:py-12 bg-white border-b border-[#e5e0d5]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-10 items-center">
             <div className="lg:col-span-6 space-y-4">
               <span className="text-xs font-bold text-[#164e37] uppercase tracking-wider block">
@@ -366,7 +372,7 @@ export const Students: React.FC<StudentsProps> = ({ onOpenAdmissionModal }) => {
 
       {/* 6. SECTION 5: Important Resources & Materials */}
       <section className="py-8 sm:py-12 border-b border-[#e5e0d5]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 sm:mb-8 gap-3">
             <div>
               <span className="text-xs font-bold text-[#164e37] uppercase tracking-wider block mb-1">
@@ -379,49 +385,65 @@ export const Students: React.FC<StudentsProps> = ({ onOpenAdmissionModal }) => {
             <PlaceholderBadge label="Educational Guides" size="sm" />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 text-xs">
-            <div className="p-4 sm:p-5 rounded-xl bg-white border border-[#e5e0d5] space-y-2">
-              <BookOpen className="w-5 h-5 text-[#164e37]" />
-              <h4 className="text-sm font-bold text-slate-900">Masnoon Azkar Handbook</h4>
-              <p className="text-slate-600 leading-relaxed">
-                Daily morning and evening invocations, eating manners, and bedtime duas.
-              </p>
-              <span className="inline-block text-[10px] font-semibold text-[#164e37] bg-[#f4f1ea] px-2 py-0.5 rounded">
-                Prescribed Classes 1–10
-              </span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 text-xs items-stretch">
+            <div className="p-4 sm:p-5 rounded-xl bg-white border border-[#e5e0d5] flex flex-col justify-between h-full space-y-3">
+              <div className="space-y-2">
+                <BookOpen className="w-5 h-5 text-[#164e37]" />
+                <h4 className="text-sm font-bold text-slate-900">Masnoon Azkar Handbook</h4>
+                <p className="text-slate-600 leading-relaxed">
+                  Daily morning and evening invocations, eating manners, and bedtime duas.
+                </p>
+              </div>
+              <div>
+                <span className="inline-block text-[10px] font-semibold text-[#164e37] bg-[#f4f1ea] px-2 py-0.5 rounded">
+                  Prescribed Classes 1–10
+                </span>
+              </div>
             </div>
 
-            <div className="p-4 sm:p-5 rounded-xl bg-white border border-[#e5e0d5] space-y-2">
-              <FileText className="w-5 h-5 text-[#164e37]" />
-              <h4 className="text-sm font-bold text-slate-900">Tajweed Articulation Chart</h4>
-              <p className="text-slate-600 leading-relaxed">
-                Diagrams of Makharij (points of vocal articulation) and rules of Noon/Meem Sakinah.
-              </p>
-              <span className="inline-block text-[10px] font-semibold text-[#164e37] bg-[#f4f1ea] px-2 py-0.5 rounded">
-                Classes 3–8
-              </span>
+            <div className="p-4 sm:p-5 rounded-xl bg-white border border-[#e5e0d5] flex flex-col justify-between h-full space-y-3">
+              <div className="space-y-2">
+                <FileText className="w-5 h-5 text-[#164e37]" />
+                <h4 className="text-sm font-bold text-slate-900">Tajweed Articulation Chart</h4>
+                <p className="text-slate-600 leading-relaxed">
+                  Diagrams of Makharij (points of vocal articulation) and rules of Noon/Meem Sakinah.
+                </p>
+              </div>
+              <div>
+                <span className="inline-block text-[10px] font-semibold text-[#164e37] bg-[#f4f1ea] px-2 py-0.5 rounded">
+                  Classes 3–8
+                </span>
+              </div>
             </div>
 
-            <div className="p-4 sm:p-5 rounded-xl bg-white border border-[#e5e0d5] space-y-2">
-              <Award className="w-5 h-5 text-[#164e37]" />
-              <h4 className="text-sm font-bold text-slate-900">Forty Hadith Selection</h4>
-              <p className="text-slate-600 leading-relaxed">
-                Selected Prophetic traditions on character, truthfulness, and goodwill.
-              </p>
-              <span className="inline-block text-[10px] font-semibold text-[#164e37] bg-[#f4f1ea] px-2 py-0.5 rounded">
-                Classes 7–10
-              </span>
+            <div className="p-4 sm:p-5 rounded-xl bg-white border border-[#e5e0d5] flex flex-col justify-between h-full space-y-3">
+              <div className="space-y-2">
+                <Award className="w-5 h-5 text-[#164e37]" />
+                <h4 className="text-sm font-bold text-slate-900">Forty Hadith Selection</h4>
+                <p className="text-slate-600 leading-relaxed">
+                  Selected Prophetic traditions on character, truthfulness, and goodwill.
+                </p>
+              </div>
+              <div>
+                <span className="inline-block text-[10px] font-semibold text-[#164e37] bg-[#f4f1ea] px-2 py-0.5 rounded">
+                  Classes 7–10
+                </span>
+              </div>
             </div>
 
-            <div className="p-4 sm:p-5 rounded-xl bg-white border border-[#e5e0d5] space-y-2">
-              <Calendar className="w-5 h-5 text-[#164e37]" />
-              <h4 className="text-sm font-bold text-slate-900">Student Diary & Planner</h4>
-              <p className="text-slate-600 leading-relaxed">
-                Daily attendance check, recitation milestone record, and parent remarks slip.
-              </p>
-              <span className="inline-block text-[10px] font-semibold text-[#164e37] bg-[#f4f1ea] px-2 py-0.5 rounded">
-                Distributed Annually
-              </span>
+            <div className="p-4 sm:p-5 rounded-xl bg-white border border-[#e5e0d5] flex flex-col justify-between h-full space-y-3">
+              <div className="space-y-2">
+                <Calendar className="w-5 h-5 text-[#164e37]" />
+                <h4 className="text-sm font-bold text-slate-900">Student Diary & Planner</h4>
+                <p className="text-slate-600 leading-relaxed">
+                  Daily attendance check, recitation milestone record, and parent remarks slip.
+                </p>
+              </div>
+              <div>
+                <span className="inline-block text-[10px] font-semibold text-[#164e37] bg-[#f4f1ea] px-2 py-0.5 rounded">
+                  Distributed Annually
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -429,7 +451,7 @@ export const Students: React.FC<StudentsProps> = ({ onOpenAdmissionModal }) => {
 
       {/* 7. Student Code of Conduct & Etiquette */}
       <section className="py-8 sm:py-12 bg-white border-b border-[#e5e0d5]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
           <div className="max-w-3xl mb-6 sm:mb-8">
             <h3 className="text-xl font-bold text-[#0f231c]">
               Student Code of Conduct & Moral Etiquette
@@ -460,7 +482,7 @@ export const Students: React.FC<StudentsProps> = ({ onOpenAdmissionModal }) => {
 
       {/* 8. Admission Enquiry Action Strip */}
       <section className="py-8 sm:py-10 bg-[#f4f1ea]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
           <div>
             <h4 className="text-base font-bold text-slate-900">
               Need Enrolment or Syllabus Clarifications?

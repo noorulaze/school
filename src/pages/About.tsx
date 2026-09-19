@@ -21,7 +21,7 @@ export const About: React.FC<AboutProps> = ({ onOpenAdmissionModal }) => {
     <div className="w-full flex flex-col bg-[#fbfaf7] text-slate-800">
       {/* 1. Page Header */}
       <section className="bg-white border-b border-[#e5e0d5] py-6 sm:py-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
           <div className="flex items-center gap-2 text-xs text-slate-500 mb-2">
             <Link to="/" className="hover:text-[#164e37]">Home</Link>
             <span>/</span>
@@ -41,7 +41,7 @@ export const About: React.FC<AboutProps> = ({ onOpenAdmissionModal }) => {
 
       {/* 2. Institutional Overview (Editorial Split Showcase) */}
       <section className="py-8 sm:py-12 lg:py-16 border-b border-[#e5e0d5]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
             <div className="lg:col-span-7 space-y-4">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#f4f1ea] border border-[#d2cabb] text-xs font-semibold text-[#164e37]">
@@ -93,26 +93,28 @@ export const About: React.FC<AboutProps> = ({ onOpenAdmissionModal }) => {
 
       {/* 3. Educational Approach & Dual Learning Matrix */}
       <section className="py-8 sm:py-12 lg:py-16 bg-white border-b border-[#e5e0d5]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 items-stretch">
             {/* Section 2: Educational Approach */}
-            <div className="p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl bg-[#fbfaf7] border border-[#e5e0d5] space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-[#164e37] uppercase tracking-wider">
-                  Section 2
-                </span>
-                <PlaceholderBadge label="Pedagogical Method" size="sm" />
+            <div className="p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl bg-[#fbfaf7] border border-[#e5e0d5] flex flex-col justify-between h-full space-y-4">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-[#164e37] uppercase tracking-wider">
+                    Section 2
+                  </span>
+                  <PlaceholderBadge label="Pedagogical Method" size="sm" />
+                </div>
+
+                <h3 className="text-xl font-bold text-[#0f231c]">
+                  Our Educational Approach
+                </h3>
+
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  We believe that religious learning should be compassionate, engaging, and disciplined. Our muallims follow structured daily routines emphasizing individual recitation guidance, memorization review (Dhor), and practical application of daily Adab.
+                </p>
               </div>
 
-              <h3 className="text-xl font-bold text-[#0f231c]">
-                Our Educational Approach
-              </h3>
-
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                We believe that religious learning should be compassionate, engaging, and disciplined. Our muallims follow structured daily routines emphasizing individual recitation guidance, memorization review (Dhor), and practical application of daily Adab.
-              </p>
-
-              <ul className="space-y-2 text-xs text-slate-700 pt-2">
+              <ul className="space-y-2.5 text-xs text-slate-700 pt-2 border-t border-[#eee9df]">
                 <li className="flex items-start gap-2">
                   <BookOpen className="w-4 h-4 text-[#164e37] shrink-0 mt-0.5" />
                   <span>Individualized recitation listening to ensure accurate pronunciation (Makharij).</span>
@@ -129,23 +131,25 @@ export const About: React.FC<AboutProps> = ({ onOpenAdmissionModal }) => {
             </div>
 
             {/* Section 3: Islamic and Academic Learning */}
-            <div className="p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl bg-[#fbfaf7] border border-[#e5e0d5] space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-[#164e37] uppercase tracking-wider">
-                  Section 3
-                </span>
-                <PlaceholderBadge label="Curricular Integration" size="sm" />
+            <div className="p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl bg-[#fbfaf7] border border-[#e5e0d5] flex flex-col justify-between h-full space-y-4">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-[#164e37] uppercase tracking-wider">
+                    Section 3
+                  </span>
+                  <PlaceholderBadge label="Curricular Integration" size="sm" />
+                </div>
+
+                <h3 className="text-xl font-bold text-[#0f231c]">
+                  Islamic and Academic Learning
+                </h3>
+
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  Rather than treating religious education as an extra burden, we structure our schedules to nurture clarity of thought, concentration, and good manners that directly enhance a student's regular daytime schooling.
+                </p>
               </div>
 
-              <h3 className="text-xl font-bold text-[#0f231c]">
-                Islamic and Academic Learning
-              </h3>
-
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                Rather than treating religious education as an extra burden, we structure our schedules to nurture clarity of thought, concentration, and good manners that directly enhance a student's regular daytime schooling.
-              </p>
-
-              <ul className="space-y-2 text-xs text-slate-700 pt-2">
+              <ul className="space-y-2.5 text-xs text-slate-700 pt-2 border-t border-[#eee9df]">
                 <li className="flex items-start gap-2">
                   <Award className="w-4 h-4 text-[#c59b27] shrink-0 mt-0.5" />
                   <span>Early morning sessions (06:45 AM) instill disciplined habits and alert minds.</span>
@@ -166,7 +170,7 @@ export const About: React.FC<AboutProps> = ({ onOpenAdmissionModal }) => {
 
       {/* 4. Section 4: Our Values (The 4 Pillars) */}
       <section className="py-8 sm:py-12 lg:py-16 border-b border-[#e5e0d5]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
           <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
             <span className="text-xs font-bold text-[#164e37] uppercase tracking-wider block">
               Section 4 • Core Principles
@@ -179,7 +183,7 @@ export const About: React.FC<AboutProps> = ({ onOpenAdmissionModal }) => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
             {[
               {
                 arabic: 'الصدق',
@@ -204,13 +208,15 @@ export const About: React.FC<AboutProps> = ({ onOpenAdmissionModal }) => {
             ].map((val, idx) => (
               <div
                 key={idx}
-                className="p-4 sm:p-5 rounded-xl bg-white border border-[#e5e0d5] hover:border-[#164e37] transition-all space-y-2"
+                className="p-4 sm:p-5 rounded-xl bg-white border border-[#e5e0d5] hover:border-[#164e37] transition-all flex flex-col justify-between h-full space-y-3"
               >
-                <span className="font-amiri text-lg text-[#c59b27] block" dir="rtl">
-                  {val.arabic}
-                </span>
-                <h4 className="text-sm font-bold text-slate-900">{val.title}</h4>
-                <p className="text-xs text-slate-600 leading-relaxed">{val.desc}</p>
+                <div>
+                  <span className="font-amiri text-lg text-[#c59b27] block" dir="rtl">
+                    {val.arabic}
+                  </span>
+                  <h4 className="text-sm font-bold text-slate-900 mt-1">{val.title}</h4>
+                  <p className="text-xs text-slate-600 leading-relaxed mt-1.5">{val.desc}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -219,32 +225,36 @@ export const About: React.FC<AboutProps> = ({ onOpenAdmissionModal }) => {
 
       {/* 5. Sections 5 & 6: Vision & Mission (High-Contrast Editorial Blocks) */}
       <section className="py-8 sm:py-12 lg:py-16 bg-[#164e37] text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 items-stretch">
             {/* Vision */}
-            <div className="p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl bg-[#0f3827] border border-[#276e4e] space-y-3">
-              <span className="text-[11px] font-bold text-[#c59b27] uppercase tracking-wider block">
-                Section 5 • Institutional Direction
-              </span>
-              <h3 className="text-xl sm:text-2xl font-extrabold text-white">
-                Our Vision
-              </h3>
-              <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed">
-                To be a trusted center of Islamic learning in Korangath, Tirur, that nurtures knowledgeable, confident, and compassionate young Muslims capable of excelling in their faith and serving modern society with integrity.
-              </p>
+            <div className="p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl bg-[#0f3827] border border-[#276e4e] flex flex-col justify-between h-full space-y-3">
+              <div>
+                <span className="text-[11px] font-bold text-[#c59b27] uppercase tracking-wider block">
+                  Section 5 • Institutional Direction
+                </span>
+                <h3 className="text-xl sm:text-2xl font-extrabold text-white mt-1">
+                  Our Vision
+                </h3>
+                <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed mt-2">
+                  To be a trusted center of Islamic learning in Korangath, Tirur, that nurtures knowledgeable, confident, and compassionate young Muslims capable of excelling in their faith and serving modern society with integrity.
+                </p>
+              </div>
             </div>
 
             {/* Mission */}
-            <div className="p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl bg-[#0f3827] border border-[#276e4e] space-y-3">
-              <span className="text-[11px] font-bold text-[#c59b27] uppercase tracking-wider block">
-                Section 6 • Our Ongoing Commitment
-              </span>
-              <h3 className="text-xl sm:text-2xl font-extrabold text-white">
-                Our Mission
-              </h3>
-              <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed">
-                To deliver authentic Islamic education under recognized board standards, providing grounded instruction in Quran recitation, Arabic literacy, Fiqh rulings, and moral character in a welcoming and supportive learning atmosphere.
-              </p>
+            <div className="p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl bg-[#0f3827] border border-[#276e4e] flex flex-col justify-between h-full space-y-3">
+              <div>
+                <span className="text-[11px] font-bold text-[#c59b27] uppercase tracking-wider block">
+                  Section 6 • Our Ongoing Commitment
+                </span>
+                <h3 className="text-xl sm:text-2xl font-extrabold text-white mt-1">
+                  Our Mission
+                </h3>
+                <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed mt-2">
+                  To deliver authentic Islamic education under recognized board standards, providing grounded instruction in Quran recitation, Arabic literacy, Fiqh rulings, and moral character in a welcoming and supportive learning atmosphere.
+                </p>
+              </div>
             </div>
           </div>
 

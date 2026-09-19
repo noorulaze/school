@@ -94,7 +94,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAdmissionModal }) => {
           : 'bg-[#fbfaf7] border-b border-[#e5e0d5] py-3 sm:py-3.5'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex items-center justify-between gap-2 sm:gap-4">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 xl:px-10 flex items-center justify-between gap-2 sm:gap-4">
         {/* LEFT: School Logo & Institutional Identity */}
         <Link
           to="/"
@@ -102,8 +102,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAdmissionModal }) => {
           className="flex items-center gap-2 sm:gap-3 group shrink min-w-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#164e37] rounded-lg p-1 -m-1"
         >
           {/* School Logo Placeholder Crest */}
-          <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-lg bg-[#164e37] text-white flex items-center justify-center shrink-0 border border-[#c59b27]/60 shadow-2xs relative overflow-hidden transition-transform duration-300 group-hover:scale-105">
-            <svg viewBox="0 0 100 100" className="w-6 h-6 sm:w-8 sm:h-8" aria-hidden="true">
+          <div className="w-9 h-9 sm:w-10 sm:h-10 lg:w-11 lg:h-11 rounded-lg bg-[#164e37] text-white flex items-center justify-center shrink-0 border border-[#c59b27]/60 shadow-2xs relative overflow-hidden transition-transform duration-300 group-hover:scale-105">
+            <svg viewBox="0 0 100 100" className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8" aria-hidden="true">
               <circle cx="50" cy="50" r="46" fill="none" stroke="#c59b27" strokeWidth="2.5" strokeDasharray="3 2" />
               <path
                 d="M24 64 C36 58, 45 61, 50 67 C55 61, 64 58, 76 64 L76 38 C64 34, 55 37, 50 43 C45 37, 36 34, 24 38 Z"
@@ -117,7 +117,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAdmissionModal }) => {
 
           {/* School Name & Local Identifier */}
           <div className="flex flex-col min-w-0">
-            <span className="text-xs sm:text-base font-extrabold text-[#0f231c] tracking-tight leading-snug group-hover:text-[#164e37] transition-colors truncate">
+            <span className="text-xs sm:text-sm lg:text-base font-extrabold text-[#0f231c] tracking-tight leading-snug group-hover:text-[#164e37] transition-colors truncate">
               {SCHOOL_INFO.officialName}
             </span>
             <span className="text-[10px] sm:text-xs text-[#164e37] font-medium leading-none tracking-wide mt-0.5 truncate">
@@ -126,9 +126,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAdmissionModal }) => {
           </div>
         </Link>
 
-        {/* CENTER: Desktop Navigation */}
+        {/* CENTER: Desktop Navigation (Balanced & Unwrapping on 1024px–1600px+) */}
         <nav
-          className="hidden lg:flex items-center gap-1 xl:gap-1.5"
+          className="hidden lg:flex items-center gap-0.5 xl:gap-1.5"
           aria-label="Main Navigation"
           role="menubar"
         >
@@ -140,7 +140,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAdmissionModal }) => {
                 to={link.path}
                 role="menuitem"
                 aria-current={active ? 'page' : undefined}
-                className={`relative px-2.5 xl:px-3 py-1.5 rounded-md text-xs font-semibold tracking-wide transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#164e37] focus-visible:ring-offset-1 ${
+                className={`relative px-2 xl:px-3 py-1.5 rounded-md text-[11px] xl:text-xs font-semibold tracking-wide transition-all duration-200 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#164e37] focus-visible:ring-offset-1 ${
                   active
                     ? 'text-[#164e37] bg-[#164e37]/8 font-bold'
                     : 'text-slate-700 hover:text-[#164e37] hover:bg-[#164e37]/5'
@@ -150,7 +150,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAdmissionModal }) => {
                 {active && (
                   <span
                     aria-hidden="true"
-                    className="absolute bottom-0 left-2.5 right-2.5 h-[2px] bg-[#c59b27] rounded-full"
+                    className="absolute bottom-0 left-2 right-2 xl:left-2.5 xl:right-2.5 h-[2px] bg-[#c59b27] rounded-full"
                   />
                 )}
               </Link>
@@ -159,14 +159,14 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAdmissionModal }) => {
         </nav>
 
         {/* RIGHT: Primary Action & Mobile Toggle */}
-        <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           {/* Admission Enquiry Primary Button */}
           <button
             type="button"
             onClick={onOpenAdmissionModal}
-            className="hidden sm:inline-flex items-center gap-2 px-3.5 xl:px-4 py-2 bg-[#164e37] hover:bg-[#0f3b29] text-white text-xs font-bold rounded-lg border border-[#c59b27]/30 shadow-2xs hover:shadow-xs transition-all duration-200 group active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c59b27] focus-visible:ring-offset-2"
+            className="hidden sm:inline-flex items-center gap-1.5 xl:gap-2 px-3 xl:px-4 py-2 bg-[#164e37] hover:bg-[#0f3b29] text-white text-xs font-bold rounded-lg border border-[#c59b27]/30 shadow-2xs hover:shadow-xs transition-all duration-200 group active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c59b27] focus-visible:ring-offset-2 whitespace-nowrap"
           >
-            <GraduationCap className="w-3.5 h-3.5 text-[#c59b27] transition-transform duration-200 group-hover:scale-110" />
+            <GraduationCap className="w-3.5 h-3.5 text-[#c59b27] transition-transform duration-200 group-hover:scale-110 shrink-0" />
             <span>Admission Enquiry</span>
           </button>
 

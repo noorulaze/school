@@ -23,7 +23,7 @@ export const Departments: React.FC<DepartmentsProps> = ({ onOpenAdmissionModal }
     <div className="w-full flex flex-col bg-[#fbfaf7] text-slate-800">
       {/* 1. Page Header */}
       <section className="bg-white border-b border-[#e5e0d5] py-6 sm:py-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
           <div className="flex items-center gap-2 text-xs text-slate-500 mb-2">
             <Link to="/" className="hover:text-[#164e37]">Home</Link>
             <span>/</span>
@@ -43,7 +43,7 @@ export const Departments: React.FC<DepartmentsProps> = ({ onOpenAdmissionModal }
 
       {/* 2. Interactive Academic Streams Prospectus (Not repetitive cards) */}
       <section className="py-8 sm:py-12 border-b border-[#e5e0d5]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
           {/* Stream Selector Tabs */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-2.5 mb-6 sm:mb-8">
             {DEPARTMENTS.map((dept) => {
@@ -170,7 +170,7 @@ export const Departments: React.FC<DepartmentsProps> = ({ onOpenAdmissionModal }
 
       {/* 3. Academic Progression Stages (Classes 1 to 10) */}
       <section className="py-8 sm:py-12 bg-white border-b border-[#e5e0d5]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
           <div className="max-w-3xl mb-6 sm:mb-8">
             <span className="text-xs font-bold text-[#164e37] uppercase tracking-wider block mb-1">
               Curriculum Matrix
@@ -223,7 +223,7 @@ export const Departments: React.FC<DepartmentsProps> = ({ onOpenAdmissionModal }
 
       {/* 4. Admission CTA */}
       <section className="py-8 sm:py-10 bg-[#f4f1ea] border-t border-[#e5e0d5]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
           <div>
             <h4 className="text-base font-bold text-slate-900">
               Seek Enrolment Guidance for Your Child
