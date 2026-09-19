@@ -14,10 +14,10 @@ import {
   Send,
   Sparkles,
   BookOpen,
-  Languages
+  Languages,
+  AlertCircle
 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { SCHOOL_INFO } from '../data/schoolInfo';
 import { NoticeTicker } from '../components/NoticeTicker';
 import { RealisticImageSlot } from '../components/RealisticImageSlot';
 import { PlaceholderBadge } from '../components/PlaceholderBadge';
@@ -27,12 +27,62 @@ interface HomeProps {
 }
 
 export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
-  const [quickContactSent, setQuickContactSent] = useState(false);
-  const [quickForm, setQuickForm] = useState({ name: '', email: '', phone: '', message: '' });
+  // Admission Enquiry Form State
+  const [enquiryForm, setEnquiryForm] = useState({
+    fullName: '',
+    phone: '',
+    email: '',
+    studentName: '',
+    enquiryType: 'Admission',
+    message: ''
+  });
+  const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submissionState, setSubmissionState] = useState<'idle' | 'backend_pending'>('idle');
 
-  const handleQuickSubmit = (e: React.FormEvent) => {
+  const validateForm = () => {
+    const errors: { [key: string]: string } = {};
+
+    if (!enquiryForm.fullName.trim() || enquiryForm.fullName.trim().length < 2) {
+      errors.fullName = 'Full Name is required (minimum 2 characters).';
+    }
+
+    const phoneDigits = enquiryForm.phone.replace(/[^0-9]/g, '');
+    if (!enquiryForm.phone.trim()) {
+      errors.phone = 'Phone number is required for follow-up.';
+    } else if (phoneDigits.length < 10) {
+      errors.phone = 'Please enter a valid 10-digit phone number.';
+    }
+
+    if (enquiryForm.email.trim()) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(enquiryForm.email.trim())) {
+        errors.email = 'Please enter a valid email address.';
+      }
+    }
+
+    if (!enquiryForm.studentName.trim() || enquiryForm.studentName.trim().length < 2) {
+      errors.studentName = 'Student or applicant name is required.';
+    }
+
+    if (!enquiryForm.message.trim() || enquiryForm.message.trim().length < 5) {
+      errors.message = 'Please enter your message or enquiry details (minimum 5 characters).';
+    }
+
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleEnquirySubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setQuickContactSent(true);
+    if (!validateForm()) return;
+
+    setIsSubmitting(true);
+    // Simulate validation & network processing before revealing honest backend-pending status
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setSubmissionState('backend_pending');
+    }, 600);
   };
 
   return (
@@ -1254,174 +1304,332 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
         </div>
       </section>
 
-      {/* 10. CONTACT SECTION (Clean Two-Column Area with Contact Form & Placeholders) */}
-      <section className="py-14 lg:py-16 bg-white">
+      {/* 10. CONTACT & ADMISSION ENQUIRY SECTION (Modern Two-Column Area) */}
+      <section className="py-16 lg:py-24 bg-white border-b border-[#e5e0d5]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-            {/* Left Col: Contact Information & Placeholders */}
-            <div className="lg:col-span-5 space-y-5">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+            {/* Left Column: Heading, Context, Placeholders, Map Slot */}
+            <div className="lg:col-span-5 space-y-6">
               <div>
-                <span className="text-xs font-bold text-[#164e37] uppercase tracking-wider block">
-                  Get In Touch
-                </span>
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0f231c]">
-                  Contact School Office
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="h-px w-5 bg-[#c59b27]"></span>
+                  <span className="text-[11px] font-bold uppercase tracking-widest text-[#164e37]">
+                    Contact & Enquiries
+                  </span>
+                </div>
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0f231c] tracking-tight">
+                  Have a Question?
                 </h2>
-                <p className="text-xs sm:text-sm text-slate-600 mt-1">
-                  Inquiries regarding admissions, class batches, and general administrative questions.
+                <p className="text-xs sm:text-sm text-slate-600 mt-2 font-normal leading-relaxed">
+                  For admissions, academic information, programs, or general enquiries, get in touch with us.
                 </p>
               </div>
 
+              {/* Editable Contact Information Placeholders */}
               <div className="space-y-3 text-xs">
-                <div className="p-4 rounded-xl bg-[#fbfaf7] border border-[#e5e0d5] flex items-start gap-3">
-                  <MapPin className="w-4 h-4 text-[#164e37] shrink-0 mt-0.5" />
+                {/* Location */}
+                <div className="p-4 rounded-lg bg-[#fbfaf7] border border-[#e5e0d5] flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[#f4f1ea] flex items-center justify-center shrink-0 text-[#164e37]">
+                    <MapPin className="w-4 h-4 text-[#164e37]" />
+                  </div>
                   <div>
-                    <strong className="block text-slate-900">Madrassa Campus Address</strong>
-                    <span className="text-slate-600 block mt-0.5">
-                      Korangath, Tirur, Malappuram District, Kerala – 676101
+                    <strong className="block text-slate-900 font-bold">Campus Location</strong>
+                    <span className="text-slate-600 block mt-0.5 font-normal">
+                      [Address Placeholder — Korangath, Tirur, Malappuram District, Kerala – 676101]
                     </span>
-                    <span className="text-[10px] text-slate-400 mt-1 block">
+                    <span className="text-[10px] text-slate-400 mt-1 block font-mono">
                       Transit: ~3.5 km from Tirur Railway Station
                     </span>
                   </div>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[#fbfaf7] border border-[#e5e0d5] flex items-start gap-3">
-                  <Phone className="w-4 h-4 text-[#164e37] shrink-0 mt-0.5" />
+                {/* Phone */}
+                <div className="p-4 rounded-lg bg-[#fbfaf7] border border-[#e5e0d5] flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[#f4f1ea] flex items-center justify-center shrink-0 text-[#164e37]">
+                    <Phone className="w-4 h-4 text-[#164e37]" />
+                  </div>
                   <div>
-                    <strong className="block text-slate-900">Office Phone</strong>
+                    <strong className="block text-slate-900 font-bold">Phone Number</strong>
                     <span className="text-slate-600 block mt-0.5 font-mono">
-                      {SCHOOL_INFO.contact.phone}
+                      [Official Phone Number Placeholder]
                     </span>
                   </div>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[#fbfaf7] border border-[#e5e0d5] flex items-start gap-3">
-                  <Mail className="w-4 h-4 text-[#164e37] shrink-0 mt-0.5" />
+                {/* Email */}
+                <div className="p-4 rounded-lg bg-[#fbfaf7] border border-[#e5e0d5] flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[#f4f1ea] flex items-center justify-center shrink-0 text-[#164e37]">
+                    <Mail className="w-4 h-4 text-[#164e37]" />
+                  </div>
                   <div>
-                    <strong className="block text-slate-900">Official Email</strong>
+                    <strong className="block text-slate-900 font-bold">Email Address</strong>
                     <span className="text-slate-600 block mt-0.5 font-mono">
-                      {SCHOOL_INFO.contact.email}
+                      [Official Email Address Placeholder]
                     </span>
                   </div>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[#fbfaf7] border border-[#e5e0d5] flex items-start gap-3">
-                  <Clock className="w-4 h-4 text-[#164e37] shrink-0 mt-0.5" />
+                {/* Office Hours */}
+                <div className="p-4 rounded-lg bg-[#fbfaf7] border border-[#e5e0d5] flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[#f4f1ea] flex items-center justify-center shrink-0 text-[#164e37]">
+                    <Clock className="w-4 h-4 text-[#164e37]" />
+                  </div>
                   <div>
-                    <strong className="block text-slate-900">Office Visiting Hours</strong>
-                    <span className="text-slate-600 block mt-0.5">
-                      {SCHOOL_INFO.contact.officeHours}
+                    <strong className="block text-slate-900 font-bold">Office Hours</strong>
+                    <span className="text-slate-600 block mt-0.5 font-normal">
+                      [Official Office Hours Placeholder — Sunday to Thursday, 8:00 AM – 4:00 PM]
                     </span>
                   </div>
                 </div>
               </div>
+
+              {/* Location / Map Placeholder (Honest, not fake map) */}
+              <div className="p-4 rounded-lg bg-[#fbfaf7] border border-[#e5e0d5] text-xs space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-[#164e37] uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+                    <MapPin className="w-3.5 h-3.5 text-[#c59b27]" />
+                    Location Map Placeholder
+                  </span>
+                  <span className="text-[10px] text-slate-400 font-mono">Korangath, Tirur</span>
+                </div>
+                <div className="h-28 bg-[#f4f1ea] rounded border border-dashed border-[#d2cabb] flex flex-col items-center justify-center text-center p-3 text-slate-500">
+                  <MapPin className="w-5 h-5 text-[#164e37]/40 mb-1" />
+                  <span className="font-semibold text-[11px] text-slate-700">Interactive Map Integration Pending</span>
+                  <span className="text-[10px] text-slate-500 max-w-xs mt-0.5">
+                    Official GPS coordinates will be embedded upon institutional confirmation.
+                  </span>
+                </div>
+              </div>
             </div>
 
-            {/* Right Col: Contact Form */}
-            <div className="lg:col-span-7 bg-[#fbfaf7] p-6 sm:p-8 rounded-2xl border border-[#e5e0d5] shadow-2xs">
-              <h3 className="text-lg font-bold text-[#0f231c] mb-1">
-                Send an Inquiry Message
-              </h3>
-              <p className="text-xs text-slate-600 mb-5">
-                Fill in your details below and our administrative office will respond during working hours.
-              </p>
-
-              {quickContactSent ? (
-                <div className="p-6 bg-emerald-50 border border-emerald-200 rounded-xl text-center space-y-2">
-                  <CheckCircle2 className="w-8 h-8 text-emerald-600 mx-auto" />
-                  <strong className="block text-sm font-bold text-emerald-900">
-                    Message Received
-                  </strong>
-                  <p className="text-xs text-slate-600 max-w-sm mx-auto">
-                    Thank you, {quickForm.name || 'Applicant'}. Your inquiry has been submitted to the office of Sharaful Islam Madrassa.
+            {/* Right Column: Clean Admission Enquiry Form */}
+            <div className="lg:col-span-7 bg-[#fbfaf7] p-6 sm:p-8 rounded-xl border border-[#e5e0d5] shadow-xs">
+              <div className="flex items-center justify-between pb-3 mb-5 border-b border-[#eee9df]">
+                <div>
+                  <h3 className="text-lg sm:text-xl font-bold text-[#0f231c]">
+                    Admission & General Enquiry
+                  </h3>
+                  <p className="text-xs text-slate-600 mt-0.5">
+                    Submit your details and questions for the administrative office.
                   </p>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setQuickContactSent(false);
-                      setQuickForm({ name: '', email: '', phone: '', message: '' });
-                    }}
-                    className="text-xs font-semibold text-[#164e37] hover:underline mt-2 inline-block"
-                  >
-                    Send another inquiry
-                  </button>
+                </div>
+                <PlaceholderBadge label="Enquiry Desk" size="sm" />
+              </div>
+
+              {submissionState === 'backend_pending' ? (
+                <div className="p-6 bg-white border border-[#d2cabb] rounded-xl text-center space-y-3">
+                  <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center justify-center mx-auto">
+                    <CheckCircle2 className="w-6 h-6 text-[#164e37]" />
+                  </div>
+                  <h4 className="text-base font-bold text-[#0f231c]">
+                    Form Integration Coming Soon
+                  </h4>
+                  <p className="text-xs text-slate-600 max-w-md mx-auto leading-relaxed">
+                    Thank you, <strong>{enquiryForm.fullName}</strong>. Your enquiry details for <strong>{enquiryForm.studentName}</strong> regarding <strong>{enquiryForm.enquiryType}</strong> have been validated. Online submission requires Firebase Firestore/Cloud Functions integration, which is currently under development.
+                  </p>
+                  <div className="p-3 bg-[#fbfaf7] rounded-lg border border-[#e5e0d5] text-left text-xs max-w-sm mx-auto space-y-1">
+                    <div className="flex justify-between">
+                      <span className="text-slate-500">Applicant:</span>
+                      <span className="font-semibold text-slate-800">{enquiryForm.fullName}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-500">Student:</span>
+                      <span className="font-semibold text-slate-800">{enquiryForm.studentName}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-500">Phone:</span>
+                      <span className="font-mono text-slate-800">{enquiryForm.phone}</span>
+                    </div>
+                    {enquiryForm.email && (
+                      <div className="flex justify-between">
+                        <span className="text-slate-500">Email:</span>
+                        <span className="font-mono text-slate-800">{enquiryForm.email}</span>
+                      </div>
+                    )}
+                    <div className="flex justify-between">
+                      <span className="text-slate-500">Type:</span>
+                      <span className="text-[#164e37] font-semibold">{enquiryForm.enquiryType}</span>
+                    </div>
+                  </div>
+                  <p className="text-[11px] text-slate-500">
+                    For urgent enquiries, please visit the madrassa office in Korangath during official visiting hours.
+                  </p>
+                  <div className="pt-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSubmissionState('idle');
+                        setEnquiryForm({ fullName: '', phone: '', email: '', studentName: '', enquiryType: 'Admission', message: '' });
+                        setFormErrors({});
+                      }}
+                      className="px-5 py-2.5 bg-[#164e37] hover:bg-[#0f3b29] text-white text-xs font-semibold rounded-lg transition-colors inline-block cursor-pointer"
+                    >
+                      Submit Another Enquiry
+                    </button>
+                  </div>
                 </div>
               ) : (
-                <form onSubmit={handleQuickSubmit} className="space-y-4 text-xs">
+                <form onSubmit={handleEnquirySubmit} noValidate className="space-y-4 text-xs">
+                  {/* Row 1: Full Name & Phone Number */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block font-semibold text-slate-700 mb-1">
-                        Your Full Name *
+                      <label className="block font-semibold text-slate-800 mb-1">
+                        Full Name <span className="text-rose-600">*</span>
                       </label>
                       <input
                         type="text"
-                        required
-                        placeholder="e.g. Abdullah K."
-                        value={quickForm.name}
-                        onChange={(e) => setQuickForm({ ...quickForm, name: e.target.value })}
-                        className="w-full px-3 py-2.5 text-xs bg-white border border-[#d2cabb] rounded-lg focus:outline-none focus:ring-1 focus:ring-[#164e37]"
+                        placeholder="Your full name"
+                        value={enquiryForm.fullName}
+                        onChange={(e) => {
+                          setEnquiryForm({ ...enquiryForm, fullName: e.target.value });
+                          if (formErrors.fullName) setFormErrors({ ...formErrors, fullName: '' });
+                        }}
+                        className={`w-full px-3 py-2.5 text-xs bg-white border ${formErrors.fullName ? 'border-rose-400 ring-1 ring-rose-300' : 'border-[#d2cabb]'} rounded-lg focus:outline-none focus:ring-1 focus:ring-[#164e37] transition-all`}
                       />
+                      {formErrors.fullName && (
+                        <p className="text-rose-600 text-[11px] mt-1 flex items-center gap-1">
+                          <AlertCircle className="w-3 h-3 shrink-0" />
+                          <span>{formErrors.fullName}</span>
+                        </p>
+                      )}
                     </div>
 
                     <div>
-                      <label className="block font-semibold text-slate-700 mb-1">
-                        Phone Number *
+                      <label className="block font-semibold text-slate-800 mb-1">
+                        Phone Number <span className="text-rose-600">*</span>
                       </label>
                       <input
                         type="tel"
-                        required
                         placeholder="+91 Phone number"
-                        value={quickForm.phone}
-                        onChange={(e) => setQuickForm({ ...quickForm, phone: e.target.value })}
-                        className="w-full px-3 py-2.5 text-xs bg-white border border-[#d2cabb] rounded-lg focus:outline-none focus:ring-1 focus:ring-[#164e37]"
+                        value={enquiryForm.phone}
+                        onChange={(e) => {
+                          setEnquiryForm({ ...enquiryForm, phone: e.target.value });
+                          if (formErrors.phone) setFormErrors({ ...formErrors, phone: '' });
+                        }}
+                        className={`w-full px-3 py-2.5 text-xs bg-white border ${formErrors.phone ? 'border-rose-400 ring-1 ring-rose-300' : 'border-[#d2cabb]'} rounded-lg focus:outline-none focus:ring-1 focus:ring-[#164e37] transition-all`}
                       />
+                      {formErrors.phone && (
+                        <p className="text-rose-600 text-[11px] mt-1 flex items-center gap-1">
+                          <AlertCircle className="w-3 h-3 shrink-0" />
+                          <span>{formErrors.phone}</span>
+                        </p>
+                      )}
                     </div>
                   </div>
 
-                  <div>
-                    <label className="block font-semibold text-slate-700 mb-1">
-                      Email Address *
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      placeholder="example@mail.com"
-                      value={quickForm.email}
-                      onChange={(e) => setQuickForm({ ...quickForm, email: e.target.value })}
-                      className="w-full px-3 py-2.5 text-xs bg-white border border-[#d2cabb] rounded-lg focus:outline-none focus:ring-1 focus:ring-[#164e37]"
-                    />
+                  {/* Row 2: Email & Student / Applicant Name */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block font-semibold text-slate-800 mb-1">
+                        Email Address <span className="text-slate-400 font-normal">(Optional)</span>
+                      </label>
+                      <input
+                        type="email"
+                        placeholder="example@mail.com"
+                        value={enquiryForm.email}
+                        onChange={(e) => {
+                          setEnquiryForm({ ...enquiryForm, email: e.target.value });
+                          if (formErrors.email) setFormErrors({ ...formErrors, email: '' });
+                        }}
+                        className={`w-full px-3 py-2.5 text-xs bg-white border ${formErrors.email ? 'border-rose-400 ring-1 ring-rose-300' : 'border-[#d2cabb]'} rounded-lg focus:outline-none focus:ring-1 focus:ring-[#164e37] transition-all`}
+                      />
+                      {formErrors.email && (
+                        <p className="text-rose-600 text-[11px] mt-1 flex items-center gap-1">
+                          <AlertCircle className="w-3 h-3 shrink-0" />
+                          <span>{formErrors.email}</span>
+                        </p>
+                      )}
+                    </div>
+
+                    <div>
+                      <label className="block font-semibold text-slate-800 mb-1">
+                        Student / Applicant Name <span className="text-rose-600">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="Student's name"
+                        value={enquiryForm.studentName}
+                        onChange={(e) => {
+                          setEnquiryForm({ ...enquiryForm, studentName: e.target.value });
+                          if (formErrors.studentName) setFormErrors({ ...formErrors, studentName: '' });
+                        }}
+                        className={`w-full px-3 py-2.5 text-xs bg-white border ${formErrors.studentName ? 'border-rose-400 ring-1 ring-rose-300' : 'border-[#d2cabb]'} rounded-lg focus:outline-none focus:ring-1 focus:ring-[#164e37] transition-all`}
+                      />
+                      {formErrors.studentName && (
+                        <p className="text-rose-600 text-[11px] mt-1 flex items-center gap-1">
+                          <AlertCircle className="w-3 h-3 shrink-0" />
+                          <span>{formErrors.studentName}</span>
+                        </p>
+                      )}
+                    </div>
                   </div>
 
+                  {/* Row 3: Enquiry Type */}
                   <div>
-                    <label className="block font-semibold text-slate-700 mb-1">
-                      Message / Inquiry Details *
+                    <label className="block font-semibold text-slate-800 mb-1">
+                      Enquiry Type <span className="text-rose-600">*</span>
+                    </label>
+                    <select
+                      value={enquiryForm.enquiryType}
+                      onChange={(e) => setEnquiryForm({ ...enquiryForm, enquiryType: e.target.value })}
+                      className="w-full px-3 py-2.5 text-xs bg-white border border-[#d2cabb] rounded-lg focus:outline-none focus:ring-1 focus:ring-[#164e37] cursor-pointer"
+                    >
+                      <option value="Admission">Admission</option>
+                      <option value="Academic Information">Academic Information</option>
+                      <option value="Student Information">Student Information</option>
+                      <option value="General Enquiry">General Enquiry</option>
+                    </select>
+                  </div>
+
+                  {/* Row 4: Message */}
+                  <div>
+                    <label className="block font-semibold text-slate-800 mb-1">
+                      Message <span className="text-rose-600">*</span>
                     </label>
                     <textarea
                       rows={4}
-                      required
-                      placeholder="Please specify your query regarding admissions, syllabus, or timings..."
-                      value={quickForm.message}
-                      onChange={(e) => setQuickForm({ ...quickForm, message: e.target.value })}
-                      className="w-full px-3 py-2.5 text-xs bg-white border border-[#d2cabb] rounded-lg focus:outline-none focus:ring-1 focus:ring-[#164e37] resize-none"
+                      placeholder="Please specify your query regarding admission requirements, class batches, or academic details..."
+                      value={enquiryForm.message}
+                      onChange={(e) => {
+                        setEnquiryForm({ ...enquiryForm, message: e.target.value });
+                        if (formErrors.message) setFormErrors({ ...formErrors, message: '' });
+                      }}
+                      className={`w-full px-3 py-2.5 text-xs bg-white border ${formErrors.message ? 'border-rose-400 ring-1 ring-rose-300' : 'border-[#d2cabb]'} rounded-lg focus:outline-none focus:ring-1 focus:ring-[#164e37] resize-none transition-all`}
                     />
+                    {formErrors.message && (
+                      <p className="text-rose-600 text-[11px] mt-1 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3 shrink-0" />
+                        <span>{formErrors.message}</span>
+                      </p>
+                    )}
                   </div>
 
-                  <div className="flex items-center gap-3 pt-1">
+                  {/* Submission Row */}
+                  <div className="flex flex-wrap items-center gap-3 pt-2">
                     <button
                       type="submit"
-                      className="px-6 py-2.5 bg-[#164e37] hover:bg-[#0f3b29] text-white font-bold rounded-lg shadow-xs transition-colors flex items-center gap-2"
+                      disabled={isSubmitting}
+                      className="px-6 py-2.5 bg-[#164e37] hover:bg-[#0f3b29] disabled:bg-slate-400 text-white font-bold rounded-lg shadow-xs transition-colors flex items-center gap-2 cursor-pointer disabled:cursor-not-allowed"
                     >
-                      <Send className="w-3.5 h-3.5 text-[#c59b27]" />
-                      <span>Submit Inquiry</span>
+                      {isSubmitting ? (
+                        <>
+                          <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                          <span>Validating & Submitting...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Send className="w-3.5 h-3.5 text-[#c59b27]" />
+                          <span>Send Enquiry</span>
+                        </>
+                      )}
                     </button>
 
                     <button
                       type="button"
                       onClick={onOpenAdmissionModal}
-                      className="px-4 py-2.5 bg-white hover:bg-[#f4f1ea] text-slate-700 font-semibold border border-[#d2cabb] rounded-lg transition-colors"
+                      className="px-4 py-2.5 bg-white hover:bg-[#f4f1ea] text-slate-700 font-semibold border border-[#d2cabb] rounded-lg transition-colors cursor-pointer"
                     >
-                      Admission Form
+                      Admission Form Modal
                     </button>
                   </div>
                 </form>
