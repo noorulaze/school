@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { X, ZoomIn, ShieldAlert } from 'lucide-react';
 import { GALLERY_ITEMS, GALLERY_EDITORIAL_NOTICE, type GalleryItem } from '../data/gallery';
@@ -9,6 +9,17 @@ import { PlaceholderBadge } from '../components/PlaceholderBadge';
 export const Gallery: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [activeModalItem, setActiveModalItem] = useState<GalleryItem | null>(null);
+
+  useEffect(() => {
+    if (activeModalItem) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [activeModalItem]);
 
   const categories = ['All', 'Campus', 'Classrooms', 'Student Activities', 'Programs', 'Events'];
 
@@ -29,7 +40,7 @@ export const Gallery: React.FC = () => {
   return (
     <div className="w-full flex flex-col bg-[#fbfaf7] text-slate-800">
       {/* 1. Page Header */}
-      <section className="bg-white border-b border-[#e5e0d5] py-8 sm:py-10">
+      <section className="bg-white border-b border-[#e5e0d5] py-6 sm:py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-2 text-xs text-slate-500 mb-2">
             <Link to="/" className="hover:text-[#164e37]">Home</Link>
@@ -41,7 +52,7 @@ export const Gallery: React.FC = () => {
             <h1 className="text-2xl sm:text-4xl font-extrabold text-[#0f231c] tracking-tight">
               Campus Photo Gallery
             </h1>
-            <p className="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-600 mt-1.5 sm:mt-2 leading-relaxed">
               Photographic highlights of campus facilities, classroom environments, student programs, and commemorative events at {SCHOOL_INFO.officialName} ({SCHOOL_INFO.localName}).
             </p>
           </div>
@@ -49,26 +60,26 @@ export const Gallery: React.FC = () => {
       </section>
 
       {/* 2. Transparency Notice */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-8">
-        <div className="p-4 bg-amber-50/80 border border-amber-200 rounded-xl flex items-start gap-3 text-xs text-amber-950">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-5 sm:pt-8">
+        <div className="p-3.5 sm:p-4 bg-amber-50/80 border border-amber-200 rounded-xl flex items-start gap-3 text-xs text-amber-950">
           <ShieldAlert className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
           <div className="space-y-0.5">
             <strong className="block font-bold">Gallery Archive Note:</strong>
-            <p className="text-slate-700 leading-relaxed">{GALLERY_EDITORIAL_NOTICE}</p>
+            <p className="text-slate-700 leading-relaxed text-xs">{GALLERY_EDITORIAL_NOTICE}</p>
           </div>
         </div>
       </div>
 
       {/* 3. Category Filter Tabs & Asymmetric Masonry-Inspired Grid */}
-      <section className="py-8">
+      <section className="py-6 sm:py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           {/* Category Tabs */}
-          <div className="flex flex-wrap items-center gap-2 mb-8">
+          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-2 mb-6 sm:mb-8 -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap">
             {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all border ${
+                className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs font-semibold transition-all border whitespace-nowrap shrink-0 min-h-[38px] ${
                   selectedCategory === cat
                     ? 'bg-[#164e37] text-white border-[#164e37] shadow-2xs font-bold'
                     : 'bg-white text-slate-700 hover:bg-slate-50 border-[#d2cabb]'
@@ -80,7 +91,7 @@ export const Gallery: React.FC = () => {
           </div>
 
           {/* Asymmetric Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 sm:gap-5">
             {filteredItems.map((item, idx) => {
               // Asymmetric spanning logic: every 3rd or 4th item has different prominence
               const isFeature = idx === 0 || idx === 5;
@@ -91,14 +102,14 @@ export const Gallery: React.FC = () => {
                 <div
                   key={item.id}
                   onClick={() => setActiveModalItem(item)}
-                  className={`${colSpan} group cursor-pointer relative rounded-2xl overflow-hidden border border-[#d2cabb] bg-white shadow-xs hover:shadow-md transition-all`}
+                  className={`${colSpan} group cursor-pointer relative rounded-xl sm:rounded-2xl overflow-hidden border border-[#d2cabb] bg-white shadow-xs hover:shadow-md transition-all`}
                 >
                   <RealisticImageSlot
                     scene={scene}
                     aspectRatio={isFeature ? '16/10' : '4/3'}
                     label={`Category: ${item.category}`}
                     caption={item.title}
-                    className="h-full min-h-[220px]"
+                    className="h-full min-h-[200px] sm:min-h-[220px]"
                   />
 
                   {/* Hover Overlay with Zoom Button */}
@@ -109,10 +120,10 @@ export const Gallery: React.FC = () => {
                   </div>
 
                   {/* Clean Bottom Metadata Bar */}
-                  <div className="p-3.5 bg-white border-t border-[#e5e0d5] flex items-center justify-between text-xs">
-                    <div>
-                      <strong className="block text-slate-900 text-xs">{item.title}</strong>
-                      <span className="text-[11px] text-slate-500">{item.category}</span>
+                  <div className="p-3 sm:p-3.5 bg-white border-t border-[#e5e0d5] flex items-center justify-between text-xs">
+                    <div className="min-w-0 mr-2">
+                      <strong className="block text-slate-900 text-xs truncate">{item.title}</strong>
+                      <span className="text-[11px] text-slate-500 truncate block">{item.category}</span>
                     </div>
                     <PlaceholderBadge label={item.placeholderLabel} size="sm" />
                   </div>
@@ -128,33 +139,34 @@ export const Gallery: React.FC = () => {
         <div
           role="dialog"
           aria-modal="true"
-          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-4 sm:p-6"
+          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6"
           onClick={() => setActiveModalItem(null)}
         >
           <div
-            className="bg-white rounded-2xl max-w-2xl w-full overflow-hidden shadow-2xl relative"
+            className="bg-white rounded-xl sm:rounded-2xl max-w-2xl w-full overflow-hidden shadow-2xl relative max-h-[90vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
-            <div className="p-4 bg-[#f4f1ea] border-b border-[#e5e0d5] flex items-center justify-between">
-              <div>
+            <div className="p-3.5 sm:p-4 bg-[#f4f1ea] border-b border-[#e5e0d5] flex items-center justify-between">
+              <div className="min-w-0 mr-2">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#164e37]">
                   {activeModalItem.category}
                 </span>
-                <h3 className="text-base font-bold text-slate-900">
+                <h3 className="text-sm sm:text-base font-bold text-slate-900 truncate">
                   {activeModalItem.title}
                 </h3>
               </div>
               <button
                 onClick={() => setActiveModalItem(null)}
-                className="p-1.5 rounded-lg text-slate-600 hover:text-black hover:bg-slate-200 transition-colors"
+                aria-label="Close image modal"
+                className="w-10 h-10 rounded-lg text-slate-600 hover:text-black hover:bg-slate-200 active:bg-slate-300 transition-colors flex items-center justify-center shrink-0"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Modal Body */}
-            <div className="p-4">
+            <div className="p-3 sm:p-4 overflow-y-auto">
               <RealisticImageSlot
                 scene={mapCategoryToScene(activeModalItem.category, activeModalItem.id)}
                 aspectRatio="16/10"
@@ -163,11 +175,11 @@ export const Gallery: React.FC = () => {
                 className="shadow-sm"
               />
 
-              <div className="mt-4 p-4 bg-[#fbfaf7] rounded-xl border border-[#e5e0d5] text-xs space-y-2">
-                <p className="text-slate-700 leading-relaxed">
+              <div className="mt-3 sm:mt-4 p-3.5 sm:p-4 bg-[#fbfaf7] rounded-xl border border-[#e5e0d5] text-xs space-y-2">
+                <p className="text-slate-700 leading-relaxed text-xs">
                   {activeModalItem.caption}
                 </p>
-                <div className="pt-2 border-t border-[#e5e0d5] flex items-center justify-between text-slate-500 text-[11px]">
+                <div className="pt-2 border-t border-[#e5e0d5] flex flex-col sm:flex-row sm:items-center justify-between text-slate-500 text-[11px] gap-1">
                   <span>Slot ID: {activeModalItem.id}</span>
                   <span className="font-semibold text-[#164e37]">
                     Korangath, Tirur, Malappuram

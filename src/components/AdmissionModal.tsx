@@ -20,6 +20,18 @@ export const AdmissionModal: React.FC<AdmissionModalProps> = ({ isOpen, onClose 
 
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+  // Prevent background scrolling while modal is open
+  React.useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -41,9 +53,9 @@ export const AdmissionModal: React.FC<AdmissionModalProps> = ({ isOpen, onClose 
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 flex items-center justify-center p-3 sm:p-4">
       <div
-        className="relative w-full max-w-lg bg-white rounded-xl shadow-xl border border-[#d2cabb] overflow-hidden"
+        className="relative w-full max-w-lg bg-white rounded-xl shadow-xl border border-[#d2cabb] overflow-hidden my-auto"
         role="dialog"
         aria-modal="true"
       >
@@ -73,7 +85,7 @@ export const AdmissionModal: React.FC<AdmissionModalProps> = ({ isOpen, onClose 
         </div>
 
         {/* Modal Content */}
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           {isSubmitted ? (
             <div className="text-center py-6 space-y-3">
               <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center mx-auto text-emerald-800">

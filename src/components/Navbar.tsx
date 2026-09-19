@@ -94,16 +94,16 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAdmissionModal }) => {
           : 'bg-[#fbfaf7] border-b border-[#e5e0d5] py-3 sm:py-3.5'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex items-center justify-between gap-2 sm:gap-4">
         {/* LEFT: School Logo & Institutional Identity */}
         <Link
           to="/"
           aria-label={`${SCHOOL_INFO.officialName} (${SCHOOL_INFO.localName}) Home`}
-          className="flex items-center gap-3 group shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#164e37] rounded-lg p-1 -m-1"
+          className="flex items-center gap-2 sm:gap-3 group shrink min-w-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#164e37] rounded-lg p-1 -m-1"
         >
           {/* School Logo Placeholder Crest */}
-          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-lg bg-[#164e37] text-white flex items-center justify-center shrink-0 border border-[#c59b27]/60 shadow-2xs relative overflow-hidden transition-transform duration-300 group-hover:scale-105">
-            <svg viewBox="0 0 100 100" className="w-7 h-7 sm:w-8 sm:h-8" aria-hidden="true">
+          <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-lg bg-[#164e37] text-white flex items-center justify-center shrink-0 border border-[#c59b27]/60 shadow-2xs relative overflow-hidden transition-transform duration-300 group-hover:scale-105">
+            <svg viewBox="0 0 100 100" className="w-6 h-6 sm:w-8 sm:h-8" aria-hidden="true">
               <circle cx="50" cy="50" r="46" fill="none" stroke="#c59b27" strokeWidth="2.5" strokeDasharray="3 2" />
               <path
                 d="M24 64 C36 58, 45 61, 50 67 C55 61, 64 58, 76 64 L76 38 C64 34, 55 37, 50 43 C45 37, 36 34, 24 38 Z"
@@ -116,11 +116,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAdmissionModal }) => {
           </div>
 
           {/* School Name & Local Identifier */}
-          <div className="flex flex-col">
-            <span className="text-sm sm:text-base font-extrabold text-[#0f231c] tracking-tight leading-snug group-hover:text-[#164e37] transition-colors">
+          <div className="flex flex-col min-w-0">
+            <span className="text-xs sm:text-base font-extrabold text-[#0f231c] tracking-tight leading-snug group-hover:text-[#164e37] transition-colors truncate">
               {SCHOOL_INFO.officialName}
             </span>
-            <span className="text-[11px] sm:text-xs text-[#164e37] font-medium leading-none tracking-wide mt-0.5">
+            <span className="text-[10px] sm:text-xs text-[#164e37] font-medium leading-none tracking-wide mt-0.5 truncate">
               {SCHOOL_INFO.localName}
             </span>
           </div>

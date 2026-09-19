@@ -245,23 +245,21 @@ export const RealisticImageSlot: React.FC<RealisticImageSlotProps> = ({
       {/* Subtle Warm Vignette Overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent pointer-events-none" />
 
-      {/* Camera / Photo Slot Indicator */}
-      <div className="absolute top-3 left-3 z-10">
-        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-xs text-white text-[10px] font-medium border border-white/20 shadow-xs">
-          <Camera className="w-3 h-3 text-[#c59b27]" />
-          <span>{label}</span>
+      {/* Top Header Indicators: flex container preventing collision on narrow screens */}
+      <div className="absolute top-2.5 sm:top-3 inset-x-2.5 sm:inset-x-3 z-10 flex items-center justify-between gap-2 pointer-events-none">
+        <div className="inline-flex items-center gap-1.5 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-black/60 backdrop-blur-xs text-white text-[9px] sm:text-[10px] font-medium border border-white/20 shadow-xs min-w-0 max-w-[68%]">
+          <Camera className="w-3 h-3 text-[#c59b27] shrink-0" />
+          <span className="truncate">{label}</span>
         </div>
-      </div>
 
-      {/* Admin Upload Prompt Badge */}
-      {showAdminBadge && (
-        <div className="absolute top-3 right-3 z-10">
-          <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-100/90 text-amber-950 text-[9px] font-bold border border-amber-300 shadow-2xs">
-            <ImageIcon className="w-2.5 h-2.5 text-amber-700" />
-            <span>Upload via Admin</span>
+        {showAdminBadge && (
+          <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-100/90 text-amber-950 text-[9px] font-bold border border-amber-300 shadow-2xs shrink-0">
+            <ImageIcon className="w-2.5 h-2.5 text-amber-700 shrink-0" />
+            <span className="hidden sm:inline">Upload via Admin</span>
+            <span className="sm:hidden">Admin</span>
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Caption at Bottom */}
       {caption && (

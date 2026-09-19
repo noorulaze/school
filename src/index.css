@@ -34,6 +34,9 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    overflow-x: clip;
+    max-width: 100vw;
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
@@ -41,13 +44,40 @@
     color: #1e293b;
     font-family: var(--font-sans);
     line-height: 1.6;
-    overflow-x: hidden;
+    overflow-x: clip;
+    max-width: 100vw;
+    -webkit-tap-highlight-color: transparent;
   }
 
   /* Academic print-like crispness */
   h1, h2, h3, h4, h5, h6 {
     color: #0f231c;
     letter-spacing: -0.015em;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  /* Accessible touch defaults */
+  button, a {
+    touch-action: manipulation;
+  }
+}
+
+/* Hide scrollbar for clean mobile swipeable category chips */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 

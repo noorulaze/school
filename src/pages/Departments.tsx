@@ -22,7 +22,7 @@ export const Departments: React.FC<DepartmentsProps> = ({ onOpenAdmissionModal }
   return (
     <div className="w-full flex flex-col bg-[#fbfaf7] text-slate-800">
       {/* 1. Page Header */}
-      <section className="bg-white border-b border-[#e5e0d5] py-8 sm:py-10">
+      <section className="bg-white border-b border-[#e5e0d5] py-6 sm:py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-2 text-xs text-slate-500 mb-2">
             <Link to="/" className="hover:text-[#164e37]">Home</Link>
@@ -42,24 +42,24 @@ export const Departments: React.FC<DepartmentsProps> = ({ onOpenAdmissionModal }
       </section>
 
       {/* 2. Interactive Academic Streams Prospectus (Not repetitive cards) */}
-      <section className="py-12 border-b border-[#e5e0d5]">
+      <section className="py-8 sm:py-12 border-b border-[#e5e0d5]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           {/* Stream Selector Tabs */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 mb-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-2.5 mb-6 sm:mb-8">
             {DEPARTMENTS.map((dept) => {
               const isSelected = dept.id === activeTab;
               return (
                 <button
                   key={dept.id}
                   onClick={() => setActiveTab(dept.id)}
-                  className={`p-4 rounded-xl border text-left transition-all flex flex-col justify-between ${
+                  className={`p-3 sm:p-4 rounded-xl border text-left transition-all flex flex-col justify-between min-h-[76px] ${
                     isSelected
                       ? 'bg-[#164e37] text-white border-[#164e37] shadow-sm'
                       : 'bg-white text-slate-800 border-[#e5e0d5] hover:border-[#164e37]'
                   }`}
                 >
                   <span
-                    className={`text-[10px] font-bold uppercase tracking-wider ${
+                    className={`text-[9px] sm:text-[10px] font-bold uppercase tracking-wider ${
                       isSelected ? 'text-[#c59b27]' : 'text-slate-400'
                     }`}
                   >
@@ -82,10 +82,10 @@ export const Departments: React.FC<DepartmentsProps> = ({ onOpenAdmissionModal }
           </div>
 
           {/* Active Stream Deep-Dive View */}
-          <div className="bg-white rounded-2xl border border-[#e5e0d5] p-6 sm:p-10 shadow-xs">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <div className="bg-white rounded-xl sm:rounded-2xl border border-[#e5e0d5] p-4 sm:p-8 lg:p-10 shadow-xs">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
               {/* Left Column: Stream Details */}
-              <div className="lg:col-span-7 space-y-5">
+              <div className="lg:col-span-7 space-y-4 sm:space-y-5">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="text-xs font-bold text-[#164e37] bg-[#f4f1ea] px-3 py-1 rounded-full border border-[#d2cabb]">
                     Stream {activeDepartment.code}
@@ -169,9 +169,9 @@ export const Departments: React.FC<DepartmentsProps> = ({ onOpenAdmissionModal }
       </section>
 
       {/* 3. Academic Progression Stages (Classes 1 to 10) */}
-      <section className="py-12 bg-white border-b border-[#e5e0d5]">
+      <section className="py-8 sm:py-12 bg-white border-b border-[#e5e0d5]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="max-w-3xl mb-8">
+          <div className="max-w-3xl mb-6 sm:mb-8">
             <span className="text-xs font-bold text-[#164e37] uppercase tracking-wider block mb-1">
               Curriculum Matrix
             </span>
@@ -183,58 +183,59 @@ export const Departments: React.FC<DepartmentsProps> = ({ onOpenAdmissionModal }
             </p>
           </div>
 
-          <div className="border border-[#e5e0d5] rounded-xl overflow-hidden">
+          <div className="border border-[#e5e0d5] rounded-xl overflow-hidden shadow-xs">
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs border-collapse">
+              <table className="w-full min-w-[560px] text-left text-xs border-collapse">
                 <thead>
                   <tr className="bg-[#f4f1ea] border-b border-[#d2cabb] text-[#164e37]">
-                    <th className="p-3.5 font-bold uppercase tracking-wider">Class Stage</th>
-                    <th className="p-3.5 font-bold uppercase tracking-wider">Age Group</th>
-                    <th className="p-3.5 font-bold uppercase tracking-wider">Core Focus</th>
-                    <th className="p-3.5 font-bold uppercase tracking-wider">Quranic Target</th>
+                    <th className="p-3 sm:p-3.5 font-bold uppercase tracking-wider">Class Stage</th>
+                    <th className="p-3 sm:p-3.5 font-bold uppercase tracking-wider">Age Group</th>
+                    <th className="p-3 sm:p-3.5 font-bold uppercase tracking-wider">Core Focus</th>
+                    <th className="p-3 sm:p-3.5 font-bold uppercase tracking-wider">Quranic Target</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#e5e0d5]">
                   <tr className="hover:bg-[#fdfaf5]">
-                    <td className="p-3.5 font-bold text-slate-900">Primary (Classes 1–4)</td>
-                    <td className="p-3.5 text-slate-600">5 – 9 Years</td>
-                    <td className="p-3.5 text-slate-700">Arabic alphabet, basic Fiqh of Wudu & Salah, short daily Adhkar</td>
-                    <td className="p-3.5 text-slate-700">Qaida Nooraniyyah, Makharij, Last 10 Surahs</td>
+                    <td className="p-3 sm:p-3.5 font-bold text-slate-900 whitespace-nowrap">Primary (Classes 1–4)</td>
+                    <td className="p-3 sm:p-3.5 text-slate-600 whitespace-nowrap">5 – 9 Years</td>
+                    <td className="p-3 sm:p-3.5 text-slate-700">Arabic alphabet, basic Fiqh of Wudu & Salah, short daily Adhkar</td>
+                    <td className="p-3 sm:p-3.5 text-slate-700">Qaida Nooraniyyah, Makharij, Last 10 Surahs</td>
                   </tr>
                   <tr className="hover:bg-[#fdfaf5]">
-                    <td className="p-3.5 font-bold text-slate-900">Intermediate (Classes 5–7)</td>
-                    <td className="p-3.5 text-slate-600">10 – 12 Years</td>
-                    <td className="p-3.5 text-slate-700">Detailed Taharah & Sawm rulings, Seerah narratives, introductory grammar</td>
-                    <td className="p-3.5 text-slate-700">Juz Amma fluent recitation, Noon & Meem Sakinah rules</td>
+                    <td className="p-3 sm:p-3.5 font-bold text-slate-900 whitespace-nowrap">Intermediate (Classes 5–7)</td>
+                    <td className="p-3 sm:p-3.5 text-slate-600 whitespace-nowrap">10 – 12 Years</td>
+                    <td className="p-3 sm:p-3.5 text-slate-700">Detailed Taharah & Sawm rulings, Seerah narratives, introductory grammar</td>
+                    <td className="p-3 sm:p-3.5 text-slate-700">Juz Amma fluent recitation, Noon & Meem Sakinah rules</td>
                   </tr>
                   <tr className="hover:bg-[#fdfaf5]">
-                    <td className="p-3.5 font-bold text-slate-900">Senior Secondary (Classes 8–10)</td>
-                    <td className="p-3.5 text-slate-600">13 – 15 Years</td>
-                    <td className="p-3.5 text-slate-700">Comprehensive Fiqh, Forty Hadith, Islamic moral ethics, modern challenges</td>
-                    <td className="p-3.5 text-slate-700">Complete Tilawat with full Tajweed, Surah Yaseen, Mulk memorization</td>
+                    <td className="p-3 sm:p-3.5 font-bold text-slate-900 whitespace-nowrap">Senior Secondary (Classes 8–10)</td>
+                    <td className="p-3 sm:p-3.5 text-slate-600 whitespace-nowrap">13 – 15 Years</td>
+                    <td className="p-3 sm:p-3.5 text-slate-700">Comprehensive Fiqh, Forty Hadith, Islamic moral ethics, modern challenges</td>
+                    <td className="p-3 sm:p-3.5 text-slate-700">Complete Tilawat with full Tajweed, Surah Yaseen, Mulk memorization</td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
+          <p className="text-[11px] text-slate-500 mt-2 block sm:hidden">← Swipe table sideways to view full curriculum details →</p>
         </div>
       </section>
 
       {/* 4. Admission CTA */}
-      <section className="py-10 bg-[#f4f1ea] border-t border-[#e5e0d5]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <section className="py-8 sm:py-10 bg-[#f4f1ea] border-t border-[#e5e0d5]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
           <div>
             <h4 className="text-base font-bold text-slate-900">
               Seek Enrolment Guidance for Your Child
             </h4>
-            <p className="text-xs text-slate-600">
+            <p className="text-xs text-slate-600 mt-0.5">
               Our teachers will assess the student’s current recitation level to assign them to the appropriate class.
             </p>
           </div>
 
           <button
             onClick={onOpenAdmissionModal}
-            className="px-5 py-2.5 bg-[#164e37] hover:bg-[#0f3b29] text-white text-xs font-bold rounded-xl shadow-xs transition-colors flex items-center gap-2 shrink-0"
+            className="w-full sm:w-auto min-h-[44px] px-5 py-2.5 bg-[#164e37] hover:bg-[#0f3b29] active:bg-[#0d3323] text-white text-xs font-bold rounded-xl shadow-xs transition-colors flex items-center justify-center gap-2 shrink-0"
           >
             <GraduationCap className="w-4 h-4 text-[#c59b27]" />
             <span>Admission Enquiry Form</span>

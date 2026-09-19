@@ -91,7 +91,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
       <NoticeTicker onOpenAdmissionModal={onOpenAdmissionModal} />
 
       {/* 2. MODERN SPLIT-SCREEN HERO SECTION */}
-      <section className="relative overflow-hidden bg-white border-b border-[#e5e0d5] py-12 sm:py-16 lg:py-20">
+      <section className="relative overflow-hidden bg-white border-b border-[#e5e0d5] py-10 sm:py-16 lg:py-20">
         {/* Subtle Islamic geometric pattern in the background */}
         <div className="absolute inset-0 opacity-[0.035] pointer-events-none select-none overflow-hidden">
           <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
@@ -111,37 +111,37 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
             {/* LEFT SIDE: Modern Editorial Content */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease: 'easeOut' }}
-              className="lg:col-span-7 space-y-6"
+              className="lg:col-span-7 space-y-4 sm:space-y-6"
             >
               {/* Eyebrow */}
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-[#c59b27]" />
-                <span className="text-xs uppercase tracking-widest font-extrabold text-[#164e37]">
+                <span className="text-[11px] sm:text-xs uppercase tracking-widest font-extrabold text-[#164e37]">
                   SHARAFUL ISLAM MADRASSA
                 </span>
               </div>
 
-              {/* Large Heading */}
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#0f231c] tracking-tight leading-[1.12]">
+              {/* Large Responsive Heading */}
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#0f231c] tracking-tight leading-[1.14]">
                 Learning. Character. <span className="text-[#164e37]">Faith.</span>
               </h1>
 
               {/* Short Natural Description */}
-              <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-xl">
+              <p className="text-xs sm:text-sm lg:text-base text-slate-600 leading-relaxed max-w-xl">
                 Dedicated to providing authentic Quranic recitation, Islamic studies, and disciplined moral education for young learners in a welcoming, character-building environment at Korangath, Tirur.
               </p>
 
-              {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
+              {/* Action Buttons with comfortable touch UX */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 pt-1 sm:pt-2">
                 <Link
                   to="/about"
-                  className="px-6 py-3.5 bg-[#164e37] hover:bg-[#0f3b29] text-white text-xs sm:text-sm font-bold rounded-xl shadow-xs transition-all flex items-center justify-center gap-2 group hover:shadow-sm"
+                  className="w-full sm:w-auto px-5 sm:px-6 py-3 sm:py-3.5 bg-[#164e37] hover:bg-[#0f3b29] text-white text-xs sm:text-sm font-bold rounded-xl shadow-xs transition-all flex items-center justify-center gap-2 group hover:shadow-sm min-h-[44px]"
                 >
                   <span>Explore Our School</span>
                   <ArrowRight className="w-4 h-4 text-[#c59b27] transition-transform group-hover:translate-x-1" />
@@ -150,7 +150,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
                 <button
                   type="button"
                   onClick={onOpenAdmissionModal}
-                  className="px-6 py-3.5 bg-[#f4f1ea] hover:bg-[#ebe6dc] text-slate-800 border border-[#d2cabb] text-xs sm:text-sm font-bold rounded-xl transition-colors flex items-center justify-center gap-2"
+                  className="w-full sm:w-auto px-5 sm:px-6 py-3 sm:py-3.5 bg-[#f4f1ea] hover:bg-[#ebe6dc] text-slate-800 border border-[#d2cabb] text-xs sm:text-sm font-bold rounded-xl transition-colors flex items-center justify-center gap-2 min-h-[44px]"
                 >
                   <GraduationCap className="w-4 h-4 text-[#164e37]" />
                   <span>Admission Enquiry</span>
@@ -158,37 +158,39 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
               </div>
             </motion.div>
 
-            {/* RIGHT SIDE: Large Rectangular Campus Image with Floating Info Element */}
+            {/* RIGHT SIDE: Natural Rectangular Image with Safe Floating Info Element */}
             <motion.div
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.55, delay: 0.15, ease: 'easeOut' }}
-              className="lg:col-span-5 relative mt-4 lg:mt-0 pb-6 sm:pb-8 lg:pb-0"
+              className="lg:col-span-5 relative mt-2 lg:mt-0 pb-6 sm:pb-8 lg:pb-0"
             >
-              {/* Natural Rectangular Image Composition */}
-              <RealisticImageSlot
-                scene="campus"
-                aspectRatio="4/3"
-                label="Campus Grounds & Verandah"
-                caption="Main campus building at Korangath, Tirur"
-                className="shadow-md"
-              />
+              {/* Natural Image Composition */}
+              <div className="max-h-[260px] sm:max-h-none overflow-hidden rounded-xl">
+                <RealisticImageSlot
+                  scene="campus"
+                  aspectRatio="16/10"
+                  label="Campus Grounds & Verandah"
+                  caption="Main campus building at Korangath, Tirur"
+                  className="shadow-md"
+                />
+              </div>
 
-              {/* Small Subtle Floating Information Element */}
+              {/* Floating Info Element Protected from Edge Overflow */}
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.45, delay: 0.3, ease: 'easeOut' }}
-                className="absolute -bottom-4 -left-3 sm:-bottom-5 sm:-left-4 bg-white border border-[#d2cabb] rounded-xl px-4 py-3 shadow-md z-20 flex items-center gap-3"
+                className="absolute -bottom-3 left-2 sm:-bottom-5 sm:-left-4 bg-white border border-[#d2cabb] rounded-xl px-3 sm:px-4 py-2 sm:py-3 shadow-md z-20 flex items-center gap-2.5 sm:gap-3 max-w-[calc(100%-16px)]"
               >
-                <div className="w-9 h-9 rounded-lg bg-[#f4f1ea] border border-[#d2cabb] flex items-center justify-center shrink-0 text-[#164e37]">
-                  <MapPin className="w-4 h-4 text-[#c59b27]" />
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-[#f4f1ea] border border-[#d2cabb] flex items-center justify-center shrink-0 text-[#164e37]">
+                  <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#c59b27]" />
                 </div>
-                <div>
-                  <span className="block text-xs font-extrabold text-[#0f231c] leading-tight">
+                <div className="min-w-0">
+                  <span className="block text-xs font-extrabold text-[#0f231c] leading-tight truncate">
                     Sharafiyya Korangath
                   </span>
-                  <span className="block text-[11px] text-slate-500 font-medium leading-tight mt-0.5">
+                  <span className="block text-[10px] sm:text-[11px] text-slate-500 font-medium leading-tight mt-0.5 truncate">
                     Korangath, Tirur
                   </span>
                 </div>
@@ -198,10 +200,10 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
         </div>
       </section>
 
-      {/* 3. QUICK INFORMATION SECTION (Clean Horizontal Strip) */}
-      <section className="bg-[#f4f1ea] border-b border-[#e5e0d5] py-5">
+      {/* 3. QUICK INFORMATION SECTION (Clean 5-Item Grid without dangling card) */}
+      <section className="bg-[#f4f1ea] border-b border-[#e5e0d5] py-4 sm:py-5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-2 sm:gap-3">
             {[
               {
                 title: 'About Institution',
@@ -226,7 +228,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
               },
               {
                 title: 'School Events',
-                desc: 'Calendar & milestones',
+                desc: 'Calendar & updates',
                 icon: Calendar,
                 link: '/events',
                 action: null,
@@ -240,16 +242,18 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
               },
             ].map((item, idx) => {
               const Icon = item.icon;
+              // 5th item spans full width on 2-col mobile to prevent single dangling element
+              const spanClass = idx === 4 ? 'col-span-2 md:col-span-1' : 'col-span-1';
               const content = (
-                <div className="p-3.5 bg-white rounded-xl border border-[#e5e0d5] hover:border-[#164e37] hover:shadow-xs transition-all flex items-center gap-3 text-left">
-                  <div className="w-8 h-8 rounded-lg bg-[#f4f1ea] text-[#164e37] flex items-center justify-center shrink-0">
-                    <Icon className="w-4 h-4 text-[#164e37]" />
+                <div className="p-2.5 sm:p-3.5 bg-white rounded-xl border border-[#e5e0d5] hover:border-[#164e37] hover:shadow-xs transition-all flex items-center gap-2.5 sm:gap-3 text-left min-h-[44px]">
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-[#f4f1ea] text-[#164e37] flex items-center justify-center shrink-0">
+                    <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#164e37]" />
                   </div>
                   <div className="min-w-0">
-                    <span className="block text-xs font-bold text-slate-900 truncate">
+                    <span className="block text-[11px] sm:text-xs font-bold text-slate-900 truncate">
                       {item.title}
                     </span>
-                    <span className="block text-[11px] text-slate-500 truncate">
+                    <span className="block text-[10px] sm:text-[11px] text-slate-500 truncate">
                       {item.desc}
                     </span>
                   </div>
@@ -262,7 +266,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
                     key={idx}
                     type="button"
                     onClick={item.action}
-                    className="w-full text-left col-span-2 sm:col-span-1"
+                    className={`w-full text-left ${spanClass}`}
                   >
                     {content}
                   </button>
@@ -270,7 +274,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
               }
 
               return (
-                <Link key={idx} to={item.link!} className="w-full block">
+                <Link key={idx} to={item.link!} className={`block ${spanClass}`}>
                   {content}
                 </Link>
               );
@@ -1173,26 +1177,26 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
             >
               <div className="bg-[#fbfaf7] text-slate-800 rounded-xl border border-[#d8d2c4] shadow-xl overflow-hidden transition-all duration-300">
                 {/* Dashboard Window Top Bar */}
-                <div className="bg-[#0f2c21] text-white px-4 sm:px-5 py-3 flex items-center justify-between border-b border-[#1b5038]">
-                  <div className="flex items-center gap-2.5">
-                    <div className="flex gap-1.5">
-                      <span className="w-2.5 h-2.5 rounded-full bg-rose-500/80"></span>
-                      <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80"></span>
-                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></span>
+                <div className="bg-[#0f2c21] text-white px-3 sm:px-5 py-2.5 sm:py-3 flex items-center justify-between gap-2 border-b border-[#1b5038]">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <div className="flex gap-1 shrink-0">
+                      <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-rose-500/80"></span>
+                      <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-amber-500/80"></span>
+                      <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-emerald-500/80"></span>
                     </div>
-                    <span className="text-[11px] font-mono text-emerald-200/70 border-l border-emerald-800/60 pl-2.5">
-                      portal.sharafiyya.edu • Preview
+                    <span className="text-[10px] sm:text-[11px] font-mono text-emerald-200/70 border-l border-emerald-800/60 pl-2 truncate">
+                      portal.sharafiyya.edu
                     </span>
                   </div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-[#c59b27] text-slate-950">
+                  <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-[#c59b27] text-slate-950 shrink-0">
                     Coming Soon
                   </span>
                 </div>
 
                 {/* Dashboard Main Content Body */}
-                <div className="p-4 sm:p-6 space-y-4">
+                <div className="p-3 sm:p-6 space-y-3 sm:space-y-4">
                   {/* Student Profile Placeholder Card */}
-                  <div className="p-3.5 sm:p-4 bg-white rounded-lg border border-[#e5e0d5] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="p-3 sm:p-4 bg-white rounded-lg border border-[#e5e0d5] flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-[#164e37] text-white flex items-center justify-center font-bold text-sm shrink-0">
                         <GraduationCap className="w-5 h-5 text-[#c59b27]" />
@@ -1403,7 +1407,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
             </div>
 
             {/* Right Column: Clean Admission Enquiry Form */}
-            <div className="lg:col-span-7 bg-[#fbfaf7] p-6 sm:p-8 rounded-xl border border-[#e5e0d5] shadow-xs">
+            <div className="lg:col-span-7 bg-[#fbfaf7] p-4 sm:p-6 lg:p-8 rounded-xl border border-[#e5e0d5] shadow-xs">
               <div className="flex items-center justify-between pb-3 mb-5 border-b border-[#eee9df]">
                 <div>
                   <h3 className="text-lg sm:text-xl font-bold text-[#0f231c]">
@@ -1605,11 +1609,11 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
                   </div>
 
                   {/* Submission Row */}
-                  <div className="flex flex-wrap items-center gap-3 pt-2">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 pt-2">
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="px-6 py-2.5 bg-[#164e37] hover:bg-[#0f3b29] disabled:bg-slate-400 text-white font-bold rounded-lg shadow-xs transition-colors flex items-center gap-2 cursor-pointer disabled:cursor-not-allowed"
+                      className="w-full sm:w-auto px-6 py-3 min-h-[44px] bg-[#164e37] hover:bg-[#0f3b29] disabled:bg-slate-400 text-white font-bold rounded-lg shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed"
                     >
                       {isSubmitting ? (
                         <>
@@ -1627,7 +1631,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
                     <button
                       type="button"
                       onClick={onOpenAdmissionModal}
-                      className="px-4 py-2.5 bg-white hover:bg-[#f4f1ea] text-slate-700 font-semibold border border-[#d2cabb] rounded-lg transition-colors cursor-pointer"
+                      className="w-full sm:w-auto px-4 py-3 min-h-[44px] bg-white hover:bg-[#f4f1ea] text-slate-700 font-semibold border border-[#d2cabb] rounded-lg transition-colors cursor-pointer text-center"
                     >
                       Admission Form Modal
                     </button>

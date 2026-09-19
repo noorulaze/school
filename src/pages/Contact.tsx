@@ -35,7 +35,7 @@ export const Contact: React.FC<ContactProps> = ({ onOpenAdmissionModal }) => {
   return (
     <div className="w-full flex flex-col bg-[#fbfaf7] text-slate-800">
       {/* 1. Page Header */}
-      <section className="bg-white border-b border-[#e5e0d5] py-8 sm:py-10">
+      <section className="bg-white border-b border-[#e5e0d5] py-6 sm:py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-2 text-xs text-slate-500 mb-2">
             <Link to="/" className="hover:text-[#164e37]">Home</Link>
@@ -47,7 +47,7 @@ export const Contact: React.FC<ContactProps> = ({ onOpenAdmissionModal }) => {
             <h1 className="text-2xl sm:text-4xl font-extrabold text-[#0f231c] tracking-tight">
               Contact Administrative Office
             </h1>
-            <p className="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-600 mt-1.5 sm:mt-2 leading-relaxed">
               Official address, office consultation hours, and direct inquiry communication for {SCHOOL_INFO.officialName} ({SCHOOL_INFO.localName}), Korangath, Tirur.
             </p>
           </div>
@@ -55,16 +55,16 @@ export const Contact: React.FC<ContactProps> = ({ onOpenAdmissionModal }) => {
       </section>
 
       {/* 2. Main Content (Two-Column Layout) */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-10">
           {/* Left Column: Official Administrative Details & Placeholders */}
-          <div className="lg:col-span-5 space-y-6">
-            <div className="bg-white p-6 sm:p-7 rounded-2xl border border-[#e5e0d5] space-y-4 shadow-2xs">
+          <div className="lg:col-span-5 space-y-4 sm:space-y-6">
+            <div className="bg-white p-4 sm:p-7 rounded-xl sm:rounded-2xl border border-[#e5e0d5] space-y-4 shadow-2xs">
               <div>
-                <span className="text-[10px] font-bold text-[#164e37] uppercase tracking-wider bg-[#f4f1ea] px-2.5 py-1 rounded border border-[#d2cabb]">
+                <span className="text-[10px] font-bold text-[#164e37] uppercase tracking-wider bg-[#f4f1ea] px-2.5 py-1 rounded border border-[#d2cabb] inline-block">
                   Administrative Desk
                 </span>
-                <h2 className="text-lg font-bold text-slate-900 mt-2">
+                <h2 className="text-base sm:text-lg font-bold text-slate-900 mt-2">
                   {SCHOOL_INFO.officialName}
                 </h2>
                 <p className="text-xs text-[#164e37] font-semibold">
@@ -78,10 +78,10 @@ export const Contact: React.FC<ContactProps> = ({ onOpenAdmissionModal }) => {
               {/* 4 Official Contact Channels with Placeholders */}
               <div className="space-y-3 pt-2 text-xs border-t border-[#e5e0d5]">
                 {/* 1. Address */}
-                <div className="p-3.5 rounded-xl bg-[#fbfaf7] border border-[#e5e0d5] space-y-1">
+                <div className="p-3 sm:p-3.5 rounded-xl bg-[#fbfaf7] border border-[#e5e0d5] space-y-1">
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-slate-800 flex items-center gap-1.5">
-                      <MapPin className="w-3.5 h-3.5 text-[#164e37]" />
+                      <MapPin className="w-3.5 h-3.5 text-[#164e37] shrink-0" />
                       <span>Campus Location</span>
                     </span>
                     <PlaceholderBadge label="Verified Locality" size="sm" />
@@ -92,38 +92,38 @@ export const Contact: React.FC<ContactProps> = ({ onOpenAdmissionModal }) => {
                 </div>
 
                 {/* 2. Phone */}
-                <div className="p-3.5 rounded-xl bg-[#fbfaf7] border border-[#e5e0d5] space-y-1">
+                <div className="p-3 sm:p-3.5 rounded-xl bg-[#fbfaf7] border border-[#e5e0d5] space-y-1">
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-slate-800 flex items-center gap-1.5">
-                      <Phone className="w-3.5 h-3.5 text-[#164e37]" />
+                      <Phone className="w-3.5 h-3.5 text-[#164e37] shrink-0" />
                       <span>Office Telephone</span>
                     </span>
                     <PlaceholderBadge label="Official Slot" size="sm" />
                   </div>
-                  <p className="text-slate-700 font-mono text-xs">
+                  <p className="text-slate-700 font-mono text-xs break-all sm:break-normal">
                     {SCHOOL_INFO.contact.phone}
                   </p>
                 </div>
 
                 {/* 3. Email */}
-                <div className="p-3.5 rounded-xl bg-[#fbfaf7] border border-[#e5e0d5] space-y-1">
+                <div className="p-3 sm:p-3.5 rounded-xl bg-[#fbfaf7] border border-[#e5e0d5] space-y-1">
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-slate-800 flex items-center gap-1.5">
-                      <Mail className="w-3.5 h-3.5 text-[#164e37]" />
+                      <Mail className="w-3.5 h-3.5 text-[#164e37] shrink-0" />
                       <span>Administrative Email</span>
                     </span>
                     <PlaceholderBadge label="Official Slot" size="sm" />
                   </div>
-                  <p className="text-slate-700 font-mono text-xs">
+                  <p className="text-slate-700 font-mono text-xs break-all sm:break-normal">
                     {SCHOOL_INFO.contact.email}
                   </p>
                 </div>
 
                 {/* 4. Hours */}
-                <div className="p-3.5 rounded-xl bg-[#fbfaf7] border border-[#e5e0d5] space-y-1">
+                <div className="p-3 sm:p-3.5 rounded-xl bg-[#fbfaf7] border border-[#e5e0d5] space-y-1">
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-slate-800 flex items-center gap-1.5">
-                      <Clock className="w-3.5 h-3.5 text-[#164e37]" />
+                      <Clock className="w-3.5 h-3.5 text-[#164e37] shrink-0" />
                       <span>Office Visiting Hours</span>
                     </span>
                     <PlaceholderBadge label="Standardized Schedule" size="sm" />
@@ -136,9 +136,9 @@ export const Contact: React.FC<ContactProps> = ({ onOpenAdmissionModal }) => {
             </div>
 
             {/* Transit & Commute Information */}
-            <div className="p-5 rounded-2xl bg-[#f4f1ea] border border-[#d2cabb] space-y-2 text-xs">
+            <div className="p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-[#f4f1ea] border border-[#d2cabb] space-y-2 text-xs">
               <span className="font-bold text-slate-900 flex items-center gap-1.5">
-                <Compass className="w-4 h-4 text-[#164e37]" />
+                <Compass className="w-4 h-4 text-[#164e37] shrink-0" />
                 <span>Transit & Directions from Tirur Town:</span>
               </span>
               <p className="text-slate-600 leading-relaxed">
@@ -153,16 +153,16 @@ export const Contact: React.FC<ContactProps> = ({ onOpenAdmissionModal }) => {
           </div>
 
           {/* Right Column: Contact Inquiry Form (with exact 4 fields: Name, Email, Phone, Message) */}
-          <div className="lg:col-span-7 bg-white p-6 sm:p-8 rounded-2xl border border-[#e5e0d5] shadow-2xs">
-            <h2 className="text-xl font-bold text-[#0f231c]">
+          <div className="lg:col-span-7 bg-white p-4 sm:p-8 rounded-xl sm:rounded-2xl border border-[#e5e0d5] shadow-2xs">
+            <h2 className="text-lg sm:text-xl font-bold text-[#0f231c]">
               Send Official Inquiry Message
             </h2>
-            <p className="text-xs text-slate-600 mt-1 mb-6">
+            <p className="text-xs text-slate-600 mt-1 mb-5 sm:mb-6">
               Complete the form below to communicate with the administrative office regarding admissions, curriculum, or batch timings.
             </p>
 
             {isSubmitted ? (
-              <div className="p-8 bg-emerald-50 border border-emerald-200 rounded-xl text-center space-y-3">
+              <div className="p-6 sm:p-8 bg-emerald-50 border border-emerald-200 rounded-xl text-center space-y-3">
                 <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto" />
                 <h3 className="text-base font-bold text-emerald-950">
                   Inquiry Successfully Received
@@ -177,7 +177,7 @@ export const Contact: React.FC<ContactProps> = ({ onOpenAdmissionModal }) => {
                       setIsSubmitted(false);
                       setFormData({ name: '', email: '', phone: '', message: '' });
                     }}
-                    className="px-5 py-2 bg-[#164e37] text-white text-xs font-bold rounded-lg transition-colors"
+                    className="w-full sm:w-auto px-5 py-2.5 bg-[#164e37] text-white text-xs font-bold rounded-lg transition-colors min-h-[44px] flex items-center justify-center mx-auto"
                   >
                     Send Another Message
                   </button>
@@ -196,7 +196,7 @@ export const Contact: React.FC<ContactProps> = ({ onOpenAdmissionModal }) => {
                     placeholder="Enter your full name"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-3.5 py-2.5 text-xs bg-white border border-[#d2cabb] rounded-lg focus:outline-none focus:ring-1 focus:ring-[#164e37]"
+                    className="w-full min-h-[44px] px-3.5 py-2.5 text-xs bg-white border border-[#d2cabb] rounded-lg focus:outline-none focus:ring-1 focus:ring-[#164e37]"
                   />
                 </div>
 
@@ -211,7 +211,7 @@ export const Contact: React.FC<ContactProps> = ({ onOpenAdmissionModal }) => {
                     placeholder="name@example.com"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-3.5 py-2.5 text-xs bg-white border border-[#d2cabb] rounded-lg focus:outline-none focus:ring-1 focus:ring-[#164e37]"
+                    className="w-full min-h-[44px] px-3.5 py-2.5 text-xs bg-white border border-[#d2cabb] rounded-lg focus:outline-none focus:ring-1 focus:ring-[#164e37]"
                   />
                 </div>
 
@@ -226,7 +226,7 @@ export const Contact: React.FC<ContactProps> = ({ onOpenAdmissionModal }) => {
                     placeholder="+91 Phone number"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full px-3.5 py-2.5 text-xs bg-white border border-[#d2cabb] rounded-lg focus:outline-none focus:ring-1 focus:ring-[#164e37]"
+                    className="w-full min-h-[44px] px-3.5 py-2.5 text-xs bg-white border border-[#d2cabb] rounded-lg focus:outline-none focus:ring-1 focus:ring-[#164e37]"
                   />
                 </div>
 
@@ -236,19 +236,19 @@ export const Contact: React.FC<ContactProps> = ({ onOpenAdmissionModal }) => {
                     Inquiry Message *
                   </label>
                   <textarea
-                    rows={5}
+                    rows={4}
                     required
                     placeholder="Please specify your query regarding admissions, syllabus, batch schedules, or transfer..."
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    className="w-full px-3.5 py-2.5 text-xs bg-white border border-[#d2cabb] rounded-lg focus:outline-none focus:ring-1 focus:ring-[#164e37] resize-none"
+                    className="w-full min-h-[110px] px-3.5 py-2.5 text-xs bg-white border border-[#d2cabb] rounded-lg focus:outline-none focus:ring-1 focus:ring-[#164e37] resize-none"
                   />
                 </div>
 
-                <div className="pt-2 flex flex-wrap items-center gap-3">
+                <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                   <button
                     type="submit"
-                    className="px-6 py-2.5 bg-[#164e37] hover:bg-[#0f3b29] text-white font-bold rounded-lg shadow-xs transition-colors flex items-center gap-2"
+                    className="w-full sm:w-auto min-h-[44px] px-6 py-2.5 bg-[#164e37] hover:bg-[#0f3b29] active:bg-[#0d3323] text-white font-bold rounded-lg shadow-xs transition-colors flex items-center justify-center gap-2"
                   >
                     <Send className="w-3.5 h-3.5 text-[#c59b27]" />
                     <span>Submit Inquiry</span>
@@ -257,7 +257,7 @@ export const Contact: React.FC<ContactProps> = ({ onOpenAdmissionModal }) => {
                   <button
                     type="button"
                     onClick={onOpenAdmissionModal}
-                    className="px-5 py-2.5 bg-[#f4f1ea] hover:bg-[#eae5da] text-slate-800 border border-[#d2cabb] font-semibold rounded-lg transition-colors flex items-center gap-1.5"
+                    className="w-full sm:w-auto min-h-[44px] px-5 py-2.5 bg-[#f4f1ea] hover:bg-[#eae5da] active:bg-[#ded8cc] text-slate-800 border border-[#d2cabb] font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5"
                   >
                     <GraduationCap className="w-3.5 h-3.5 text-[#164e37]" />
                     <span>Admission Enquiry Form</span>

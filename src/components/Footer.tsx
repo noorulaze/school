@@ -40,7 +40,7 @@ export const Footer: React.FC = () => {
             </p>
 
             <div className="p-3 rounded-lg bg-[#123628] border border-[#1e4d3b] text-[11px] text-emerald-200/90 space-y-1">
-              <p><strong>Board:</strong> {SCHOOL_INFO.institutionalDetails.affiliationBoard}</p>
+              <p className="break-words"><strong>Board:</strong> {SCHOOL_INFO.institutionalDetails.affiliationBoard}</p>
               <p><strong>Locality:</strong> Korangath, Tirur, Malappuram, Kerala</p>
             </div>
           </div>
@@ -63,9 +63,9 @@ export const Footer: React.FC = () => {
                 <li key={item.path}>
                   <Link
                     to={item.path}
-                    className="hover:text-white hover:translate-x-1 transition-all inline-flex items-center gap-1.5 text-slate-300"
+                    className="hover:text-white hover:translate-x-1 transition-all inline-flex items-center gap-1.5 text-slate-300 min-h-[36px] py-0.5"
                   >
-                    <ArrowRight className="w-3 h-3 text-[#c59b27]" />
+                    <ArrowRight className="w-3 h-3 text-[#c59b27] shrink-0" />
                     <span>{item.name}</span>
                   </Link>
                 </li>
@@ -102,27 +102,27 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Col 4: Campus Desk & Transit (3 cols) */}
+          {/* Col 4: Administrative Contact & Hours (3 cols) */}
           <div className="lg:col-span-3 space-y-3">
             <h4 className="text-white font-bold text-xs uppercase tracking-wider border-b border-[#1b4332] pb-2">
-              Campus & Office Desk
+              Administrative Desk
             </h4>
             <div className="space-y-2 text-xs text-slate-300">
               <div className="flex items-start gap-2">
                 <MapPin className="w-3.5 h-3.5 text-[#c59b27] shrink-0 mt-0.5" />
-                <span>Korangath, Tirur, Malappuram District, Kerala – 676101</span>
+                <span className="break-words">Korangath, Tirur, Malappuram District, Kerala – 676101</span>
               </div>
               <div className="flex items-center gap-2">
                 <Phone className="w-3.5 h-3.5 text-[#c59b27] shrink-0" />
-                <span>Desk: {SCHOOL_INFO.contact.phone}</span>
+                <span className="break-all sm:break-normal">Desk: {SCHOOL_INFO.contact.phone}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="w-3.5 h-3.5 text-[#c59b27] shrink-0" />
-                <span>{SCHOOL_INFO.contact.email}</span>
+                <span className="break-all sm:break-normal">{SCHOOL_INFO.contact.email}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="w-3.5 h-3.5 text-[#c59b27] shrink-0" />
-                <span>Office: {SCHOOL_INFO.contact.officeHours}</span>
+                <span className="break-words">Office: {SCHOOL_INFO.contact.officeHours}</span>
               </div>
               <div className="pt-2 text-[11px] text-slate-400 border-t border-[#1b4332]">
                 <p>Transit: ~3.5 km from Tirur Railway Station</p>
