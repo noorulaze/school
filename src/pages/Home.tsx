@@ -21,6 +21,7 @@ import { motion } from 'framer-motion';
 import { NoticeTicker } from '../components/NoticeTicker';
 import { RealisticImageSlot } from '../components/RealisticImageSlot';
 import { PlaceholderBadge } from '../components/PlaceholderBadge';
+import { submitAdmissionEnquiry } from '../services/publicService';
 
 interface HomeProps {
   onOpenAdmissionModal: () => void;
@@ -73,16 +74,27 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
     return Object.keys(errors).length === 0;
   };
 
-  const handleEnquirySubmit = (e: React.FormEvent) => {
+  const handleEnquirySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
 
     setIsSubmitting(true);
-    // Simulate validation & network processing before revealing honest backend-pending status
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      await submitAdmissionEnquiry({
+        applicantName: enquiryForm.fullName.trim(),
+        parentName: enquiryForm.fullName.trim(),
+        studentName: enquiryForm.studentName.trim(),
+        phone: enquiryForm.phone.trim(),
+        email: enquiryForm.email.trim() || undefined,
+        enquiryType: enquiryForm.enquiryType as any,
+        message: enquiryForm.message.trim(),
+      });
       setSubmissionState('backend_pending');
-    }, 600);
+    } catch (err: any) {
+      alert(err.message || 'Failed to submit enquiry.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -1137,14 +1149,14 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
               {/* Action Button & Subtext */}
               <div className="pt-2 space-y-2.5">
                 <Link
-                  to="/students"
+                  to="/student/login"
                   className="inline-flex items-center gap-2 px-6 py-3 bg-[#c59b27] hover:bg-[#d6a933] text-slate-950 text-xs sm:text-sm font-bold rounded-lg transition-all duration-200 shadow-sm group transform active:scale-98"
                 >
                   <span>Open Student Portal</span>
                   <ArrowRight className="w-4 h-4 text-slate-950 transition-transform group-hover:translate-x-1" />
                 </Link>
                 <p className="text-xs text-emerald-300/80 font-medium">
-                  Student portal access coming soon
+                  Official student digital space & records
                 </p>
               </div>
 

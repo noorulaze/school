@@ -110,8 +110,17 @@ export const Students: React.FC<StudentsProps> = ({ onOpenAdmissionModal }) => {
                       <p className="break-words">{searchResult}</p>
                     </div>
                   )}
+                  <div className="pt-2">
+                    <Link
+                      to="/student/login"
+                      className="w-full min-h-[40px] px-4 py-2 bg-[#164e37] hover:bg-[#113d2b] text-white text-xs font-bold rounded-lg transition-colors flex items-center justify-center gap-2 border border-[#276e4e]"
+                    >
+                      <GraduationCap className="w-4 h-4 text-[#c59b27]" />
+                      <span>Log In to Student Portal</span>
+                    </Link>
+                  </div>
                   <p className="text-[10px] text-emerald-300/70 italic">
-                    * Authenticated database login will be activated in the next phase.
+                    * Authenticated student portal is active. Students can log in using their Student ID.
                   </p>
                 </div>
               </div>

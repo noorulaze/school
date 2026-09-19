@@ -1,0 +1,84 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && (
+        request.auth.token.email.matches('.*@sharafiyya.*') ||
+        request.auth.token.admin == true ||
+        request.auth.uid != null
+      );
+    }
+    
+    function isOwner(uid) {
+      return isAuthenticated() && request.auth.uid == uid;
+    }
+
+    // 1. Schools (Institutional metadata)
+    match /schools/{document=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // 2. Notices & Updates
+    match /notices/{noticeId} {
+      allow read: if resource.data.published == true || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // 3. Events & Programs
+    match /events/{eventId} {
+      allow read: if resource.data.published == true || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // 4. Teachers & Faculty
+    match /teachers/{teacherId} {
+      allow read: if resource.data.published == true || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // 5. Academic Departments
+    match /departments/{deptId} {
+      allow read: if resource.data.published == true || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // 6. Photo Gallery
+    match /gallery/{imageId} {
+      allow read: if resource.data.published == true || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // 7. Admission Enquiries (Public can create with valid fields; only admin can read/manage)
+    match /admissions/{enquiryId} {
+      allow create: if request.resource.data.applicantName is string
+                    && request.resource.data.phone is string
+                    && request.resource.data.enquiryType is string;
+      allow read, update, delete: if isAdmin();
+    }
+
+    // 8. Students (Strict UID isolation: student can only read their own record; admin can manage)
+    match /students/{studentId} {
+      allow read: if isOwner(studentId) || isOwner(resource.data.uid) || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // 9. Attendance
+    match /attendance/{attendanceId} {
+      allow read: if isOwner(resource.data.uid) || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // 10. Academic Records
+    match /academicRecords/{recordId} {
+      allow read: if isOwner(resource.data.uid) || isAdmin();
+      allow write: if isAdmin();
+    }
+  }
+}

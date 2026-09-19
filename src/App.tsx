@@ -4,7 +4,7 @@ import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { AdmissionModal } from './components/AdmissionModal';
 
-// Pages
+// Public Pages
 import { Home } from './pages/Home';
 import { About } from './pages/About';
 import { Departments } from './pages/Departments';
@@ -13,6 +13,31 @@ import { Students } from './pages/Students';
 import { Events } from './pages/Events';
 import { Gallery } from './pages/Gallery';
 import { Contact } from './pages/Contact';
+
+// Admin Portal Pages & Components
+import { AdminLayout } from './admin/components/AdminLayout';
+import { AdminProtectedRoute } from './admin/components/AdminProtectedRoute';
+import { AdminLogin } from './admin/pages/AdminLogin';
+import { AdminDashboard } from './admin/pages/AdminDashboard';
+import { AdminStudents } from './admin/pages/AdminStudents';
+import { AdminNotices } from './admin/pages/AdminNotices';
+import { AdminEvents } from './admin/pages/AdminEvents';
+import { AdminTeachers } from './admin/pages/AdminTeachers';
+import { AdminDepartments } from './admin/pages/AdminDepartments';
+import { AdminGallery } from './admin/pages/AdminGallery';
+import { AdminAdmissions } from './admin/pages/AdminAdmissions';
+import { AdminSettings } from './admin/pages/AdminSettings';
+
+// Student Portal Pages & Components
+import { StudentLayout } from './student/components/StudentLayout';
+import { StudentProtectedRoute } from './student/components/StudentProtectedRoute';
+import { StudentLogin } from './student/pages/StudentLogin';
+import { StudentDashboard } from './student/pages/StudentDashboard';
+import { StudentProfile } from './student/pages/StudentProfile';
+import { StudentAttendance } from './student/pages/StudentAttendance';
+import { StudentAcademics } from './student/pages/StudentAcademics';
+import { StudentNotices } from './student/pages/StudentNotices';
+import { StudentEvents } from './student/pages/StudentEvents';
 
 // Scroll to top helper on route change
 function ScrollToTop() {
@@ -44,6 +69,66 @@ function NotFound() {
   );
 }
 
+function MainLayout({ onOpenAdmissionModal }: { onOpenAdmissionModal: () => void }) {
+  const { pathname } = useLocation();
+  const isAdminOrStudent = pathname.startsWith('/admin') || pathname.startsWith('/student');
+
+  return (
+    <div className="min-h-screen flex flex-col bg-[#FDFBF7] text-slate-800 font-sans selection:bg-emerald-800 selection:text-white">
+      {!isAdminOrStudent && <Navbar onOpenAdmissionModal={onOpenAdmissionModal} />}
+
+      <main className="flex-grow">
+        <Routes>
+          {/* Public Website Routes */}
+          <Route path="/" element={<Home onOpenAdmissionModal={onOpenAdmissionModal} />} />
+          <Route path="/about" element={<About onOpenAdmissionModal={onOpenAdmissionModal} />} />
+          <Route path="/departments" element={<Departments onOpenAdmissionModal={onOpenAdmissionModal} />} />
+          <Route path="/academics" element={<Departments onOpenAdmissionModal={onOpenAdmissionModal} />} />
+          <Route path="/teachers" element={<Teachers />} />
+          <Route path="/students" element={<Students onOpenAdmissionModal={onOpenAdmissionModal} />} />
+          <Route path="/events" element={<Events />} />
+          <Route path="/gallery" element={<Gallery />} />
+          <Route path="/contact" element={<Contact onOpenAdmissionModal={onOpenAdmissionModal} />} />
+
+          {/* Admin Routes */}
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin" element={<AdminProtectedRoute />}>
+            <Route element={<AdminLayout />}>
+              <Route index element={<AdminDashboard />} />
+              <Route path="students" element={<AdminStudents />} />
+              <Route path="notices" element={<AdminNotices />} />
+              <Route path="events" element={<AdminEvents />} />
+              <Route path="teachers" element={<AdminTeachers />} />
+              <Route path="departments" element={<AdminDepartments />} />
+              <Route path="gallery" element={<AdminGallery />} />
+              <Route path="admissions" element={<AdminAdmissions />} />
+              <Route path="settings" element={<AdminSettings />} />
+            </Route>
+          </Route>
+
+          {/* Student Portal Routes */}
+          <Route path="/student/login" element={<StudentLogin />} />
+          <Route path="/student" element={<StudentProtectedRoute />}>
+            <Route element={<StudentLayout />}>
+              <Route index element={<StudentDashboard />} />
+              <Route path="dashboard" element={<StudentDashboard />} />
+              <Route path="profile" element={<StudentProfile />} />
+              <Route path="attendance" element={<StudentAttendance />} />
+              <Route path="academics" element={<StudentAcademics />} />
+              <Route path="notices" element={<StudentNotices />} />
+              <Route path="events" element={<StudentEvents />} />
+            </Route>
+          </Route>
+
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </main>
+
+      {!isAdminOrStudent && <Footer />}
+    </div>
+  );
+}
+
 export function App() {
   const [isAdmissionModalOpen, setIsAdmissionModalOpen] = useState(false);
 
@@ -53,31 +138,11 @@ export function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <div className="min-h-screen flex flex-col bg-[#FDFBF7] text-slate-800 font-sans selection:bg-emerald-800 selection:text-white">
-        <Navbar onOpenAdmissionModal={handleOpenAdmissionModal} />
-
-        <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<Home onOpenAdmissionModal={handleOpenAdmissionModal} />} />
-            <Route path="/about" element={<About onOpenAdmissionModal={handleOpenAdmissionModal} />} />
-            <Route path="/departments" element={<Departments onOpenAdmissionModal={handleOpenAdmissionModal} />} />
-            <Route path="/academics" element={<Departments onOpenAdmissionModal={handleOpenAdmissionModal} />} />
-            <Route path="/teachers" element={<Teachers />} />
-            <Route path="/students" element={<Students onOpenAdmissionModal={handleOpenAdmissionModal} />} />
-            <Route path="/events" element={<Events />} />
-            <Route path="/gallery" element={<Gallery />} />
-            <Route path="/contact" element={<Contact onOpenAdmissionModal={handleOpenAdmissionModal} />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </main>
-
-        <Footer />
-
-        <AdmissionModal
-          isOpen={isAdmissionModalOpen}
-          onClose={handleCloseAdmissionModal}
-        />
-      </div>
+      <MainLayout onOpenAdmissionModal={handleOpenAdmissionModal} />
+      <AdmissionModal
+        isOpen={isAdmissionModalOpen}
+        onClose={handleCloseAdmissionModal}
+      />
     </BrowserRouter>
   );
 }

@@ -8,10 +8,12 @@ import {
   Send,
   CheckCircle2,
   Compass,
-  GraduationCap
+  GraduationCap,
+  Loader2
 } from 'lucide-react';
 import { SCHOOL_INFO } from '../data/schoolInfo';
 import { PlaceholderBadge } from '../components/PlaceholderBadge';
+import { submitAdmissionEnquiry } from '../services/publicService';
 
 interface ContactProps {
   onOpenAdmissionModal: () => void;
@@ -26,10 +28,30 @@ export const Contact: React.FC<ContactProps> = ({ onOpenAdmissionModal }) => {
   });
 
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitted(true);
+    setErrorMessage(null);
+    setIsSubmitting(true);
+
+    try {
+      await submitAdmissionEnquiry({
+        applicantName: formData.name.trim(),
+        parentName: formData.name.trim(),
+        studentName: formData.name.trim(),
+        phone: formData.phone.trim(),
+        email: formData.email.trim() || undefined,
+        enquiryType: 'General Enquiry',
+        message: formData.message.trim(),
+      });
+      setIsSubmitted(true);
+    } catch (err: any) {
+      setErrorMessage(err.message || 'Failed to submit enquiry. Please check your contact information.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -245,13 +267,29 @@ export const Contact: React.FC<ContactProps> = ({ onOpenAdmissionModal }) => {
                   />
                 </div>
 
+                {errorMessage && (
+                  <div className="p-3 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium">
+                    {errorMessage}
+                  </div>
+                )}
+
                 <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                   <button
                     type="submit"
-                    className="w-full sm:w-auto min-h-[44px] px-6 py-2.5 bg-[#164e37] hover:bg-[#0f3b29] active:bg-[#0d3323] text-white font-bold rounded-lg shadow-xs transition-colors flex items-center justify-center gap-2"
+                    disabled={isSubmitting}
+                    className="w-full sm:w-auto min-h-[44px] px-6 py-2.5 bg-[#164e37] hover:bg-[#0f3b29] active:bg-[#0d3323] text-white font-bold rounded-lg shadow-xs transition-colors flex items-center justify-center gap-2 disabled:opacity-60 cursor-pointer"
                   >
-                    <Send className="w-3.5 h-3.5 text-[#c59b27]" />
-                    <span>Submit Inquiry</span>
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        <span>Submitting Inquiry...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-3.5 h-3.5 text-[#c59b27]" />
+                        <span>Submit Inquiry</span>
+                      </>
+                    )}
                   </button>
 
                   <button

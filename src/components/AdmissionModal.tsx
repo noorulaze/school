@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { X, CheckCircle, Send, School, Phone, User, MapPin } from 'lucide-react';
+import { X, CheckCircle, Send, School, Phone, User, MapPin, Loader2 } from 'lucide-react';
 import { SCHOOL_INFO } from '../data/schoolInfo';
 import { PlaceholderBadge } from './PlaceholderBadge';
+import { submitAdmissionEnquiry } from '../services/publicService';
 
 interface AdmissionModalProps {
   isOpen: boolean;
@@ -19,6 +20,8 @@ export const AdmissionModal: React.FC<AdmissionModalProps> = ({ isOpen, onClose 
   });
 
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   // Prevent background scrolling while modal is open
   React.useEffect(() => {
@@ -34,9 +37,26 @@ export const AdmissionModal: React.FC<AdmissionModalProps> = ({ isOpen, onClose 
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitted(true);
+    setSubmitError(null);
+    setIsSubmitting(true);
+
+    try {
+      await submitAdmissionEnquiry({
+        applicantName: formData.parentName.trim() || formData.studentName.trim(),
+        parentName: formData.parentName.trim(),
+        studentName: formData.studentName.trim(),
+        phone: formData.phone.trim(),
+        enquiryType: 'Admission',
+        message: `Applying Class: ${formData.applyingClass}. Residential Area: ${formData.address || 'N/A'}. Additional Notes: ${formData.notes || 'None'}`
+      });
+      setIsSubmitted(true);
+    } catch (err: any) {
+      setSubmitError(err.message || 'Failed to submit admission enquiry. Please check the form.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleReset = () => {
@@ -219,13 +239,29 @@ export const AdmissionModal: React.FC<AdmissionModalProps> = ({ isOpen, onClose 
                 />
               </div>
 
+              {submitError && (
+                <div className="p-2.5 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 text-[11px]">
+                  {submitError}
+                </div>
+              )}
+
               <div className="pt-2">
                 <button
                   type="submit"
-                  className="w-full py-2.5 px-4 bg-[#164e37] hover:bg-[#0f3b29] text-white font-bold rounded-lg transition-colors flex items-center justify-center gap-1.5 shadow-xs"
+                  disabled={isSubmitting}
+                  className="w-full py-2.5 px-4 bg-[#164e37] hover:bg-[#0f3b29] text-white font-bold rounded-lg transition-colors flex items-center justify-center gap-1.5 shadow-xs disabled:opacity-60 cursor-pointer"
                 >
-                  <Send className="w-3.5 h-3.5 text-[#c59b27]" />
-                  <span>Submit Admission Enquiry</span>
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      <span>Submitting Enquiry...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-3.5 h-3.5 text-[#c59b27]" />
+                      <span>Submit Admission Enquiry</span>
+                    </>
+                  )}
                 </button>
               </div>
 

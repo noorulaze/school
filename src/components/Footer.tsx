@@ -131,14 +131,20 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* 3. Sub-footer & Non-fabrication Statement */}
+        {/* 3. Sub-footer & Portal Links */}
         <div className="mt-10 pt-6 border-t border-[#1b4332] flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left text-[11px] text-slate-400">
           <p>
             © {new Date().getFullYear()} {SCHOOL_INFO.officialName} ({SCHOOL_INFO.localName}). All rights reserved.
           </p>
-          <p className="text-[10px] text-emerald-300/80">
-            Korangath, Tirur, Malappuram, Kerala, India • Official Institutional Website
-          </p>
+          <div className="flex items-center gap-4 text-xs font-semibold">
+            <Link to="/student/login" className="text-emerald-300 hover:text-white transition-colors">
+              Student Portal
+            </Link>
+            <span className="text-slate-600">•</span>
+            <Link to="/admin/login" className="text-slate-400 hover:text-[#c59b27] transition-colors">
+              Staff / Admin Access
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
