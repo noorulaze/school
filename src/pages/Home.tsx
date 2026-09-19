@@ -1028,61 +1028,228 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
         </div>
       </section>
 
-      {/* 9. STUDENT PORTAL SECTION (Modern Call-To-Action with 'Coming Soon') */}
-      <section className="py-14 bg-[#123628] text-white border-b border-[#164e37] relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-8 space-y-3">
+      {/* 9. STUDENT PORTAL SECTION (Modern 2026 Split-Layout Preview) */}
+      <section className="py-16 lg:py-24 bg-[#123628] text-white border-b border-[#164e37] relative overflow-hidden">
+        {/* Subtle geometric background motif */}
+        <div className="absolute inset-0 opacity-[0.035] pointer-events-none select-none overflow-hidden">
+          <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="portal-pattern" width="60" height="60" patternUnits="userSpaceOnUse">
+                <path d="M 30 0 L 60 30 L 30 60 L 0 30 Z" fill="none" stroke="#ffffff" strokeWidth="0.75" />
+                <circle cx="30" cy="30" r="3" fill="none" stroke="#c59b27" strokeWidth="0.75" />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#portal-pattern)" />
+          </svg>
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+            {/* LEFT COLUMN: Headings, Description, CTA */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="lg:col-span-5 space-y-5"
+            >
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1b5038] border border-[#276e4e] text-xs font-semibold text-emerald-200">
                 <Sparkles className="w-3.5 h-3.5 text-[#c59b27]" />
-                <span>Parent & Student Portal • Digital System</span>
-                <span className="text-[10px] font-bold bg-[#c59b27] text-slate-900 px-2 py-0.5 rounded-full">
+                <span>Student & Parent Portal</span>
+                <span className="text-[10px] font-bold bg-[#c59b27] text-slate-950 px-2 py-0.5 rounded-full">
                   Coming Soon
                 </span>
               </div>
 
-              <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-                Direct Access to Attendance, Progress Cards & Notices
-              </h2>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <span className="h-px w-5 bg-[#c59b27]"></span>
+                  <span className="text-[11px] font-bold uppercase tracking-widest text-emerald-300">
+                    Digital Campus Services
+                  </span>
+                </div>
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-tight">
+                  Everything Students Need, In One Place
+                </h2>
+              </div>
 
-              <p className="text-xs sm:text-sm text-emerald-100/90 max-w-2xl leading-relaxed">
-                We are setting up the official student portal for Sharafiyya Korangath. Once live, guardians will be able to verify attendance, quarterly evaluations, and download fee receipts directly using the student admission number.
+              <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed font-normal">
+                A dedicated digital space for students to access important academic information and resources. Planned to provide unified access to attendance records, evaluations, circulars, and study materials.
               </p>
 
-              <div className="flex items-center gap-3 pt-2">
+              {/* Action Button & Subtext */}
+              <div className="pt-2 space-y-2.5">
                 <Link
                   to="/students"
-                  className="px-5 py-2.5 bg-[#c59b27] hover:bg-[#b48318] text-slate-950 text-xs font-bold rounded-lg shadow-xs transition-colors inline-flex items-center gap-1.5"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-[#c59b27] hover:bg-[#d6a933] text-slate-950 text-xs sm:text-sm font-bold rounded-lg transition-all duration-200 shadow-sm group transform active:scale-98"
                 >
-                  <FileText className="w-3.5 h-3.5" />
-                  <span>Preview Portal Interface & Timetables</span>
+                  <span>Open Student Portal</span>
+                  <ArrowRight className="w-4 h-4 text-slate-950 transition-transform group-hover:translate-x-1" />
                 </Link>
+                <p className="text-xs text-emerald-300/80 font-medium">
+                  Student portal access coming soon
+                </p>
               </div>
-            </div>
 
-            <div className="lg:col-span-4 p-5 rounded-xl bg-[#0f2c21] border border-[#1b5038] text-xs space-y-2.5">
-              <strong className="block text-white text-xs uppercase tracking-wider">
-                Planned Portal Features:
-              </strong>
-              <ul className="space-y-1.5 text-slate-300">
-                <li className="flex items-center gap-2">
+              {/* Planned Feature Points */}
+              <div className="pt-4 border-t border-[#1b5038] grid grid-cols-2 gap-3 text-xs text-emerald-200/90">
+                <div className="flex items-center gap-1.5">
                   <CheckCircle2 className="w-3.5 h-3.5 text-[#c59b27] shrink-0" />
-                  <span>Verified Student Attendance Tracking</span>
-                </li>
-                <li className="flex items-center gap-2">
+                  <span>Attendance Tracking</span>
+                </div>
+                <div className="flex items-center gap-1.5">
                   <CheckCircle2 className="w-3.5 h-3.5 text-[#c59b27] shrink-0" />
-                  <span>Quarterly Evaluation Scorecards</span>
-                </li>
-                <li className="flex items-center gap-2">
+                  <span>Academic Information</span>
+                </div>
+                <div className="flex items-center gap-1.5">
                   <CheckCircle2 className="w-3.5 h-3.5 text-[#c59b27] shrink-0" />
-                  <span>Direct Communication with Class Muallim</span>
-                </li>
-                <li className="flex items-center gap-2">
+                  <span>Events & Circulars</span>
+                </div>
+                <div className="flex items-center gap-1.5">
                   <CheckCircle2 className="w-3.5 h-3.5 text-[#c59b27] shrink-0" />
-                  <span>Daily Masnoon Azkar Reference Guides</span>
-                </li>
-              </ul>
-            </div>
+                  <span>Tajweed Resources</span>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* RIGHT COLUMN: Modern Visual Preview of Student Portal Dashboard */}
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, ease: 'easeOut' }}
+              whileHover={{ y: -4 }}
+              className="lg:col-span-7"
+            >
+              <div className="bg-[#fbfaf7] text-slate-800 rounded-xl border border-[#d8d2c4] shadow-xl overflow-hidden transition-all duration-300">
+                {/* Dashboard Window Top Bar */}
+                <div className="bg-[#0f2c21] text-white px-4 sm:px-5 py-3 flex items-center justify-between border-b border-[#1b5038]">
+                  <div className="flex items-center gap-2.5">
+                    <div className="flex gap-1.5">
+                      <span className="w-2.5 h-2.5 rounded-full bg-rose-500/80"></span>
+                      <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80"></span>
+                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></span>
+                    </div>
+                    <span className="text-[11px] font-mono text-emerald-200/70 border-l border-emerald-800/60 pl-2.5">
+                      portal.sharafiyya.edu • Preview
+                    </span>
+                  </div>
+                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-[#c59b27] text-slate-950">
+                    Coming Soon
+                  </span>
+                </div>
+
+                {/* Dashboard Main Content Body */}
+                <div className="p-4 sm:p-6 space-y-4">
+                  {/* Student Profile Placeholder Card */}
+                  <div className="p-3.5 sm:p-4 bg-white rounded-lg border border-[#e5e0d5] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-[#164e37] text-white flex items-center justify-center font-bold text-sm shrink-0">
+                        <GraduationCap className="w-5 h-5 text-[#c59b27]" />
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h4 className="text-sm sm:text-base font-bold text-[#0f231c]">
+                            Student Name
+                          </h4>
+                          <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200">
+                            Enrolled
+                          </span>
+                        </div>
+                        <p className="text-xs text-slate-500 mt-0.5">
+                          Class: <span className="font-medium text-slate-700">Class Placeholder</span> • Roll: <span className="font-mono text-slate-600">ID-XXXX</span>
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Attendance Placeholder Pill */}
+                    <div className="sm:text-right bg-[#fbfaf7] sm:bg-transparent p-2 sm:p-0 rounded border sm:border-0 border-[#eee9df]">
+                      <span className="text-[10px] uppercase font-bold text-slate-400 block">
+                        Attendance Record
+                      </span>
+                      <span className="text-xs font-semibold text-[#164e37]">
+                        [Attendance Placeholder]
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Dashboard Preview Modules Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    {/* Module 1: Academic Information */}
+                    <div className="p-3.5 bg-white rounded-lg border border-[#e5e0d5] space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] font-bold text-[#164e37] uppercase tracking-wider flex items-center gap-1.5">
+                          <BookOpen className="w-3.5 h-3.5 text-[#c59b27]" />
+                          Academic Information
+                        </span>
+                        <span className="text-[10px] font-mono text-slate-400">[Module]</span>
+                      </div>
+                      <div className="space-y-1.5 text-xs text-slate-600">
+                        <div className="flex justify-between py-1 border-b border-[#f4f1ea]">
+                          <span>Current Syllabus Module:</span>
+                          <span className="font-medium text-slate-800">[Placeholder]</span>
+                        </div>
+                        <div className="flex justify-between py-1 border-b border-[#f4f1ea]">
+                          <span>Term Progress Card:</span>
+                          <span className="text-emerald-700 font-semibold">[Coming Soon]</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Module 2: Notices */}
+                    <div className="p-3.5 bg-white rounded-lg border border-[#e5e0d5] space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] font-bold text-[#164e37] uppercase tracking-wider flex items-center gap-1.5">
+                          <FileText className="w-3.5 h-3.5 text-[#c59b27]" />
+                          Notices
+                        </span>
+                        <span className="text-[10px] font-mono text-slate-400">[Updates]</span>
+                      </div>
+                      <div className="space-y-1.5 text-xs text-slate-600">
+                        <div className="p-1.5 rounded bg-[#fbfaf7] border border-[#eee9df]">
+                          <span className="font-semibold text-slate-800 block text-[11px]">Academic Schedule Notice</span>
+                          <span className="text-[10px] text-slate-500">Official circular for students</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Module 3: Events */}
+                    <div className="p-3.5 bg-white rounded-lg border border-[#e5e0d5] space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] font-bold text-[#164e37] uppercase tracking-wider flex items-center gap-1.5">
+                          <Calendar className="w-3.5 h-3.5 text-[#c59b27]" />
+                          Events
+                        </span>
+                        <span className="text-[10px] font-mono text-slate-400">[Calendar]</span>
+                      </div>
+                      <div className="space-y-1 text-xs text-slate-600">
+                        <p className="text-[11px]">Next Institutional Assembly & Examination milestones will be posted here.</p>
+                      </div>
+                    </div>
+
+                    {/* Module 4: Resources */}
+                    <div className="p-3.5 bg-white rounded-lg border border-[#e5e0d5] space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] font-bold text-[#164e37] uppercase tracking-wider flex items-center gap-1.5">
+                          <Clock className="w-3.5 h-3.5 text-[#c59b27]" />
+                          Resources
+                        </span>
+                        <span className="text-[10px] font-mono text-slate-400">[Library]</span>
+                      </div>
+                      <div className="space-y-1 text-xs text-slate-600">
+                        <p className="text-[11px]">Daily Masnoon Azkar, audio recitation guides, and download center.</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Visual Preview Disclaimer Footer */}
+                  <div className="p-2.5 bg-[#f4f1ea] rounded-md border border-[#e2dcd0] flex items-center justify-between text-[11px] text-slate-600">
+                    <span>Preview interface • Under active development</span>
+                    <span className="font-bold text-[#164e37]">Sharafiyya Korangath</span>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>
