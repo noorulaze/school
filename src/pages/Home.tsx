@@ -12,7 +12,9 @@ import {
   School,
   CheckCircle2,
   Send,
-  Sparkles
+  Sparkles,
+  BookOpen,
+  Languages
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { SCHOOL_INFO } from '../data/schoolInfo';
@@ -320,88 +322,124 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
         </div>
       </section>
 
-      {/* 5. ACADEMIC SECTIONS (Clean Prospectus Stream Layout - NOT Repetitive Cards) */}
-      <section className="py-14 lg:py-16 bg-[#fbfaf7] border-b border-[#e5e0d5]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="max-w-3xl mb-10">
-            <span className="text-xs font-bold text-[#164e37] uppercase tracking-wider block mb-1">
-              Curriculum & Programs
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0f231c]">
-              Academic Departments & Learning Streams
+      {/* 5. ACADEMIC PROGRAMS & LEARNING AREAS (Modern Editorial Layout) */}
+      <section className="relative overflow-hidden py-14 lg:py-20 bg-[#fbfaf7] border-b border-[#e5e0d5]">
+        {/* Subtle Islamic geometric pattern in the background only */}
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none select-none overflow-hidden">
+          <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="islamic-learning-pattern" width="80" height="80" patternUnits="userSpaceOnUse">
+                <path d="M 40 0 L 80 40 L 40 80 L 0 40 Z" fill="none" stroke="#164e37" strokeWidth="1" />
+                <path d="M 40 10 L 70 40 L 40 70 L 10 40 Z" fill="none" stroke="#164e37" strokeWidth="0.75" />
+                <circle cx="40" cy="40" r="4" fill="none" stroke="#c59b27" strokeWidth="0.75" />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#islamic-learning-pattern)" />
+          </svg>
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
+          {/* Section Header */}
+          <div className="max-w-3xl mb-10 sm:mb-12">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="h-px w-5 bg-[#c59b27]"></span>
+              <span className="text-[11px] font-bold uppercase tracking-widest text-[#164e37]">
+                Academic Programs & Streams
+              </span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0f231c] tracking-tight">
+              Learning at Sharaful Islam
             </h2>
-            <p className="text-xs sm:text-sm text-slate-600 mt-2">
-              Structured progressive modules designed to build sound knowledge of the Quran, Sunnah, and Islamic manners alongside regular school education.
+            <p className="text-sm sm:text-base text-slate-600 mt-2.5 font-normal leading-relaxed">
+              An educational environment that brings together Islamic learning, language, knowledge and student development.
             </p>
+            <div className="mt-4 flex flex-wrap items-center gap-2">
+              <PlaceholderBadge label="Editable Placeholder Categories" size="sm" />
+              <span className="text-xs text-slate-500 italic">
+                These are editable placeholder categories. Official syllabus and departments will be updated upon institutional confirmation.
+              </span>
+            </div>
           </div>
 
-          {/* Editorial Stream List */}
-          <div className="divide-y divide-[#e5e0d5] border-y border-[#e5e0d5]">
+          {/* 4 Learning Areas - Modern Editorial Layout */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
             {[
               {
                 number: '01',
-                title: 'Islamic Studies & Jurisprudence (Fiqh)',
-                arabic: 'الفقه الإسلامي والعقيدة',
-                desc: 'Comprehensive instruction in Aqeedah, purification (Taharah), prayer (Salah), and daily ethical rulings.',
-                scope: 'Classes 1–10 • Daily Practical Guidance',
+                title: 'Qur’an & Hadith',
+                desc: 'Structured guidance in Qur’anic recitation with Tajweed rules, memorization of essential Surahs, and foundational study of Prophetic Hadiths.',
+                icon: BookOpen,
               },
               {
                 number: '02',
-                title: 'Qur’an Recitation & Hadith Studies',
-                arabic: 'علوم القرآن الكريم والحديث',
-                desc: 'Step-by-step Tajweed articulation, memorization of selected chapters, and study of forty fundamental Prophetic Hadiths.',
-                scope: 'Classes 1–10 • Melodic Tilawat & Translation',
+                title: 'Islamic Studies',
+                desc: 'Comprehensive instruction in Aqeedah (faith), practical Fiqh (jurisprudence), daily worship practices, and Islamic ethics for student life.',
+                icon: Sparkles,
               },
               {
                 number: '03',
-                title: 'Arabic Language & Literacy',
-                arabic: 'اللغة العربية وقواعدها',
-                desc: 'Foundational Arabic reading, writing, essential vocabulary, and introductory grammar tailored for comprehension.',
-                scope: 'Classes 2–8 • Reading, Vocabulary, Expression',
+                title: 'Arabic Language',
+                desc: 'Foundational Arabic literacy focusing on reading, writing, essential vocabulary, and communicative grammar to understand classical texts.',
+                icon: Languages,
               },
               {
                 number: '04',
-                title: 'General Moral Education & Character (Akhlaq)',
-                arabic: 'التربية الإسلامية والأخلاق',
-                desc: 'Character formation, Islamic history, exemplary biographies of the Companions, and civic responsibility.',
-                scope: 'All Enrolled Classes • Weekly Character Circles',
+                title: 'General Education',
+                desc: 'Supplementary academic guidance and moral development that complement regular schooling, fostering intellectual curiosity and discipline.',
+                icon: School,
               },
-            ].map((stream) => (
-              <div
-                key={stream.number}
-                className="py-6 sm:py-7 grid grid-cols-1 md:grid-cols-12 gap-4 items-center hover:bg-white/60 px-3 rounded-lg transition-colors"
+            ].map((item) => (
+              <Link
+                key={item.number}
+                to="/departments"
+                className="group relative flex flex-col justify-between p-6 sm:p-7 bg-white/80 hover:bg-white rounded-lg border border-[#e5e0d5] hover:border-[#164e37]/40 hover:shadow-xs transition-all duration-200"
               >
-                <div className="md:col-span-1 text-[#164e37] font-extrabold text-xl sm:text-2xl font-mono">
-                  {stream.number}
-                </div>
+                <div>
+                  {/* Top Bar: Number & Subtle Small Visual Mark */}
+                  <div className="flex items-center justify-between pb-4 mb-4 border-b border-[#eee9df]">
+                    <span className="text-2xl sm:text-3xl font-serif font-bold text-[#164e37] tracking-tight">
+                      {item.number}
+                    </span>
+                    <div className="w-8 h-8 rounded-full bg-[#f4f1ea] flex items-center justify-center text-[#164e37] group-hover:bg-[#164e37] group-hover:text-white transition-colors">
+                      <item.icon className="w-4 h-4" />
+                    </div>
+                  </div>
 
-                <div className="md:col-span-5 space-y-1">
-                  <h3 className="text-base sm:text-lg font-bold text-slate-900">
-                    {stream.title}
+                  {/* Title */}
+                  <h3 className="text-base sm:text-lg font-bold text-[#0f231c] group-hover:text-[#164e37] transition-colors mb-2">
+                    {item.title}
                   </h3>
-                  <p className="font-amiri text-xs text-[#c59b27]" dir="rtl">
-                    {stream.arabic}
+
+                  {/* Short Editable Description */}
+                  <p className="text-xs sm:text-[13px] text-slate-600 leading-relaxed font-normal">
+                    {item.desc}
                   </p>
                 </div>
 
-                <div className="md:col-span-4 text-xs text-slate-600">
-                  <p>{stream.desc}</p>
-                </div>
-
-                <div className="md:col-span-2 text-right md:text-right">
-                  <span className="inline-block text-[11px] font-semibold text-[#164e37] bg-[#f4f1ea] px-2.5 py-1 rounded-md border border-[#d2cabb]">
-                    {stream.scope}
+                {/* Subtle Hover Interaction: Revealing small "Explore" indicator */}
+                <div className="pt-4 mt-6 border-t border-[#f0ece3] flex items-center justify-between text-xs font-semibold">
+                  <span className="text-slate-500 group-hover:text-[#164e37] transition-colors">
+                    Curriculum Area
                   </span>
+                  <div className="flex items-center gap-1 text-[#c59b27] group-hover:text-[#164e37] transition-colors">
+                    <span className="text-[11px] font-bold opacity-0 group-hover:opacity-100 transition-opacity">
+                      Explore
+                    </span>
+                    <ArrowRight className="w-3.5 h-3.5 transform transition-transform group-hover:translate-x-1" />
+                  </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
 
-          <div className="mt-6 flex justify-between items-center text-xs text-slate-500">
-            <span>Aligned with recognized Kerala Islamic Education Board curriculum</span>
-            <Link to="/departments" className="text-[#164e37] font-bold hover:underline flex items-center gap-1">
-              <span>View Full Syllabus Matrix</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+          {/* Button Below */}
+          <div className="mt-10 sm:mt-12 text-center">
+            <Link
+              to="/departments"
+              className="inline-flex items-center gap-2 px-6 py-2.5 bg-[#164e37] hover:bg-[#0f3b29] text-white text-xs sm:text-sm font-semibold rounded-lg transition-colors group shadow-xs"
+            >
+              <span>Explore Academics</span>
+              <ArrowRight className="w-3.5 h-3.5 text-[#c59b27] transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
         </div>
