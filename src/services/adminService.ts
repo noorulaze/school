@@ -52,21 +52,30 @@ const initialNotices: NoticeItem[] = NOTICES.map((n: any) => ({
   id: n.id,
   title: n.title,
   description: n.description,
+  fullContent: `${n.description}\n\nAll concerned students, parents, and community members are requested to take note of this institutional announcement. For further clarifications or assistance, please contact the madrassa administrative office during regular working hours (08:30 AM – 04:30 PM).`,
   date: n.date,
-  category: n.category as any,
+  category: (n.category || 'General') as any,
+  priority: 'Normal',
+  targetAudience: 'Everyone',
   published: n.published,
   createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
 }));
 
-const initialEvents: EventItem[] = EVENTS.map((e) => ({
+const initialEvents: EventItem[] = EVENTS.map((e, idx) => ({
   id: e.id,
   title: e.title,
   description: e.summary,
+  fullDescription: `${e.summary}\n\nThe program features traditional recitation sessions, guidance addresses by esteemed scholars, and dedicated recognitions for student achievements. All parents, guardians, and well-wishers from the Korangath community are welcome to attend.`,
   date: e.datePlaceholder,
+  startTime: '09:30 AM',
+  endTime: '12:30 PM',
   location: e.venuePlaceholder,
   category: e.category,
+  featured: idx === 0,
   published: true,
   createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
 }));
 
 const initialTeachers: TeacherItem[] = TEACHERS.map((t) => ({
@@ -201,6 +210,21 @@ export const toggleNoticePublish = async (id: string, published: boolean): Promi
   setLocalCollection('notices', list);
 };
 
+export const getNoticeById = async (id: string): Promise<NoticeItem | null> => {
+  if (isFirebaseConfigured && db) {
+    try {
+      const snap = await getDoc(doc(db, 'notices', id));
+      if (snap.exists()) {
+        return { id: snap.id, ...snap.data() } as NoticeItem;
+      }
+    } catch (e) {
+      console.warn('[AdminService] Firestore getNoticeById error:', e);
+    }
+  }
+  const list = getLocalCollection('notices', initialNotices);
+  return list.find((n) => n.id === id) || null;
+};
+
 // ==================== EVENTS ====================
 export const getEventsAdmin = async (): Promise<EventItem[]> => {
   if (isFirebaseConfigured && db) {
@@ -266,6 +290,21 @@ export const toggleEventPublish = async (id: string, published: boolean): Promis
     e.id === id ? { ...e, published, updatedAt: new Date().toISOString() } : e
   );
   setLocalCollection('events', list);
+};
+
+export const getEventById = async (id: string): Promise<EventItem | null> => {
+  if (isFirebaseConfigured && db) {
+    try {
+      const snap = await getDoc(doc(db, 'events', id));
+      if (snap.exists()) {
+        return { id: snap.id, ...snap.data() } as EventItem;
+      }
+    } catch (e) {
+      console.warn('[AdminService] Firestore getEventById error:', e);
+    }
+  }
+  const list = getLocalCollection('events', initialEvents);
+  return list.find((e) => e.id === id) || null;
 };
 
 // ==================== TEACHERS ====================
@@ -478,15 +517,16 @@ export const updateAdmissionStatus = async (
   id: string,
   status: 'New' | 'Contacted' | 'Closed'
 ): Promise<void> => {
+  const now = new Date().toISOString();
   if (isFirebaseConfigured && db) {
     try {
-      await updateDoc(doc(db, 'admissions', id), { status });
+      await updateDoc(doc(db, 'admissions', id), { status, updatedAt: now });
     } catch (e) {
       console.error('[AdminService] Error updating admission status:', e);
     }
   }
   const list = getLocalCollection<AdmissionEnquiry>('admissions', []).map((a) =>
-    a.id === id ? { ...a, status } : a
+    a.id === id ? { ...a, status, updatedAt: now } : a
   );
   setLocalCollection('admissions', list);
 };

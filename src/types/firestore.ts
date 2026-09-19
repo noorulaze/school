@@ -4,8 +4,11 @@ export interface NoticeItem {
   id: string;
   title: string;
   description: string;
+  fullContent?: string;
   date: string;
-  category: 'Academic Notice' | 'Admission Update' | 'Institution Notice' | 'General';
+  category: 'General' | 'Academic' | 'Admission' | 'Examination' | 'Events' | 'Academic Notice' | 'Admission Update' | 'Institution Notice';
+  priority?: 'Normal' | 'Important' | 'Urgent';
+  targetAudience?: 'Everyone' | 'Students' | 'Parents' | 'Staff';
   published: boolean;
   createdAt: string;
   updatedAt?: string;
@@ -15,10 +18,15 @@ export interface EventItem {
   id: string;
   title: string;
   description: string;
+  fullDescription?: string;
   date: string;
+  startTime?: string;
+  endTime?: string;
   location: string;
   image?: string;
+  coverImage?: string;
   category?: string;
+  featured?: boolean;
   published: boolean;
   createdAt: string;
   updatedAt?: string;
@@ -69,6 +77,7 @@ export interface AdmissionEnquiry {
   enquiryType: 'Admission' | 'Academic Information' | 'Student Information' | 'General Enquiry';
   message: string;
   createdAt: string;
+  updatedAt?: string;
   status: 'New' | 'Contacted' | 'Closed';
 }
 

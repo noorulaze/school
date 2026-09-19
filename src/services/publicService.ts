@@ -11,7 +11,9 @@ import type {
 } from '../types/firestore';
 import {
   getNoticesAdmin,
+  getNoticeById,
   getEventsAdmin,
+  getEventById,
   getTeachersAdmin,
   getDepartmentsAdmin,
   getGalleryAdmin,
@@ -90,9 +92,25 @@ export const getPublicNotices = async (): Promise<NoticeItem[]> => {
   return notices.filter((n) => n.published);
 };
 
+export const getPublicNoticeById = async (id: string): Promise<NoticeItem | null> => {
+  const notice = await getNoticeById(id);
+  if (notice && notice.published) {
+    return notice;
+  }
+  return null;
+};
+
 export const getPublicEvents = async (): Promise<EventItem[]> => {
   const events = await getEventsAdmin();
   return events.filter((e) => e.published);
+};
+
+export const getPublicEventById = async (id: string): Promise<EventItem | null> => {
+  const event = await getEventById(id);
+  if (event && event.published) {
+    return event;
+  }
+  return null;
 };
 
 export const getPublicTeachers = async (): Promise<TeacherItem[]> => {

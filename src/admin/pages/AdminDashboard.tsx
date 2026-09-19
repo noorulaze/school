@@ -12,8 +12,14 @@ import {
   PlusCircle,
   CheckCircle2
 } from 'lucide-react';
-import { getDashboardStats, getAdmissionsAdmin, updateAdmissionStatus } from '../../services/adminService';
-import type { DashboardStats, AdmissionEnquiry } from '../../types/firestore';
+import {
+  getDashboardStats,
+  getAdmissionsAdmin,
+  updateAdmissionStatus,
+  getNoticesAdmin,
+  getEventsAdmin
+} from '../../services/adminService';
+import type { DashboardStats, AdmissionEnquiry, NoticeItem, EventItem } from '../../types/firestore';
 
 export const AdminDashboard: React.FC = () => {
   const [stats, setStats] = useState<DashboardStats>({
@@ -26,17 +32,23 @@ export const AdminDashboard: React.FC = () => {
     newAdmissions: 0,
   });
   const [recentAdmissions, setRecentAdmissions] = useState<AdmissionEnquiry[]>([]);
+  const [recentNotices, setRecentNotices] = useState<NoticeItem[]>([]);
+  const [recentEvents, setRecentEvents] = useState<EventItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   const loadData = async () => {
     setLoading(true);
     try {
-      const [st, adm] = await Promise.all([
+      const [st, adm, nots, evts] = await Promise.all([
         getDashboardStats(),
         getAdmissionsAdmin(),
+        getNoticesAdmin(),
+        getEventsAdmin(),
       ]);
       setStats(st);
       setRecentAdmissions(adm.slice(0, 5));
+      setRecentNotices(nots.slice(0, 3));
+      setRecentEvents(evts.slice(0, 3));
     } catch (err) {
       console.error('Failed to load dashboard data:', err);
     } finally {
@@ -300,6 +312,101 @@ export const AdminDashboard: React.FC = () => {
               Connected to Firebase Cloud Firestore and Authentication with resilient fallback storage.
             </p>
           </div>
+        </div>
+      </div>
+
+      {/* Notices & Events Summary Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Recent Circulars */}
+        <div className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-xs">
+          <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+            <div className="flex items-center gap-2">
+              <Bell className="w-4 h-4 text-[#164e37]" />
+              <h2 className="text-base font-bold text-slate-900">Latest Circulars & Notices</h2>
+            </div>
+            <Link
+              to="/admin/notices"
+              className="text-xs font-bold text-emerald-800 hover:text-emerald-950 flex items-center gap-1"
+            >
+              <span>Manage Notices</span>
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          {recentNotices.length === 0 ? (
+            <p className="text-xs text-slate-400 text-center py-6">No notices logged yet.</p>
+          ) : (
+            <div className="space-y-3">
+              {recentNotices.map((n) => (
+                <div
+                  key={n.id}
+                  className="p-3 rounded-xl bg-slate-50 border border-slate-200/70 flex items-start justify-between gap-3"
+                >
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-1.5 flex-wrap mb-1">
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
+                        {n.category}
+                      </span>
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                        n.published ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-200 text-slate-600'
+                      }`}>
+                        {n.published ? 'Published' : 'Draft'}
+                      </span>
+                      <span className="text-[10px] font-mono text-slate-400">{n.date}</span>
+                    </div>
+                    <h3 className="text-xs font-bold text-slate-900 line-clamp-1">{n.title}</h3>
+                    <p className="text-[11px] text-slate-500 line-clamp-1 mt-0.5">{n.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Upcoming Events */}
+        <div className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-xs">
+          <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+            <div className="flex items-center gap-2">
+              <Calendar className="w-4 h-4 text-[#c59b27]" />
+              <h2 className="text-base font-bold text-slate-900">Upcoming Events & Milestones</h2>
+            </div>
+            <Link
+              to="/admin/events"
+              className="text-xs font-bold text-emerald-800 hover:text-emerald-950 flex items-center gap-1"
+            >
+              <span>Manage Events</span>
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          {recentEvents.length === 0 ? (
+            <p className="text-xs text-slate-400 text-center py-6">No events scheduled yet.</p>
+          ) : (
+            <div className="space-y-3">
+              {recentEvents.map((ev) => (
+                <div
+                  key={ev.id}
+                  className="p-3 rounded-xl bg-slate-50 border border-slate-200/70 flex items-start justify-between gap-3"
+                >
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-1.5 flex-wrap mb-1">
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
+                        {ev.category || 'Event'}
+                      </span>
+                      {ev.featured && (
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300">
+                          Featured
+                        </span>
+                      )}
+                      <span className="text-[10px] font-mono text-slate-500">{ev.date}</span>
+                    </div>
+                    <h3 className="text-xs font-bold text-slate-900 line-clamp-1">{ev.title}</h3>
+                    <p className="text-[11px] text-slate-500 line-clamp-1 mt-0.5">{ev.location}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

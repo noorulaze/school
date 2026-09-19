@@ -25,13 +25,16 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
-    // 2. Notices & Updates
+    // 2. Notices & Updates (Published notices can be read; drafts & management restricted to admin)
     match /notices/{noticeId} {
-      allow read: if resource.data.published == true || isAdmin();
+      allow read: if (resource.data.published == true && 
+                      (resource.data.targetAudience in ['Everyone', 'Parents'] || !('targetAudience' in resource.data)))
+                  || (isAuthenticated() && resource.data.published == true)
+                  || isAdmin();
       allow write: if isAdmin();
     }
 
-    // 3. Events & Programs
+    // 3. Events & Programs (Published events can be viewed by public; write restricted to admin)
     match /events/{eventId} {
       allow read: if resource.data.published == true || isAdmin();
       allow write: if isAdmin();
@@ -55,11 +58,12 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
-    // 7. Admission Enquiries (Public can create with valid fields; only admin can read/manage)
+    // 7. Admission Enquiries (Public can only create with status 'New'; only admin can read, update, delete)
     match /admissions/{enquiryId} {
       allow create: if request.resource.data.applicantName is string
                     && request.resource.data.phone is string
-                    && request.resource.data.enquiryType is string;
+                    && request.resource.data.enquiryType is string
+                    && (request.resource.data.status == 'New' || !('status' in request.resource.data));
       allow read, update, delete: if isAdmin();
     }
 

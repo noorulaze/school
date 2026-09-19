@@ -13,6 +13,8 @@ import { Students } from './pages/Students';
 import { Events } from './pages/Events';
 import { Gallery } from './pages/Gallery';
 import { Contact } from './pages/Contact';
+import { NoticeDetail } from './pages/NoticeDetail';
+import { EventDetail } from './pages/EventDetail';
 
 // Admin Portal Pages & Components
 import { AdminLayout } from './admin/components/AdminLayout';
@@ -87,6 +89,8 @@ function MainLayout({ onOpenAdmissionModal }: { onOpenAdmissionModal: () => void
           <Route path="/teachers" element={<Teachers />} />
           <Route path="/students" element={<Students onOpenAdmissionModal={onOpenAdmissionModal} />} />
           <Route path="/events" element={<Events />} />
+          <Route path="/events/:id" element={<EventDetail />} />
+          <Route path="/notice/:id" element={<NoticeDetail />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/contact" element={<Contact onOpenAdmissionModal={onOpenAdmissionModal} />} />
 

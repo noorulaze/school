@@ -115,7 +115,7 @@ export const AdmissionModal: React.FC<AdmissionModalProps> = ({ isOpen, onClose 
                 Enquiry Logged Successfully
               </h4>
               <p className="text-xs text-slate-600 max-w-sm mx-auto leading-relaxed">
-                Thank you, <strong>{formData.parentName || 'Parent/Guardian'}</strong>. Your admission query for <strong>{formData.studentName || 'your ward'}</strong> has been registered in demonstration mode.
+                Thank you, <strong>{formData.parentName || 'Parent/Guardian'}</strong>. Your admission enquiry for <strong>{formData.studentName || 'your ward'}</strong> has been registered with the madrassa office desk. Our team will review your details and contact you promptly.
               </p>
               <div className="p-3 bg-[#f4f1ea] rounded-lg border border-[#d2cabb] text-[11px] text-slate-700 text-left">
                 <p className="font-semibold text-[#164e37] mb-0.5">Office Instructions:</p>

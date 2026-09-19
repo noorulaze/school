@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   GraduationCap,
@@ -21,7 +21,8 @@ import { motion } from 'framer-motion';
 import { NoticeTicker } from '../components/NoticeTicker';
 import { RealisticImageSlot } from '../components/RealisticImageSlot';
 import { PlaceholderBadge } from '../components/PlaceholderBadge';
-import { submitAdmissionEnquiry } from '../services/publicService';
+import { submitAdmissionEnquiry, getPublicNotices, getPublicEvents } from '../services/publicService';
+import type { NoticeItem, EventItem } from '../types/firestore';
 
 interface HomeProps {
   onOpenAdmissionModal: () => void;
@@ -40,6 +41,23 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
   const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionState, setSubmissionState] = useState<'idle' | 'backend_pending'>('idle');
+
+  // Dynamic Notices & Events from Firestore
+  const [publicNotices, setPublicNotices] = useState<NoticeItem[]>([]);
+  const [publicEvents, setPublicEvents] = useState<EventItem[]>([]);
+
+  useEffect(() => {
+    const loadContent = async () => {
+      try {
+        const [nots, evts] = await Promise.all([getPublicNotices(), getPublicEvents()]);
+        setPublicNotices(nots);
+        setPublicEvents(evts);
+      } catch (err) {
+        console.warn('Error loading public notices/events on Home page:', err);
+      }
+    };
+    loadContent();
+  }, []);
 
   const validateForm = () => {
     const errors: { [key: string]: string } = {};
@@ -544,58 +562,68 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
 
           {/* Horizontal Editorial Notice Grid: Desktop (3-col horizontal), Tablet (2-col balanced), Mobile (vertical list) */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
-            {[
+            {(publicNotices.length > 0 ? publicNotices.slice(0, 3) : [
               {
                 id: 'notice-1',
                 category: 'Academic Notice',
-                datePlaceholder: '[Date Placeholder]',
+                date: '[Date Placeholder]',
                 title: 'Academic Notice',
                 description: 'Important academic announcements will appear here. Regular examination timetables, syllabus progressions, and term schedules are posted by the office.',
-                badgeStyle: 'bg-emerald-50 text-emerald-800 border-emerald-200',
-                colSpan: 'col-span-1',
+                priority: 'Normal',
               },
               {
                 id: 'notice-2',
                 category: 'Admission Update',
-                datePlaceholder: '[Date Placeholder]',
+                date: '[Date Placeholder]',
                 title: 'Admission Update',
                 description: 'Admission-related information will be updated here. Application forms, intake schedules, and enrollment guidelines for upcoming batches will be confirmed here.',
-                badgeStyle: 'bg-blue-50 text-blue-800 border-blue-200',
-                colSpan: 'col-span-1',
+                priority: 'Normal',
               },
               {
                 id: 'notice-3',
                 category: 'Institution Notice',
-                datePlaceholder: '[Date Placeholder]',
+                date: '[Date Placeholder]',
                 title: 'Institution Notice',
                 description: 'Important notices and announcements will appear here. General circulars, institutional schedules, and parent-teacher updates will be communicated here.',
-                badgeStyle: 'bg-amber-50 text-amber-800 border-amber-200',
-                colSpan: 'col-span-1 md:col-span-2 lg:col-span-1',
+                priority: 'Normal',
               },
-            ].map((notice) => (
+            ]).map((notice, idx) => (
               <Link
                 key={notice.id}
-                to="/events"
-                className={`group relative flex flex-col justify-between p-5 sm:p-6 bg-[#fbfaf7] hover:bg-white rounded-xl border border-[#e5e0d5] hover:border-[#164e37]/40 hover:shadow-xs transition-all duration-200 h-full ${notice.colSpan}`}
+                to={`/notice/${notice.id}`}
+                className={`group relative flex flex-col justify-between p-5 sm:p-6 bg-[#fbfaf7] hover:bg-white rounded-xl border border-[#e5e0d5] hover:border-[#164e37]/40 hover:shadow-xs transition-all duration-200 h-full ${
+                  idx === 2 ? 'col-span-1 md:col-span-2 lg:col-span-1' : 'col-span-1'
+                }`}
               >
                 <div>
-                  {/* Category & Date Placeholder Header */}
+                  {/* Category & Date Header */}
                   <div className="flex items-center justify-between gap-2 pb-3 mb-3 border-b border-[#eee9df]">
-                    <span className={`text-[11px] font-semibold px-2 py-0.5 rounded border ${notice.badgeStyle}`}>
-                      {notice.category}
-                    </span>
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <span className="text-[11px] font-semibold px-2 py-0.5 rounded border bg-emerald-50 text-emerald-800 border-emerald-200">
+                        {notice.category}
+                      </span>
+                      {notice.priority && notice.priority !== 'Normal' && (
+                        <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border ${
+                          notice.priority === 'Urgent'
+                            ? 'bg-rose-50 text-rose-800 border-rose-200'
+                            : 'bg-amber-50 text-amber-900 border-amber-200'
+                        }`}>
+                          {notice.priority}
+                        </span>
+                      )}
+                    </div>
                     <span className="text-[11px] font-mono text-slate-500">
-                      {notice.datePlaceholder}
+                      {notice.date}
                     </span>
                   </div>
 
                   {/* Notice Title */}
-                  <h3 className="text-base sm:text-lg font-bold text-[#0f231c] group-hover:text-[#164e37] transition-colors mb-2">
+                  <h3 className="text-base sm:text-lg font-bold text-[#0f231c] group-hover:text-[#164e37] transition-colors mb-2 line-clamp-2">
                     {notice.title}
                   </h3>
 
                   {/* Short Description */}
-                  <p className="text-xs sm:text-[13px] text-slate-600 leading-relaxed font-normal">
+                  <p className="text-xs sm:text-[13px] text-slate-600 leading-relaxed font-normal line-clamp-3">
                     {notice.description}
                   </p>
                 </div>
@@ -603,10 +631,10 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
                 {/* Arrow / Read More Indicator */}
                 <div className="pt-3.5 mt-5 border-t border-[#eee9df] flex items-center justify-between text-xs font-semibold">
                   <span className="text-slate-500 group-hover:text-[#164e37] transition-colors">
-                    Official Notice
+                    Official Circular
                   </span>
                   <div className="inline-flex items-center gap-1.5 text-[#164e37]">
-                    <span className="text-xs font-semibold">Read More</span>
+                    <span className="text-xs font-semibold">Read Circular</span>
                     <ArrowRight className="w-3.5 h-3.5 text-[#c59b27] transform transition-transform group-hover:translate-x-1" />
                   </div>
                 </div>
@@ -660,157 +688,251 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
           </div>
 
           {/* Editorial Asymmetric Layout: Left = 1 Large Featured, Right = 2 Smaller Stacked */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
-            {/* Left: Featured Event Placeholder (Large) */}
-            <div className="lg:col-span-7 flex">
-              <Link
-                to="/events"
-                className="group relative w-full flex flex-col justify-between bg-white rounded-xl border border-[#e5e0d5] hover:border-[#164e37]/40 hover:shadow-xs transition-all duration-200 overflow-hidden"
-              >
-                {/* Image Container with Subtle Zoom */}
-                <div className="overflow-hidden bg-[#f4f1ea]">
-                  <div className="transform transition-transform duration-500 ease-out group-hover:scale-[1.03]">
-                    <RealisticImageSlot
-                      scene="assembly"
-                      aspectRatio="16/10"
-                      label="School Program Photograph Placeholder"
-                      caption="Annual educational gathering and student assembly in Korangath"
-                    />
-                  </div>
-                </div>
+          {(() => {
+            const featuredEvent = publicEvents.find((e) => e.featured) || publicEvents[0];
+            const secondaryEvents = publicEvents.filter((e) => e.id !== featuredEvent?.id).slice(0, 2);
 
-                {/* Content Details */}
-                <div className="p-5 sm:p-6 lg:p-7 flex-1 flex flex-col justify-between">
-                  <div>
-                    {/* Metadata */}
-                    <div className="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b border-[#eee9df]">
-                      <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded border bg-emerald-50 text-emerald-800 border-emerald-200">
-                        Featured Program
-                      </span>
-                      <span className="flex items-center gap-1.5 text-xs text-slate-500 font-mono">
-                        <Calendar className="w-3.5 h-3.5 text-[#c59b27]" />
-                        <span>[Date Placeholder]</span>
-                      </span>
+            return (
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
+                {/* Left: Featured Event Placeholder (Large) */}
+                <div className="lg:col-span-7 flex">
+                  <Link
+                    to={featuredEvent ? `/events/${featuredEvent.id}` : '/events'}
+                    className="group relative w-full flex flex-col justify-between bg-white rounded-xl border border-[#e5e0d5] hover:border-[#164e37]/40 hover:shadow-xs transition-all duration-200 overflow-hidden"
+                  >
+                    {/* Image Container with Subtle Zoom */}
+                    <div className="overflow-hidden bg-[#f4f1ea] relative">
+                      {featuredEvent?.coverImage || featuredEvent?.image ? (
+                        <div className="w-full h-64 sm:h-80 overflow-hidden">
+                          <img
+                            src={featuredEvent.coverImage || featuredEvent.image}
+                            alt={featuredEvent.title}
+                            className="w-full h-full object-cover transform transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+                          />
+                        </div>
+                      ) : (
+                        <div className="transform transition-transform duration-500 ease-out group-hover:scale-[1.03]">
+                          <RealisticImageSlot
+                            scene="assembly"
+                            aspectRatio="16/10"
+                            label="School Program Photograph Placeholder"
+                            caption="Annual educational gathering and student assembly in Korangath"
+                          />
+                        </div>
+                      )}
                     </div>
 
-                    {/* Title */}
-                    <h3 className="text-xl sm:text-2xl font-bold text-[#0f231c] group-hover:text-[#164e37] transition-colors mb-2.5">
-                      Annual Educational Program
-                    </h3>
+                    {/* Content Details */}
+                    <div className="p-5 sm:p-6 lg:p-7 flex-1 flex flex-col justify-between">
+                      <div>
+                        {/* Metadata */}
+                        <div className="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b border-[#eee9df]">
+                          <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded border bg-emerald-50 text-emerald-800 border-emerald-200">
+                            {featuredEvent ? (featuredEvent.category || 'Featured Program') : 'Featured Program'}
+                          </span>
+                          <span className="flex items-center gap-1.5 text-xs text-slate-500 font-mono">
+                            <Calendar className="w-3.5 h-3.5 text-[#c59b27]" />
+                            <span>{featuredEvent?.date || '[Date Placeholder]'}</span>
+                          </span>
+                        </div>
 
-                    {/* Description */}
-                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
-                      The flagship educational gathering bringing together students, teachers, and guardians for Quranic presentations, moral discussions, and recognizing student efforts. Specific dates, guest schedules, and timetable will be updated upon official announcement.
-                    </p>
-                  </div>
+                        {/* Title */}
+                        <h3 className="text-xl sm:text-2xl font-bold text-[#0f231c] group-hover:text-[#164e37] transition-colors mb-2.5">
+                          {featuredEvent?.title || 'Annual Educational Program'}
+                        </h3>
 
-                  {/* Action Link */}
-                  <div className="pt-4 mt-6 border-t border-[#eee9df] flex items-center justify-between text-xs font-semibold">
-                    <span className="text-slate-500 group-hover:text-[#164e37] transition-colors">
-                      Institutional Event
-                    </span>
-                    <div className="inline-flex items-center gap-1.5 text-[#164e37]">
-                      <span className="text-xs font-semibold">View Details</span>
-                      <ArrowRight className="w-3.5 h-3.5 text-[#c59b27] transform transition-transform group-hover:translate-x-1" />
+                        {/* Description */}
+                        <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                          {featuredEvent?.description ||
+                            'The flagship educational gathering bringing together students, teachers, and guardians for Quranic presentations, moral discussions, and recognizing student efforts.'}
+                        </p>
+                      </div>
+
+                      {/* Action Link */}
+                      <div className="pt-4 mt-6 border-t border-[#eee9df] flex items-center justify-between text-xs font-semibold">
+                        <span className="text-slate-500 group-hover:text-[#164e37] transition-colors">
+                          {featuredEvent?.location || 'Main Campus Auditorium'}
+                        </span>
+                        <div className="inline-flex items-center gap-1.5 text-[#164e37]">
+                          <span className="text-xs font-semibold">View Program</span>
+                          <ArrowRight className="w-3.5 h-3.5 text-[#c59b27] transform transition-transform group-hover:translate-x-1" />
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </Link>
-            </div>
-
-            {/* Right: 2 Smaller Secondary Event Items (side by side on tablet, stacked on desktop) */}
-            <div className="lg:col-span-5 flex flex-col sm:flex-row lg:flex-col justify-between gap-5 sm:gap-6">
-              {/* Secondary Event 1: Student Activity */}
-              <Link
-                to="/events"
-                className="group relative flex-1 flex flex-col bg-white rounded-xl border border-[#e5e0d5] hover:border-[#164e37]/40 hover:shadow-xs transition-all duration-200 overflow-hidden"
-              >
-                <div className="overflow-hidden bg-[#f4f1ea] shrink-0">
-                  <div className="h-full transform transition-transform duration-500 ease-out group-hover:scale-[1.03]">
-                    <RealisticImageSlot
-                      scene="activities"
-                      aspectRatio="16/10"
-                      label="Student Activity Photo Placeholder"
-                      caption="Student co-curricular activity and study circle"
-                    />
-                  </div>
+                  </Link>
                 </div>
 
-                <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
-                  <div>
-                    <div className="flex items-center justify-between gap-2 pb-2 mb-2 border-b border-[#eee9df]">
-                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded border bg-blue-50 text-blue-800 border-blue-200">
-                        Student Activity
-                      </span>
-                      <span className="text-[11px] text-slate-500 font-mono">
-                        [Date Placeholder]
-                      </span>
-                    </div>
+                {/* Right: 2 Smaller Secondary Event Items */}
+                <div className="lg:col-span-5 flex flex-col sm:flex-row lg:flex-col justify-between gap-5 sm:gap-6">
+                  {/* Secondary Event 1 */}
+                  {secondaryEvents[0] ? (
+                    <Link
+                      to={`/events/${secondaryEvents[0].id}`}
+                      className="group relative flex-1 flex flex-col bg-white rounded-xl border border-[#e5e0d5] hover:border-[#164e37]/40 hover:shadow-xs transition-all duration-200 overflow-hidden"
+                    >
+                      <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
+                        <div>
+                          <div className="flex items-center justify-between gap-2 pb-2 mb-2 border-b border-[#eee9df]">
+                            <span className="text-[10px] font-semibold px-2 py-0.5 rounded border bg-blue-50 text-blue-800 border-blue-200">
+                              {secondaryEvents[0].category || 'Campus Program'}
+                            </span>
+                            <span className="text-[11px] text-slate-500 font-mono">
+                              {secondaryEvents[0].date}
+                            </span>
+                          </div>
 
-                    <h4 className="text-base font-bold text-[#0f231c] group-hover:text-[#164e37] transition-colors mb-1.5">
-                      Student Activity
-                    </h4>
+                          <h4 className="text-base font-bold text-[#0f231c] group-hover:text-[#164e37] transition-colors mb-1.5 line-clamp-2">
+                            {secondaryEvents[0].title}
+                          </h4>
 
-                    <p className="text-xs text-slate-600 leading-relaxed line-clamp-3">
-                      Interactive student workshops, peer study circles, and character-building extracurricular sessions conducted under teacher supervision.
-                    </p>
-                  </div>
+                          <p className="text-xs text-slate-600 leading-relaxed line-clamp-3">
+                            {secondaryEvents[0].description}
+                          </p>
+                        </div>
 
-                  <div className="pt-3 mt-3 border-t border-[#eee9df] flex items-center justify-end text-xs font-semibold text-[#164e37]">
-                    <div className="inline-flex items-center gap-1">
-                      <span className="text-xs">View Details</span>
-                      <ArrowRight className="w-3 h-3 text-[#c59b27] transform transition-transform group-hover:translate-x-1" />
-                    </div>
-                  </div>
+                        <div className="pt-3 mt-3 border-t border-[#eee9df] flex items-center justify-between text-xs font-semibold text-[#164e37]">
+                          <span className="text-[11px] text-slate-400 font-normal truncate max-w-[160px]">
+                            {secondaryEvents[0].location}
+                          </span>
+                          <div className="inline-flex items-center gap-1">
+                            <span className="text-xs">Details</span>
+                            <ArrowRight className="w-3 h-3 text-[#c59b27] transform transition-transform group-hover:translate-x-1" />
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  ) : (
+                    <Link
+                      to="/events"
+                      className="group relative flex-1 flex flex-col bg-white rounded-xl border border-[#e5e0d5] hover:border-[#164e37]/40 hover:shadow-xs transition-all duration-200 overflow-hidden"
+                    >
+                      <div className="overflow-hidden bg-[#f4f1ea] shrink-0">
+                        <div className="h-full transform transition-transform duration-500 ease-out group-hover:scale-[1.03]">
+                          <RealisticImageSlot
+                            scene="activities"
+                            aspectRatio="16/10"
+                            label="Student Activity Photo Placeholder"
+                            caption="Student co-curricular activity and study circle"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
+                        <div>
+                          <div className="flex items-center justify-between gap-2 pb-2 mb-2 border-b border-[#eee9df]">
+                            <span className="text-[10px] font-semibold px-2 py-0.5 rounded border bg-blue-50 text-blue-800 border-blue-200">
+                              Student Activity
+                            </span>
+                            <span className="text-[11px] text-slate-500 font-mono">
+                              [Date Placeholder]
+                            </span>
+                          </div>
+
+                          <h4 className="text-base font-bold text-[#0f231c] group-hover:text-[#164e37] transition-colors mb-1.5">
+                            Student Activity
+                          </h4>
+
+                          <p className="text-xs text-slate-600 leading-relaxed line-clamp-3">
+                            Interactive student workshops, peer study circles, and character-building extracurricular sessions conducted under teacher supervision.
+                          </p>
+                        </div>
+
+                        <div className="pt-3 mt-3 border-t border-[#eee9df] flex items-center justify-end text-xs font-semibold text-[#164e37]">
+                          <div className="inline-flex items-center gap-1">
+                            <span className="text-xs">View Details</span>
+                            <ArrowRight className="w-3 h-3 text-[#c59b27] transform transition-transform group-hover:translate-x-1" />
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  )}
+
+                  {/* Secondary Event 2 */}
+                  {secondaryEvents[1] ? (
+                    <Link
+                      to={`/events/${secondaryEvents[1].id}`}
+                      className="group relative flex-1 flex flex-col bg-white rounded-xl border border-[#e5e0d5] hover:border-[#164e37]/40 hover:shadow-xs transition-all duration-200 overflow-hidden"
+                    >
+                      <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
+                        <div>
+                          <div className="flex items-center justify-between gap-2 pb-2 mb-2 border-b border-[#eee9df]">
+                            <span className="text-[10px] font-semibold px-2 py-0.5 rounded border bg-amber-50 text-amber-800 border-amber-200">
+                              {secondaryEvents[1].category || 'Islamic Learning'}
+                            </span>
+                            <span className="text-[11px] text-slate-500 font-mono">
+                              {secondaryEvents[1].date}
+                            </span>
+                          </div>
+
+                          <h4 className="text-base font-bold text-[#0f231c] group-hover:text-[#164e37] transition-colors mb-1.5 line-clamp-2">
+                            {secondaryEvents[1].title}
+                          </h4>
+
+                          <p className="text-xs text-slate-600 leading-relaxed line-clamp-3">
+                            {secondaryEvents[1].description}
+                          </p>
+                        </div>
+
+                        <div className="pt-3 mt-3 border-t border-[#eee9df] flex items-center justify-between text-xs font-semibold text-[#164e37]">
+                          <span className="text-[11px] text-slate-400 font-normal truncate max-w-[160px]">
+                            {secondaryEvents[1].location}
+                          </span>
+                          <div className="inline-flex items-center gap-1">
+                            <span className="text-xs">Details</span>
+                            <ArrowRight className="w-3 h-3 text-[#c59b27] transform transition-transform group-hover:translate-x-1" />
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  ) : (
+                    <Link
+                      to="/events"
+                      className="group relative flex-1 flex flex-col bg-white rounded-xl border border-[#e5e0d5] hover:border-[#164e37]/40 hover:shadow-xs transition-all duration-200 overflow-hidden"
+                    >
+                      <div className="overflow-hidden bg-[#f4f1ea] shrink-0">
+                        <div className="h-full transform transition-transform duration-500 ease-out group-hover:scale-[1.03]">
+                          <RealisticImageSlot
+                            scene="quran_study"
+                            aspectRatio="16/10"
+                            label="Educational Event Photo Placeholder"
+                            caption="Structured Islamic study session and Quranic learning circle"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
+                        <div>
+                          <div className="flex items-center justify-between gap-2 pb-2 mb-2 border-b border-[#eee9df]">
+                            <span className="text-[10px] font-semibold px-2 py-0.5 rounded border bg-amber-50 text-amber-800 border-amber-200">
+                              Islamic Learning Program
+                            </span>
+                            <span className="text-[11px] text-slate-500 font-mono">
+                              [Date Placeholder]
+                            </span>
+                          </div>
+
+                          <h4 className="text-base font-bold text-[#0f231c] group-hover:text-[#164e37] transition-colors mb-1.5">
+                            Islamic Learning Program
+                          </h4>
+
+                          <p className="text-xs text-slate-600 leading-relaxed line-clamp-3">
+                            Specialized weekend and seasonal educational sessions focused on Tajweed mastery, Fiqh guidance, and prophetic ethical traditions.
+                          </p>
+                        </div>
+
+                        <div className="pt-3 mt-3 border-t border-[#eee9df] flex items-center justify-end text-xs font-semibold text-[#164e37]">
+                          <div className="inline-flex items-center gap-1">
+                            <span className="text-xs">View Details</span>
+                            <ArrowRight className="w-3 h-3 text-[#c59b27] transform transition-transform group-hover:translate-x-1" />
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  )}
                 </div>
-              </Link>
-
-              {/* Secondary Event 2: Islamic Learning Program */}
-              <Link
-                to="/events"
-                className="group relative flex-1 flex flex-col bg-white rounded-xl border border-[#e5e0d5] hover:border-[#164e37]/40 hover:shadow-xs transition-all duration-200 overflow-hidden"
-              >
-                <div className="overflow-hidden bg-[#f4f1ea] shrink-0">
-                  <div className="h-full transform transition-transform duration-500 ease-out group-hover:scale-[1.03]">
-                    <RealisticImageSlot
-                      scene="quran_study"
-                      aspectRatio="16/10"
-                      label="Educational Event Photo Placeholder"
-                      caption="Structured Islamic study session and Quranic learning circle"
-                    />
-                  </div>
-                </div>
-
-                <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
-                  <div>
-                    <div className="flex items-center justify-between gap-2 pb-2 mb-2 border-b border-[#eee9df]">
-                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded border bg-amber-50 text-amber-800 border-amber-200">
-                        Islamic Learning Program
-                      </span>
-                      <span className="text-[11px] text-slate-500 font-mono">
-                        [Date Placeholder]
-                      </span>
-                    </div>
-
-                    <h4 className="text-base font-bold text-[#0f231c] group-hover:text-[#164e37] transition-colors mb-1.5">
-                      Islamic Learning Program
-                    </h4>
-
-                    <p className="text-xs text-slate-600 leading-relaxed line-clamp-3">
-                      Specialized weekend and seasonal educational sessions focused on Tajweed mastery, Fiqh guidance, and prophetic ethical traditions.
-                    </p>
-                  </div>
-
-                  <div className="pt-3 mt-3 border-t border-[#eee9df] flex items-center justify-end text-xs font-semibold text-[#164e37]">
-                    <div className="inline-flex items-center gap-1">
-                      <span className="text-xs">View Details</span>
-                      <ArrowRight className="w-3 h-3 text-[#c59b27] transform transition-transform group-hover:translate-x-1" />
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            </div>
-          </div>
+              </div>
+            );
+          })()}
 
           {/* View All Events Button Below */}
           <div className="mt-8 sm:mt-10 lg:mt-12 text-center">

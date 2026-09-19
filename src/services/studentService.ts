@@ -116,10 +116,12 @@ export const getStudentAcademicRecords = async (uid: string): Promise<AcademicRe
   return [];
 };
 
-// Fetch Announcements for Student Dashboard (from published notices)
+// Fetch Announcements for Student Dashboard (from published notices targeted to students or everyone)
 export const getStudentAnnouncements = async (): Promise<NoticeItem[]> => {
   const notices = await getNoticesAdmin();
-  return notices.filter((n) => n.published);
+  return notices.filter(
+    (n) => n.published && (!n.targetAudience || n.targetAudience === 'Everyone' || n.targetAudience === 'Students')
+  );
 };
 
 export const getStudentNotices = getStudentAnnouncements;
