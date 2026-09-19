@@ -18,7 +18,6 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { SCHOOL_INFO } from '../data/schoolInfo';
-import { EVENTS } from '../data/events';
 import { NoticeTicker } from '../components/NoticeTicker';
 import { RealisticImageSlot } from '../components/RealisticImageSlot';
 import { PlaceholderBadge } from '../components/PlaceholderBadge';
@@ -559,62 +558,200 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
         </div>
       </section>
 
-      {/* 7. EVENTS SECTION (Modern Editorial Event Layout) */}
-      <section className="py-14 lg:py-16 bg-[#fbfaf7] border-b border-[#e5e0d5]">
+      {/* 7. EVENTS & PROGRAMS (Modern Editorial Asymmetric Layout) */}
+      <section className="py-14 lg:py-20 bg-[#fbfaf7] border-b border-[#e5e0d5]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-3">
+          {/* Header Row */}
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 sm:mb-10 gap-4">
             <div>
-              <span className="text-xs font-bold text-[#164e37] uppercase tracking-wider block">
-                Academic & Islamic Programs
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0f231c]">
-                Upcoming School Events
+              <div className="flex items-center gap-2 mb-2">
+                <span className="h-px w-5 bg-[#c59b27]"></span>
+                <span className="text-[11px] font-bold uppercase tracking-widest text-[#164e37]">
+                  Campus Life & Calendar
+                </span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0f231c] tracking-tight">
+                Events & Programs
               </h2>
+              <p className="text-xs sm:text-sm text-slate-600 mt-1.5 font-normal">
+                Moments of learning, participation and community.
+              </p>
             </div>
 
-            <Link
-              to="/events"
-              className="text-xs font-bold text-[#164e37] hover:underline flex items-center gap-1"
-            >
-              <span>Full Calendar & Notices</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
+            <div className="flex items-center gap-2.5">
+              <PlaceholderBadge label="Editable Events" size="sm" />
+              <Link
+                to="/events"
+                className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 bg-white hover:bg-[#f4f1ea] text-[#164e37] text-xs font-bold rounded-lg border border-[#d2cabb] transition-colors group shadow-2xs"
+              >
+                <span>View All Events</span>
+                <ArrowRight className="w-3.5 h-3.5 text-[#c59b27] transition-transform group-hover:translate-x-1" />
+              </Link>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {EVENTS.slice(0, 3).map((event) => (
-              <div
-                key={event.id}
-                className="p-5 bg-white rounded-xl border border-[#e5e0d5] hover:border-[#164e37] transition-all flex flex-col justify-between space-y-4"
+          {/* Editorial Asymmetric Layout: Left = 1 Large Featured, Right = 2 Smaller Stacked */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
+            {/* Left: Featured Event Placeholder (Large) */}
+            <div className="lg:col-span-7 flex">
+              <Link
+                to="/events"
+                className="group relative w-full flex flex-col justify-between bg-white rounded-lg border border-[#e5e0d5] hover:border-[#164e37]/40 hover:shadow-xs transition-all duration-200 overflow-hidden"
               >
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#164e37] bg-[#f4f1ea] px-2 py-0.5 rounded">
-                      {event.category}
-                    </span>
-                    <span className="text-[10px] text-slate-400 font-mono">
-                      {event.timePlaceholder}
-                    </span>
+                {/* Image Container with Subtle Zoom */}
+                <div className="overflow-hidden bg-[#f4f1ea]">
+                  <div className="transform transition-transform duration-500 ease-out group-hover:scale-[1.03]">
+                    <RealisticImageSlot
+                      scene="assembly"
+                      aspectRatio="16/10"
+                      label="School Program Photograph Placeholder"
+                      caption="Annual educational gathering and student assembly in Korangath"
+                    />
+                  </div>
+                </div>
+
+                {/* Content Details */}
+                <div className="p-6 sm:p-7 flex-1 flex flex-col justify-between">
+                  <div>
+                    {/* Metadata */}
+                    <div className="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b border-[#eee9df]">
+                      <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded border bg-emerald-50 text-emerald-800 border-emerald-200">
+                        Featured Program
+                      </span>
+                      <span className="flex items-center gap-1.5 text-xs text-slate-500 font-mono">
+                        <Calendar className="w-3.5 h-3.5 text-[#c59b27]" />
+                        <span>[Date Placeholder]</span>
+                      </span>
+                    </div>
+
+                    {/* Title */}
+                    <h3 className="text-xl sm:text-2xl font-bold text-[#0f231c] group-hover:text-[#164e37] transition-colors mb-2.5">
+                      Annual Educational Program
+                    </h3>
+
+                    {/* Description */}
+                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                      The flagship educational gathering bringing together students, teachers, and guardians for Quranic presentations, moral discussions, and recognizing student efforts. Specific dates, guest schedules, and timetable will be updated upon official announcement.
+                    </p>
                   </div>
 
-                  <h3 className="text-base font-bold text-slate-900 leading-snug">
-                    {event.title}
-                  </h3>
+                  {/* Action Link */}
+                  <div className="pt-4 mt-6 border-t border-[#eee9df] flex items-center justify-between text-xs font-semibold">
+                    <span className="text-slate-500 group-hover:text-[#164e37] transition-colors">
+                      Institutional Event
+                    </span>
+                    <div className="inline-flex items-center gap-1.5 text-[#164e37]">
+                      <span className="text-xs font-semibold">View Details</span>
+                      <ArrowRight className="w-3.5 h-3.5 text-[#c59b27] transform transition-transform group-hover:translate-x-1" />
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            </div>
 
-                  <p className="text-xs text-slate-600 line-clamp-2">
-                    {event.summary}
-                  </p>
+            {/* Right: 2 Smaller Secondary Event Items */}
+            <div className="lg:col-span-5 flex flex-col justify-between gap-5 sm:gap-6">
+              {/* Secondary Event 1: Student Activity */}
+              <Link
+                to="/events"
+                className="group relative flex-1 flex flex-col sm:flex-row bg-white rounded-lg border border-[#e5e0d5] hover:border-[#164e37]/40 hover:shadow-xs transition-all duration-200 overflow-hidden"
+              >
+                <div className="sm:w-2/5 overflow-hidden bg-[#f4f1ea] shrink-0">
+                  <div className="h-full transform transition-transform duration-500 ease-out group-hover:scale-[1.03]">
+                    <RealisticImageSlot
+                      scene="activities"
+                      aspectRatio="4/3"
+                      label="Student Activity Photo Placeholder"
+                      caption="Student co-curricular activity and study circle"
+                    />
+                  </div>
                 </div>
 
-                <div className="pt-3 border-t border-[#f0ece3] text-xs text-slate-500 flex items-center justify-between">
-                  <span className="flex items-center gap-1.5 font-medium">
-                    <Calendar className="w-3.5 h-3.5 text-[#c59b27]" />
-                    <span>{event.datePlaceholder}</span>
-                  </span>
-                  <span>{event.venuePlaceholder}</span>
+                <div className="p-4 sm:p-5 sm:w-3/5 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between gap-2 pb-2 mb-2 border-b border-[#eee9df]">
+                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded border bg-blue-50 text-blue-800 border-blue-200">
+                        Student Activity
+                      </span>
+                      <span className="text-[11px] text-slate-500 font-mono">
+                        [Date Placeholder]
+                      </span>
+                    </div>
+
+                    <h4 className="text-base font-bold text-[#0f231c] group-hover:text-[#164e37] transition-colors mb-1.5">
+                      Student Activity
+                    </h4>
+
+                    <p className="text-xs text-slate-600 leading-relaxed line-clamp-3">
+                      Interactive student workshops, peer study circles, and character-building extracurricular sessions conducted under teacher supervision.
+                    </p>
+                  </div>
+
+                  <div className="pt-3 mt-3 border-t border-[#eee9df] flex items-center justify-end text-xs font-semibold text-[#164e37]">
+                    <div className="inline-flex items-center gap-1">
+                      <span className="text-xs">View Details</span>
+                      <ArrowRight className="w-3 h-3 text-[#c59b27] transform transition-transform group-hover:translate-x-1" />
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              </Link>
+
+              {/* Secondary Event 2: Islamic Learning Program */}
+              <Link
+                to="/events"
+                className="group relative flex-1 flex flex-col sm:flex-row bg-white rounded-lg border border-[#e5e0d5] hover:border-[#164e37]/40 hover:shadow-xs transition-all duration-200 overflow-hidden"
+              >
+                <div className="sm:w-2/5 overflow-hidden bg-[#f4f1ea] shrink-0">
+                  <div className="h-full transform transition-transform duration-500 ease-out group-hover:scale-[1.03]">
+                    <RealisticImageSlot
+                      scene="quran_study"
+                      aspectRatio="4/3"
+                      label="Educational Event Photo Placeholder"
+                      caption="Structured Islamic study session and Quranic learning circle"
+                    />
+                  </div>
+                </div>
+
+                <div className="p-4 sm:p-5 sm:w-3/5 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between gap-2 pb-2 mb-2 border-b border-[#eee9df]">
+                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded border bg-amber-50 text-amber-800 border-amber-200">
+                        Islamic Learning Program
+                      </span>
+                      <span className="text-[11px] text-slate-500 font-mono">
+                        [Date Placeholder]
+                      </span>
+                    </div>
+
+                    <h4 className="text-base font-bold text-[#0f231c] group-hover:text-[#164e37] transition-colors mb-1.5">
+                      Islamic Learning Program
+                    </h4>
+
+                    <p className="text-xs text-slate-600 leading-relaxed line-clamp-3">
+                      Specialized weekend and seasonal educational sessions focused on Tajweed mastery, Fiqh guidance, and prophetic ethical traditions.
+                    </p>
+                  </div>
+
+                  <div className="pt-3 mt-3 border-t border-[#eee9df] flex items-center justify-end text-xs font-semibold text-[#164e37]">
+                    <div className="inline-flex items-center gap-1">
+                      <span className="text-xs">View Details</span>
+                      <ArrowRight className="w-3 h-3 text-[#c59b27] transform transition-transform group-hover:translate-x-1" />
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            </div>
+          </div>
+
+          {/* View All Events Button Below */}
+          <div className="mt-10 sm:mt-12 text-center">
+            <Link
+              to="/events"
+              className="inline-flex items-center gap-2 px-6 py-2.5 bg-[#164e37] hover:bg-[#0f3b29] text-white text-xs sm:text-sm font-semibold rounded-lg transition-colors group shadow-xs"
+            >
+              <span>View All Events</span>
+              <ArrowRight className="w-3.5 h-3.5 text-[#c59b27] transition-transform group-hover:translate-x-1" />
+            </Link>
           </div>
         </div>
       </section>
