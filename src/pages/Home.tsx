@@ -11,7 +11,6 @@ import {
   FileText,
   School,
   CheckCircle2,
-  Compass,
   Send,
   Sparkles
 } from 'lucide-react';
@@ -229,57 +228,94 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
         </div>
       </section>
 
-      {/* 4. ABOUT PREVIEW (Editorial Split Layout) */}
-      <section className="py-14 lg:py-16 bg-white border-b border-[#e5e0d5]">
+      {/* 4. ABOUT PREVIEW (Modern Editorial 2-Column Section) */}
+      <section className="py-14 lg:py-20 bg-white border-b border-[#e5e0d5]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-            {/* Image on one side */}
-            <div className="lg:col-span-6 order-2 lg:order-1">
+            {/* Left: Large School/Classroom Image Placeholder (stacks on top on mobile) */}
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.45, ease: 'easeOut' }}
+              className="lg:col-span-6"
+            >
               <RealisticImageSlot
-                scene="quran_study"
-                aspectRatio="16/10"
-                label="Qur'an & Tajweed Study Session"
-                caption="Recitation coaching and character formation"
-                className="shadow-sm"
+                scene="classroom"
+                aspectRatio="4/3"
+                label="Classroom & Study Hall"
+                caption="Learning environment at Sharaful Islam Madrassa, Korangath"
+                className="rounded-xl shadow-xs"
               />
-            </div>
+            </motion.div>
 
-            {/* Short content on the other side */}
-            <div className="lg:col-span-6 space-y-4 order-1 lg:order-2">
-              <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[#164e37] uppercase tracking-wider">
-                <Compass className="w-3.5 h-3.5 text-[#c59b27]" />
-                <span>Our Heritage & Values</span>
+            {/* Right: Heading, Natural Introduction, and 3 Information Points */}
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.45, delay: 0.12, ease: 'easeOut' }}
+              className="lg:col-span-6 space-y-6"
+            >
+              {/* Eyebrow */}
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-0.5 bg-[#c59b27]" />
+                <span className="text-xs uppercase tracking-widest font-extrabold text-[#164e37]">
+                  ABOUT OUR INSTITUTION
+                </span>
               </div>
 
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0f231c] tracking-tight">
-                Authentic Islamic Foundations for Modern Young Minds
+              {/* Heading */}
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0f231c] tracking-tight leading-tight">
+                Education rooted in knowledge, faith and character.
               </h2>
 
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Sharaful Islam Madrassa, widely known in the area as Sharafiyya Korangath, has long stood as an anchor for religious instruction in Tirur. Our pedagogy balances traditional classical texts with compassionate, structured teaching.
+              {/* Description */}
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Sharaful Islam Madrassa, widely known in the community as <strong>Sharafiyya Korangath</strong>, is an Islamic educational institution serving families in Korangath, Tirur, Malappuram. Our institution provides structured religious learning that instills reverence for the Qur'an and authentic prophetic teachings while supporting students attending daytime formal schools.
               </p>
 
-              <div className="grid grid-cols-2 gap-3 pt-2 text-xs">
-                <div className="p-3 bg-[#fbfaf7] rounded-lg border border-[#e5e0d5]">
-                  <strong className="block text-slate-900 font-bold">Moral Guidance (Akhlaq)</strong>
-                  <p className="text-slate-500 mt-0.5">Truthfulness, respect for elders, and community service.</p>
+              {/* Three Information Points */}
+              <div className="space-y-4 pt-1">
+                <div className="border-l-2 border-[#164e37] pl-3.5 py-0.5">
+                  <h3 className="text-xs sm:text-sm font-bold text-slate-900">
+                    Islamic Education
+                  </h3>
+                  <p className="text-xs text-slate-600 mt-0.5 leading-relaxed">
+                    Systematic instruction in foundational Aqeedah, practical Fiqh rulings, and daily worship according to authorized curriculum standards.
+                  </p>
                 </div>
-                <div className="p-3 bg-[#fbfaf7] rounded-lg border border-[#e5e0d5]">
-                  <strong className="block text-slate-900 font-bold">Tajweed Precision</strong>
-                  <p className="text-slate-500 mt-0.5">Accurate pronunciation according to classical rules.</p>
+
+                <div className="border-l-2 border-[#c59b27] pl-3.5 py-0.5">
+                  <h3 className="text-xs sm:text-sm font-bold text-slate-900">
+                    Arabic & Qur’anic Learning
+                  </h3>
+                  <p className="text-xs text-slate-600 mt-0.5 leading-relaxed">
+                    Step-by-step Tajweed phonetics, accurate vocal articulation (Makharij), and foundational Arabic language comprehension.
+                  </p>
+                </div>
+
+                <div className="border-l-2 border-[#164e37] pl-3.5 py-0.5">
+                  <h3 className="text-xs sm:text-sm font-bold text-slate-900">
+                    Student Development
+                  </h3>
+                  <p className="text-xs text-slate-600 mt-0.5 leading-relaxed">
+                    Tarbiyyah and character formation emphasizing honesty, respect for elders, personal discipline, and positive social goodwill.
+                  </p>
                 </div>
               </div>
 
+              {/* Simple Learn More Button */}
               <div className="pt-2">
                 <Link
                   to="/about"
-                  className="inline-flex items-center gap-2 text-xs font-bold text-[#164e37] hover:text-[#0f3b29] hover:underline"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#164e37] hover:bg-[#0f3b29] text-white text-xs sm:text-sm font-bold rounded-lg transition-colors group shadow-xs"
                 >
-                  <span>Learn More About Our Institution</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+                  <span>Learn More</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-[#c59b27] transition-transform group-hover:translate-x-1" />
                 </Link>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
