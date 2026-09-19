@@ -756,56 +756,274 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
         </div>
       </section>
 
-      {/* 8. GALLERY SECTION (Modern Asymmetric / Masonry-style Layout) */}
-      <section className="py-14 lg:py-16 bg-white border-b border-[#e5e0d5]">
+      {/* 8. GALLERY SECTION (Modern Asymmetric Editorial Gallery) */}
+      <section className="py-14 lg:py-20 bg-white border-b border-[#e5e0d5]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-3">
+          {/* Header Row */}
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 sm:mb-10 gap-4">
             <div>
-              <span className="text-xs font-bold text-[#164e37] uppercase tracking-wider block">
-                Campus Atmosphere
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0f231c]">
-                Institution Photo Highlights
+              <div className="flex items-center gap-2 mb-2">
+                <span className="h-px w-5 bg-[#c59b27]"></span>
+                <span className="text-[11px] font-bold uppercase tracking-widest text-[#164e37]">
+                  Campus Photo Archive
+                </span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0f231c] tracking-tight">
+                Life at Sharaful Islam
               </h2>
+              <p className="text-xs sm:text-sm text-slate-600 mt-1.5 font-normal">
+                A glimpse into learning, activities and moments from our institution.
+              </p>
             </div>
 
+            <div className="flex items-center gap-2.5">
+              <PlaceholderBadge label="Editable Photo Archive" size="sm" />
+              <Link
+                to="/gallery"
+                className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 bg-[#f4f1ea] hover:bg-[#eae5d9] text-[#164e37] text-xs font-bold rounded-lg border border-[#d2cabb] transition-colors group"
+              >
+                <span>View Full Gallery</span>
+                <ArrowRight className="w-3.5 h-3.5 text-[#c59b27] transition-transform group-hover:translate-x-1" />
+              </Link>
+            </div>
+          </div>
+
+          {/* Asymmetric Editorial Gallery Composition */}
+          {/* Top Row: 1 Large Featured (7 cols) + 2 Medium (5 cols stacked) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-5 lg:gap-6 mb-5 lg:mb-6">
+            {/* 1 Large Featured Image: Campus (7 cols on desktop) */}
+            <div className="md:col-span-2 lg:col-span-7 flex">
+              <Link
+                to="/gallery"
+                className="group relative w-full flex flex-col justify-between rounded-lg border border-[#e5e0d5] bg-[#fbfaf7] overflow-hidden hover:border-[#164e37]/40 hover:shadow-xs transition-all duration-300"
+              >
+                <div className="relative overflow-hidden bg-[#f4f1ea] flex-1 min-h-[260px] sm:min-h-[320px]">
+                  {/* Category Chip with Hover State */}
+                  <div className="absolute top-3 left-3 z-20">
+                    <span className="inline-block text-[11px] font-semibold px-2.5 py-1 rounded bg-white/95 text-[#0f231c] border border-[#e5e0d5] shadow-2xs group-hover:bg-[#164e37] group-hover:text-white group-hover:border-[#164e37] transition-all duration-200">
+                      Campus
+                    </span>
+                  </div>
+
+                  <div className="h-full transform transition-transform duration-500 ease-out group-hover:scale-[1.03]">
+                    <RealisticImageSlot
+                      scene="campus"
+                      aspectRatio="16/10"
+                      label="Campus Grounds & Architecture Placeholder"
+                      caption="Main campus grounds, front courtyard, and verandah in Korangath"
+                      className="h-full w-full"
+                    />
+                  </div>
+                </div>
+
+                <div className="p-4 sm:p-5 bg-white border-t border-[#eee9df] flex items-center justify-between">
+                  <div>
+                    <h3 className="text-sm sm:text-base font-bold text-[#0f231c] group-hover:text-[#164e37] transition-colors">
+                      Campus Grounds & Architecture
+                    </h3>
+                    <p className="text-xs text-slate-500 mt-0.5">
+                      Main campus building and surrounding greenery in Korangath
+                    </p>
+                  </div>
+                  <div className="shrink-0 text-[#164e37] flex items-center gap-1 text-xs font-semibold pl-3">
+                    <span className="hidden sm:inline">View Image</span>
+                    <ArrowRight className="w-3.5 h-3.5 text-[#c59b27] transform transition-transform group-hover:translate-x-1" />
+                  </div>
+                </div>
+              </Link>
+            </div>
+
+            {/* 2 Medium Images (5 cols on desktop, stacked) */}
+            <div className="md:col-span-2 lg:col-span-5 flex flex-col justify-between gap-5 sm:gap-6">
+              {/* Medium 1: Classroom */}
+              <Link
+                to="/gallery"
+                className="group relative flex-1 flex flex-col justify-between rounded-lg border border-[#e5e0d5] bg-[#fbfaf7] overflow-hidden hover:border-[#164e37]/40 hover:shadow-xs transition-all duration-300"
+              >
+                <div className="relative overflow-hidden bg-[#f4f1ea]">
+                  <div className="absolute top-3 left-3 z-20">
+                    <span className="inline-block text-[11px] font-semibold px-2.5 py-1 rounded bg-white/95 text-[#0f231c] border border-[#e5e0d5] shadow-2xs group-hover:bg-[#164e37] group-hover:text-white group-hover:border-[#164e37] transition-all duration-200">
+                      Classroom
+                    </span>
+                  </div>
+
+                  <div className="transform transition-transform duration-500 ease-out group-hover:scale-[1.03]">
+                    <RealisticImageSlot
+                      scene="classroom"
+                      aspectRatio="16/10"
+                      label="Classroom Study Hall Placeholder"
+                      caption="Classroom benches and student study environment"
+                    />
+                  </div>
+                </div>
+
+                <div className="p-3.5 sm:p-4 bg-white border-t border-[#eee9df] flex items-center justify-between">
+                  <div>
+                    <h4 className="text-xs sm:text-sm font-bold text-[#0f231c] group-hover:text-[#164e37] transition-colors">
+                      Classroom Learning Hall
+                    </h4>
+                    <p className="text-[11px] text-slate-500 mt-0.5">
+                      Structured learning desks and interactive study spaces
+                    </p>
+                  </div>
+                  <ArrowRight className="w-3.5 h-3.5 text-[#c59b27] transform transition-transform group-hover:translate-x-1 shrink-0 ml-2" />
+                </div>
+              </Link>
+
+              {/* Medium 2: Student Activities */}
+              <Link
+                to="/gallery"
+                className="group relative flex-1 flex flex-col justify-between rounded-lg border border-[#e5e0d5] bg-[#fbfaf7] overflow-hidden hover:border-[#164e37]/40 hover:shadow-xs transition-all duration-300"
+              >
+                <div className="relative overflow-hidden bg-[#f4f1ea]">
+                  <div className="absolute top-3 left-3 z-20">
+                    <span className="inline-block text-[11px] font-semibold px-2.5 py-1 rounded bg-white/95 text-[#0f231c] border border-[#e5e0d5] shadow-2xs group-hover:bg-[#164e37] group-hover:text-white group-hover:border-[#164e37] transition-all duration-200">
+                      Student Activities
+                    </span>
+                  </div>
+
+                  <div className="transform transition-transform duration-500 ease-out group-hover:scale-[1.03]">
+                    <RealisticImageSlot
+                      scene="activities"
+                      aspectRatio="16/10"
+                      label="Student Activities Placeholder"
+                      caption="Student activities, study circles, and peer workshops"
+                    />
+                  </div>
+                </div>
+
+                <div className="p-3.5 sm:p-4 bg-white border-t border-[#eee9df] flex items-center justify-between">
+                  <div>
+                    <h4 className="text-xs sm:text-sm font-bold text-[#0f231c] group-hover:text-[#164e37] transition-colors">
+                      Student Activities & Circles
+                    </h4>
+                    <p className="text-[11px] text-slate-500 mt-0.5">
+                      Peer collaboration and character-building exercises
+                    </p>
+                  </div>
+                  <ArrowRight className="w-3.5 h-3.5 text-[#c59b27] transform transition-transform group-hover:translate-x-1 shrink-0 ml-2" />
+                </div>
+              </Link>
+            </div>
+          </div>
+
+          {/* Bottom Row: 3 Smaller Supporting Images (Islamic Programs, Educational Events, Community Activities) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
+            {/* Supporting 1: Islamic Programs */}
             <Link
               to="/gallery"
-              className="text-xs font-bold text-[#164e37] hover:underline flex items-center gap-1"
+              className="group relative flex flex-col justify-between rounded-lg border border-[#e5e0d5] bg-[#fbfaf7] overflow-hidden hover:border-[#164e37]/40 hover:shadow-xs transition-all duration-300"
             >
-              <span>Explore All 5 Categories</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <div className="relative overflow-hidden bg-[#f4f1ea]">
+                <div className="absolute top-3 left-3 z-20">
+                  <span className="inline-block text-[11px] font-semibold px-2.5 py-1 rounded bg-white/95 text-[#0f231c] border border-[#e5e0d5] shadow-2xs group-hover:bg-[#164e37] group-hover:text-white group-hover:border-[#164e37] transition-all duration-200">
+                    Islamic Programs
+                  </span>
+                </div>
+
+                <div className="transform transition-transform duration-500 ease-out group-hover:scale-[1.03]">
+                  <RealisticImageSlot
+                    scene="quran_study"
+                    aspectRatio="16/10"
+                    label="Islamic Programs Photo Placeholder"
+                    caption="Quranic recitation circles and moral study classes"
+                  />
+                </div>
+              </div>
+
+              <div className="p-3.5 sm:p-4 bg-white border-t border-[#eee9df] flex items-center justify-between">
+                <div>
+                  <h4 className="text-xs sm:text-sm font-bold text-[#0f231c] group-hover:text-[#164e37] transition-colors">
+                    Islamic Learning Sessions
+                  </h4>
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    Focused Tajweed recitations and Fiqh foundations
+                  </p>
+                </div>
+                <ArrowRight className="w-3.5 h-3.5 text-[#c59b27] transform transition-transform group-hover:translate-x-1 shrink-0 ml-2" />
+              </div>
+            </Link>
+
+            {/* Supporting 2: Educational Events */}
+            <Link
+              to="/gallery"
+              className="group relative flex flex-col justify-between rounded-lg border border-[#e5e0d5] bg-[#fbfaf7] overflow-hidden hover:border-[#164e37]/40 hover:shadow-xs transition-all duration-300"
+            >
+              <div className="relative overflow-hidden bg-[#f4f1ea]">
+                <div className="absolute top-3 left-3 z-20">
+                  <span className="inline-block text-[11px] font-semibold px-2.5 py-1 rounded bg-white/95 text-[#0f231c] border border-[#e5e0d5] shadow-2xs group-hover:bg-[#164e37] group-hover:text-white group-hover:border-[#164e37] transition-all duration-200">
+                    Educational Events
+                  </span>
+                </div>
+
+                <div className="transform transition-transform duration-500 ease-out group-hover:scale-[1.03]">
+                  <RealisticImageSlot
+                    scene="assembly"
+                    aspectRatio="16/10"
+                    label="Educational Events Photo Placeholder"
+                    caption="School assembly gatherings and student presentations"
+                  />
+                </div>
+              </div>
+
+              <div className="p-3.5 sm:p-4 bg-white border-t border-[#eee9df] flex items-center justify-between">
+                <div>
+                  <h4 className="text-xs sm:text-sm font-bold text-[#0f231c] group-hover:text-[#164e37] transition-colors">
+                    Assembly Gatherings
+                  </h4>
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    Morning invocations, presentations and recognitions
+                  </p>
+                </div>
+                <ArrowRight className="w-3.5 h-3.5 text-[#c59b27] transform transition-transform group-hover:translate-x-1 shrink-0 ml-2" />
+              </div>
+            </Link>
+
+            {/* Supporting 3: Community Activities */}
+            <Link
+              to="/gallery"
+              className="group relative flex flex-col justify-between rounded-lg border border-[#e5e0d5] bg-[#fbfaf7] overflow-hidden hover:border-[#164e37]/40 hover:shadow-xs transition-all duration-300 md:col-span-2 lg:col-span-1"
+            >
+              <div className="relative overflow-hidden bg-[#f4f1ea]">
+                <div className="absolute top-3 left-3 z-20">
+                  <span className="inline-block text-[11px] font-semibold px-2.5 py-1 rounded bg-white/95 text-[#0f231c] border border-[#e5e0d5] shadow-2xs group-hover:bg-[#164e37] group-hover:text-white group-hover:border-[#164e37] transition-all duration-200">
+                    Community Activities
+                  </span>
+                </div>
+
+                <div className="transform transition-transform duration-500 ease-out group-hover:scale-[1.03]">
+                  <RealisticImageSlot
+                    scene="library"
+                    aspectRatio="16/10"
+                    label="Community Activities Photo Placeholder"
+                    caption="Institutional library resources and community consultative meetings"
+                  />
+                </div>
+              </div>
+
+              <div className="p-3.5 sm:p-4 bg-white border-t border-[#eee9df] flex items-center justify-between">
+                <div>
+                  <h4 className="text-xs sm:text-sm font-bold text-[#0f231c] group-hover:text-[#164e37] transition-colors">
+                    Community Consultations
+                  </h4>
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    Library reference folios and guardian community dialogue
+                  </p>
+                </div>
+                <ArrowRight className="w-3.5 h-3.5 text-[#c59b27] transform transition-transform group-hover:translate-x-1 shrink-0 ml-2" />
+              </div>
             </Link>
           </div>
 
-          {/* Asymmetric Gallery Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-            {/* Large Feature Slot (7 cols) */}
-            <div className="md:col-span-7">
-              <RealisticImageSlot
-                scene="campus"
-                aspectRatio="16/10"
-                label="Campus Grounds & Front Verandah"
-                caption="Sharaful Islam Madrassa, Korangath Campus"
-                className="h-full min-h-[280px]"
-              />
-            </div>
-
-            {/* Stacked Right Slots (5 cols) */}
-            <div className="md:col-span-5 grid grid-cols-1 gap-4">
-              <RealisticImageSlot
-                scene="classroom"
-                aspectRatio="16/10"
-                label="Classroom Study Hall"
-                caption="Interactive learning and recitation desks"
-              />
-              <RealisticImageSlot
-                scene="library"
-                aspectRatio="16/10"
-                label="Reference Books & Folios"
-                caption="Islamic literature & curriculum textbooks"
-              />
-            </div>
+          {/* View Full Gallery Button Below */}
+          <div className="mt-10 sm:mt-12 text-center">
+            <Link
+              to="/gallery"
+              className="inline-flex items-center gap-2 px-6 py-2.5 bg-[#164e37] hover:bg-[#0f3b29] text-white text-xs sm:text-sm font-semibold rounded-lg transition-colors group shadow-xs"
+            >
+              <span>View Full Gallery</span>
+              <ArrowRight className="w-3.5 h-3.5 text-[#c59b27] transition-transform group-hover:translate-x-1" />
+            </Link>
           </div>
         </div>
       </section>
