@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, Clock, MapPin, ShieldAlert } from 'lucide-react';
-import { EVENTS, EVENTS_EDITORIAL_NOTICE, type SchoolEvent } from '../data/events';
+import { Calendar, MapPin, ShieldAlert } from 'lucide-react';
+import { EVENTS, EVENTS_EDITORIAL_NOTICE } from '../data/events';
 import { SCHOOL_INFO } from '../data/schoolInfo';
 import { PlaceholderBadge } from '../components/PlaceholderBadge';
 
@@ -10,102 +10,178 @@ export const Events: React.FC = () => {
 
   const categories = ['All', 'Upcoming Events', 'Academic Programs', 'Islamic Programs', 'Notices'];
 
-  const filteredEvents = selectedCategory === 'All'
-    ? EVENTS
-    : EVENTS.filter((e) => e.category === selectedCategory);
+  const filteredEvents =
+    selectedCategory === 'All'
+      ? EVENTS
+      : EVENTS.filter((e) => e.category === selectedCategory);
 
   return (
-    <div className="w-full flex flex-col bg-[#fbfaf7]">
-      {/* Page Header & Breadcrumb */}
+    <div className="w-full flex flex-col bg-[#fbfaf7] text-slate-800">
+      {/* 1. Page Header */}
       <section className="bg-white border-b border-[#e5e0d5] py-8 sm:py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-2 text-xs text-slate-500 mb-2">
             <Link to="/" className="hover:text-[#164e37]">Home</Link>
             <span>/</span>
-            <span className="text-[#164e37] font-semibold">Events & Calendar</span>
+            <span className="text-[#164e37] font-semibold">Events & Academic Calendar</span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#0f231c]">
-            Events & Academic Programs
-          </h1>
-          <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl">
-            Schedules for upcoming events, academic assessments, Islamic observances, and official notices at {SCHOOL_INFO.officialName}.
-          </p>
-        </div>
-      </section>
-
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 space-y-8">
-        {/* Compliance Notice */}
-        <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-3 text-xs text-amber-950">
-          <ShieldAlert className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
-          <div className="space-y-0.5">
-            <p className="font-bold">Schedule Transparency Notice:</p>
-            <p className="text-slate-700 leading-relaxed">
-              {EVENTS_EDITORIAL_NOTICE}
+          <div className="max-w-3xl">
+            <h1 className="text-2xl sm:text-4xl font-extrabold text-[#0f231c] tracking-tight">
+              Events & Academic Calendar
+            </h1>
+            <p className="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">
+              Official schedule for school assemblies, quarterly assessments, Islamic celebrations, and administrative notices at {SCHOOL_INFO.officialName} ({SCHOOL_INFO.localName}).
             </p>
           </div>
         </div>
+      </section>
 
-        {/* Category Filter Tabs */}
-        <div className="flex flex-wrap items-center justify-center gap-2">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors border ${
-                selectedCategory === cat
-                  ? 'bg-[#164e37] text-white border-[#164e37]'
-                  : 'bg-white text-slate-700 hover:bg-slate-50 border-[#d2cabb]'
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
-
-        {/* Events Cards Grid */}
-        <div className="space-y-4">
-          {filteredEvents.map((event: SchoolEvent) => (
-            <div
-              key={event.id}
-              className="bg-white rounded-xl border border-[#e5e0d5] p-5 sm:p-6 shadow-2xs space-y-3"
-            >
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-[#f4f1ea] text-[#164e37] border border-[#d2cabb]">
-                  {event.category}
-                </span>
-                <PlaceholderBadge label="Editable Event Placeholder" size="sm" />
-              </div>
-
-              <div>
-                <h3 className="text-base sm:text-lg font-bold text-slate-900">
-                  {event.title}
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mt-1">
-                  {event.fullDetails}
-                </p>
-              </div>
-
-              {/* Event Logistics Strip */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 p-3 rounded-lg bg-[#fbfaf7] border border-[#e5e0d5] text-xs text-slate-700">
-                <div className="flex items-center gap-2">
-                  <Calendar className="w-3.5 h-3.5 text-[#164e37] shrink-0" />
-                  <span>{event.datePlaceholder}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="w-3.5 h-3.5 text-[#164e37] shrink-0" />
-                  <span>{event.timePlaceholder}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-3.5 h-3.5 text-[#164e37] shrink-0" />
-                  <span>{event.venuePlaceholder}</span>
-                </div>
-              </div>
-            </div>
-          ))}
+      {/* 2. Transparency & Non-fabrication Notice */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-8">
+        <div className="p-4 bg-amber-50/80 border border-amber-200 rounded-xl flex items-start gap-3 text-xs text-amber-950">
+          <ShieldAlert className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
+          <div className="space-y-0.5">
+            <strong className="block font-bold">Calendar Notice:</strong>
+            <p className="text-slate-700 leading-relaxed">
+              {EVENTS_EDITORIAL_NOTICE} Specific calendar dates are marked as administrative placeholders until confirmed by the managing committee for the current session.
+            </p>
+          </div>
         </div>
       </div>
+
+      {/* 3. Category Filter Tabs */}
+      <section className="py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="flex flex-wrap items-center gap-2 mb-8">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all border ${
+                  selectedCategory === cat
+                    ? 'bg-[#164e37] text-white border-[#164e37] shadow-2xs font-bold'
+                    : 'bg-white text-slate-700 hover:bg-slate-50 border-[#d2cabb]'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          {/* Modern Editorial Agenda List (Not repetitive cards) */}
+          <div className="border border-[#e5e0d5] bg-white rounded-2xl overflow-hidden divide-y divide-[#e5e0d5] shadow-2xs">
+            {filteredEvents.map((event) => (
+              <div
+                key={event.id}
+                className="p-5 sm:p-6 hover:bg-[#fbfaf7] transition-colors flex flex-col md:flex-row md:items-center justify-between gap-5"
+              >
+                {/* Left: Date Badge */}
+                <div className="flex items-center gap-4 md:w-56 shrink-0">
+                  <div className="w-12 h-12 rounded-xl bg-[#f4f1ea] border border-[#d2cabb] flex flex-col items-center justify-center text-center shrink-0">
+                    <Calendar className="w-5 h-5 text-[#164e37]" />
+                  </div>
+                  <div>
+                    <span className="block text-xs font-bold text-slate-900 leading-tight">
+                      {event.datePlaceholder}
+                    </span>
+                    <span className="text-[11px] text-slate-500 font-mono">
+                      Event ID: {event.id}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Center: Title & Description */}
+                <div className="flex-grow space-y-1.5">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#164e37] bg-[#f4f1ea] px-2.5 py-0.5 rounded border border-[#d2cabb]">
+                      {event.category}
+                    </span>
+                    <span className="text-[10px] text-slate-400 font-semibold">
+                      {event.timePlaceholder}
+                    </span>
+                  </div>
+
+                  <h3 className="text-base font-bold text-slate-900 leading-snug">
+                    {event.title}
+                  </h3>
+
+                  <p className="text-xs text-slate-600 leading-relaxed max-w-3xl">
+                    {event.summary}
+                  </p>
+                </div>
+
+                {/* Right: Venue & Placeholder Tag */}
+                <div className="md:w-52 shrink-0 md:text-right space-y-1.5">
+                  <div className="flex items-center md:justify-end gap-1.5 text-xs text-slate-600">
+                    <MapPin className="w-3.5 h-3.5 text-[#c59b27] shrink-0" />
+                    <span>{event.venuePlaceholder}</span>
+                  </div>
+                  <PlaceholderBadge label="Schedule Slot" size="sm" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 4. Annual Academic Milestones Table */}
+      <section className="py-12 bg-white border-t border-[#e5e0d5]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="max-w-3xl mb-8">
+            <span className="text-xs font-bold text-[#164e37] uppercase tracking-wider block mb-1">
+              Annual Milestones
+            </span>
+            <h3 className="text-xl sm:text-2xl font-bold text-[#0f231c]">
+              Standard Academic Term Milestones
+            </h3>
+            <p className="text-xs text-slate-600 mt-1">
+              General timeline of yearly educational phases observed at Sharafiyya Korangath.
+            </p>
+          </div>
+
+          <div className="border border-[#e5e0d5] rounded-xl overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr className="bg-[#f4f1ea] border-b border-[#d2cabb] text-[#164e37]">
+                    <th className="p-3.5 font-bold uppercase tracking-wider">Phase</th>
+                    <th className="p-3.5 font-bold uppercase tracking-wider">Event Milestone</th>
+                    <th className="p-3.5 font-bold uppercase tracking-wider">Target Participants</th>
+                    <th className="p-3.5 font-bold uppercase tracking-wider">Expected Timeframe</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#e5e0d5]">
+                  <tr className="hover:bg-[#fdfaf5]">
+                    <td className="p-3.5 font-bold text-slate-900">Term 1</td>
+                    <td className="p-3.5 text-slate-700">Academic Session Re-opening & Welcome Assembly</td>
+                    <td className="p-3.5 text-slate-600">All Students & Parents</td>
+                    <td className="p-3.5 text-slate-600">[Term 1 Opening Date]</td>
+                  </tr>
+                  <tr className="hover:bg-[#fdfaf5]">
+                    <td className="p-3.5 font-bold text-slate-900">Mid-Session</td>
+                    <td className="p-3.5 text-slate-700">Milad un-Nabi Observance & Recitation Fest</td>
+                    <td className="p-3.5 text-slate-600">All Enrolled Classes</td>
+                    <td className="p-3.5 text-slate-600">Rabi’ al-Awwal Observance</td>
+                  </tr>
+                  <tr className="hover:bg-[#fdfaf5]">
+                    <td className="p-3.5 font-bold text-slate-900">Term 2</td>
+                    <td className="p-3.5 text-slate-700">Quarterly Oral Recitation & Written Evaluation</td>
+                    <td className="p-3.5 text-slate-600">Classes 1–10</td>
+                    <td className="p-3.5 text-slate-600">[Evaluation Date Placeholder]</td>
+                  </tr>
+                  <tr className="hover:bg-[#fdfaf5]">
+                    <td className="p-3.5 font-bold text-slate-900">Year End</td>
+                    <td className="p-3.5 text-slate-700">Annual Sanad Distribution & Parents Assembly</td>
+                    <td className="p-3.5 text-slate-600">Graduating Students & Community</td>
+                    <td className="p-3.5 text-slate-600">[Concluding Ceremony Date]</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };

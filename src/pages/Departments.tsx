@@ -1,204 +1,246 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { CheckCircle, ChevronRight } from 'lucide-react';
+import {
+  CheckCircle2,
+  GraduationCap
+} from 'lucide-react';
 import { DEPARTMENTS, type DepartmentItem } from '../data/departments';
 import { SCHOOL_INFO } from '../data/schoolInfo';
 import { PlaceholderBadge } from '../components/PlaceholderBadge';
+import { RealisticImageSlot } from '../components/RealisticImageSlot';
 
 interface DepartmentsProps {
   onOpenAdmissionModal: () => void;
 }
 
 export const Departments: React.FC<DepartmentsProps> = ({ onOpenAdmissionModal }) => {
-  const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const [activeTab, setActiveTab] = useState<string>(DEPARTMENTS[0].id);
 
-  const categories = ['All', 'Foundational', 'Theological', 'Language', 'Character & Ethics'];
-
-  const filteredDepartments = selectedCategory === 'All'
-    ? DEPARTMENTS
-    : DEPARTMENTS.filter((d) => d.category === selectedCategory);
+  const activeDepartment: DepartmentItem =
+    DEPARTMENTS.find((d) => d.id === activeTab) || DEPARTMENTS[0];
 
   return (
-    <div className="w-full flex flex-col bg-[#fbfaf7]">
-      {/* Page Header & Breadcrumb */}
+    <div className="w-full flex flex-col bg-[#fbfaf7] text-slate-800">
+      {/* 1. Page Header */}
       <section className="bg-white border-b border-[#e5e0d5] py-8 sm:py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-2 text-xs text-slate-500 mb-2">
             <Link to="/" className="hover:text-[#164e37]">Home</Link>
             <span>/</span>
-            <span className="text-[#164e37] font-semibold">Educational Departments</span>
+            <span className="text-[#164e37] font-semibold">Academic Departments</span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#0f231c]">
-            Curriculum & Academic Wings
-          </h1>
-          <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl">
-            Detailed breakdown of religious disciplines, prescribed syllabi, and educational streams at {SCHOOL_INFO.officialName}.
-          </p>
+          <div className="max-w-3xl">
+            <h1 className="text-2xl sm:text-4xl font-extrabold text-[#0f231c] tracking-tight">
+              Curriculum & Academic Wings
+            </h1>
+            <p className="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">
+              Structured religious disciplines and moral education syllabus taught at {SCHOOL_INFO.officialName} ({SCHOOL_INFO.localName}) under recognized board standards.
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 space-y-10">
-        {/* Category Filter Pills */}
-        <div className="flex flex-wrap items-center justify-center gap-2">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors border ${
-                selectedCategory === cat
-                  ? 'bg-[#164e37] text-white border-[#164e37]'
-                  : 'bg-white text-slate-700 hover:bg-slate-50 border-[#d2cabb]'
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
+      {/* 2. Interactive Academic Streams Prospectus (Not repetitive cards) */}
+      <section className="py-12 border-b border-[#e5e0d5]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          {/* Stream Selector Tabs */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 mb-8">
+            {DEPARTMENTS.map((dept) => {
+              const isSelected = dept.id === activeTab;
+              return (
+                <button
+                  key={dept.id}
+                  onClick={() => setActiveTab(dept.id)}
+                  className={`p-4 rounded-xl border text-left transition-all flex flex-col justify-between ${
+                    isSelected
+                      ? 'bg-[#164e37] text-white border-[#164e37] shadow-sm'
+                      : 'bg-white text-slate-800 border-[#e5e0d5] hover:border-[#164e37]'
+                  }`}
+                >
+                  <span
+                    className={`text-[10px] font-bold uppercase tracking-wider ${
+                      isSelected ? 'text-[#c59b27]' : 'text-slate-400'
+                    }`}
+                  >
+                    Stream {dept.code}
+                  </span>
+                  <span className="text-xs sm:text-sm font-bold mt-1 line-clamp-1">
+                    {dept.name}
+                  </span>
+                  <span
+                    className={`font-amiri text-xs mt-1 block ${
+                      isSelected ? 'text-emerald-200' : 'text-[#c59b27]'
+                    }`}
+                    dir="rtl"
+                  >
+                    {dept.arabicName}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
 
-        {/* Departments Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {filteredDepartments.map((dept: DepartmentItem) => (
-            <div
-              key={dept.id}
-              className="bg-white rounded-xl border border-[#e5e0d5] p-6 flex flex-col justify-between shadow-2xs"
-            >
-              <div>
-                <div className="flex items-center justify-between gap-2 mb-3">
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono text-xs font-bold text-[#164e37] bg-[#f4f1ea] px-2 py-0.5 rounded border border-[#d2cabb]">
-                      {dept.code}
-                    </span>
-                    <span className="text-xs text-slate-500 font-medium">
-                      {dept.category}
-                    </span>
-                  </div>
-                  <PlaceholderBadge label="Editable Syllabus" size="sm" />
+          {/* Active Stream Deep-Dive View */}
+          <div className="bg-white rounded-2xl border border-[#e5e0d5] p-6 sm:p-10 shadow-xs">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+              {/* Left Column: Stream Details */}
+              <div className="lg:col-span-7 space-y-5">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-xs font-bold text-[#164e37] bg-[#f4f1ea] px-3 py-1 rounded-full border border-[#d2cabb]">
+                    Stream {activeDepartment.code}
+                  </span>
+                  <span className="text-xs font-semibold text-slate-600 bg-slate-100 px-3 py-1 rounded-full">
+                    {activeDepartment.targetLevels}
+                  </span>
+                  <PlaceholderBadge label="Standardized Syllabus" size="sm" />
                 </div>
 
-                <h2 className="text-lg font-bold text-slate-900 mb-0.5">
-                  {dept.name}
-                </h2>
-
-                {dept.arabicName && (
-                  <p className="font-amiri text-sm text-[#164e37] mb-3" dir="rtl">
-                    {dept.arabicName}
+                <div>
+                  <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0f231c]">
+                    {activeDepartment.name}
+                  </h2>
+                  <p className="font-amiri text-base text-[#c59b27] mt-0.5" dir="rtl">
+                    {activeDepartment.arabicName}
                   </p>
-                )}
+                </div>
 
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
-                  {dept.fullDescription}
+                <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                  {activeDepartment.fullDescription}
                 </p>
 
-                {/* Syllabus Highlights Box */}
-                <div className="p-3.5 rounded-lg bg-[#fbfaf7] border border-[#e5e0d5] text-xs space-y-2 mb-4">
-                  <strong className="block text-slate-800 text-[11px] uppercase tracking-wider">
-                    Prescribed Syllabi Overview:
-                  </strong>
-                  <ul className="space-y-1.5">
-                    {dept.syllabusOverview.map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-2 text-slate-700">
-                        <CheckCircle className="w-3.5 h-3.5 text-emerald-700 shrink-0 mt-0.5" />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Key Outcomes */}
-                <div className="space-y-1.5 mb-4">
-                  <strong className="block text-slate-800 text-[11px] uppercase tracking-wider">
-                    Key Outcomes:
-                  </strong>
-                  <div className="flex flex-wrap gap-1.5">
-                    {dept.keyOutcomes.map((outcome, idx) => (
-                      <span
-                        key={idx}
-                        className="text-[11px] bg-[#f4f1ea] text-slate-800 px-2 py-0.5 rounded border border-[#d2cabb]"
+                {/* Focus Areas & Topics */}
+                <div className="space-y-2">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900">
+                    Core Learning Modules:
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                    {activeDepartment.syllabusOverview.map((topic: string, i: number) => (
+                      <div
+                        key={i}
+                        className="p-3 bg-[#fbfaf7] rounded-lg border border-[#e5e0d5] flex items-center gap-2"
                       >
-                        {outcome}
-                      </span>
+                        <CheckCircle2 className="w-3.5 h-3.5 text-[#164e37] shrink-0" />
+                        <span className="text-slate-800 font-medium">{topic}</span>
+                      </div>
                     ))}
                   </div>
                 </div>
+
+                {/* Practical Outcomes */}
+                <div className="p-4 rounded-xl bg-[#f4f1ea] border border-[#d2cabb] space-y-1 text-xs">
+                  <strong className="block text-slate-900 font-bold">
+                    Target Pedagogical Outcome:
+                  </strong>
+                  <p className="text-slate-600 leading-relaxed">
+                    By completing this stream, students develop consistent accuracy, memorization stability, and practical appreciation of daily Islamic worship and ethical responsibilities.
+                  </p>
+                </div>
               </div>
 
-              <div className="pt-3 border-t border-[#e5e0d5] flex items-center justify-between text-xs">
-                <span className="text-slate-500 font-medium">Target: {dept.targetLevels}</span>
-                <button
-                  onClick={onOpenAdmissionModal}
-                  className="font-bold text-[#164e37] hover:underline flex items-center gap-1"
-                >
-                  <span>Admission Enquiry</span>
-                  <ChevronRight className="w-3 h-3" />
-                </button>
+              {/* Right Column: Visual Scene Slot */}
+              <div className="lg:col-span-5 space-y-4">
+                <RealisticImageSlot
+                  scene={activeDepartment.id === 'dept-quran-hadith' ? 'quran_study' : activeDepartment.id === 'dept-arabic' ? 'library' : 'classroom'}
+                  aspectRatio="4/3"
+                  label={`Classroom Session: ${activeDepartment.name}`}
+                  caption={`Study materials for ${activeDepartment.name}`}
+                  className="shadow-sm"
+                />
+
+                <div className="p-4 rounded-xl bg-[#fbfaf7] border border-[#e5e0d5] text-xs space-y-2">
+                  <div className="flex items-center justify-between text-slate-500">
+                    <span>Batch Sessions:</span>
+                    <span className="font-semibold text-slate-800">Morning & Evening</span>
+                  </div>
+                  <div className="flex items-center justify-between text-slate-500">
+                    <span>Evaluation Method:</span>
+                    <span className="font-semibold text-slate-800">Quarterly Oral & Written</span>
+                  </div>
+                  <div className="flex items-center justify-between text-slate-500">
+                    <span>Target Enrolment:</span>
+                    <span className="font-semibold text-slate-800">{activeDepartment.targetLevels}</span>
+                  </div>
+                </div>
               </div>
             </div>
-          ))}
+          </div>
         </div>
+      </section>
 
-        {/* Academic Stages Overview Table */}
-        <section className="bg-white rounded-xl border border-[#e5e0d5] p-6 space-y-4">
-          <div className="border-b border-[#e5e0d5] pb-3">
-            <h3 className="text-base font-bold text-slate-900">
-              Overview of Madrassa Academic Stages
+      {/* 3. Academic Progression Stages (Classes 1 to 10) */}
+      <section className="py-12 bg-white border-b border-[#e5e0d5]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="max-w-3xl mb-8">
+            <span className="text-xs font-bold text-[#164e37] uppercase tracking-wider block mb-1">
+              Curriculum Matrix
+            </span>
+            <h3 className="text-xl sm:text-2xl font-bold text-[#0f231c]">
+              Academic Progression by Class Level
             </h3>
-            <p className="text-xs text-slate-600">
-              Structure of progression from foundational Qaida through senior high school batches.
+            <p className="text-xs text-slate-600 mt-1">
+              Progression ladder from primary fundamentals to advanced study.
             </p>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-left school-table">
-              <thead>
-                <tr>
-                  <th>Stage / Wing</th>
-                  <th>Target Grades</th>
-                  <th>Primary Focus</th>
-                  <th>Class Sessions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[#e5e0d5] text-xs">
-                <tr>
-                  <td className="font-bold text-slate-900">Foundational Wing</td>
-                  <td>Preparatory & Class 1–2</td>
-                  <td>Alphabet phonetics, Noorani Qaida, basic duas, prayer posture</td>
-                  <td>Morning (6:45 AM – 8:30 AM)</td>
-                </tr>
-                <tr>
-                  <td className="font-bold text-slate-900">Primary Madrasa Wing</td>
-                  <td>Class 3 through 5</td>
-                  <td>Fluent recitation with Tajweed rules, fundamental Fiqh, memorization of Amma Juz</td>
-                  <td>Morning (6:45 AM – 8:30 AM)</td>
-                </tr>
-                <tr>
-                  <td className="font-bold text-slate-900">Intermediate Wing</td>
-                  <td>Class 6 through 7</td>
-                  <td>Arabic grammar basics (Nahw & Sarf), Hadith studies, Seerah of the Prophet</td>
-                  <td>Morning / Evening Batches</td>
-                </tr>
-                <tr>
-                  <td className="font-bold text-slate-900">Senior Madrasa Wing</td>
-                  <td>Class 8 through 10</td>
-                  <td>Comprehensive Islamic theology, jurisprudential rulings, contemporary ethics</td>
-                  <td>Morning / Evening Batches</td>
-                </tr>
-              </tbody>
-            </table>
+          <div className="border border-[#e5e0d5] rounded-xl overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr className="bg-[#f4f1ea] border-b border-[#d2cabb] text-[#164e37]">
+                    <th className="p-3.5 font-bold uppercase tracking-wider">Class Stage</th>
+                    <th className="p-3.5 font-bold uppercase tracking-wider">Age Group</th>
+                    <th className="p-3.5 font-bold uppercase tracking-wider">Core Focus</th>
+                    <th className="p-3.5 font-bold uppercase tracking-wider">Quranic Target</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#e5e0d5]">
+                  <tr className="hover:bg-[#fdfaf5]">
+                    <td className="p-3.5 font-bold text-slate-900">Primary (Classes 1–4)</td>
+                    <td className="p-3.5 text-slate-600">5 – 9 Years</td>
+                    <td className="p-3.5 text-slate-700">Arabic alphabet, basic Fiqh of Wudu & Salah, short daily Adhkar</td>
+                    <td className="p-3.5 text-slate-700">Qaida Nooraniyyah, Makharij, Last 10 Surahs</td>
+                  </tr>
+                  <tr className="hover:bg-[#fdfaf5]">
+                    <td className="p-3.5 font-bold text-slate-900">Intermediate (Classes 5–7)</td>
+                    <td className="p-3.5 text-slate-600">10 – 12 Years</td>
+                    <td className="p-3.5 text-slate-700">Detailed Taharah & Sawm rulings, Seerah narratives, introductory grammar</td>
+                    <td className="p-3.5 text-slate-700">Juz Amma fluent recitation, Noon & Meem Sakinah rules</td>
+                  </tr>
+                  <tr className="hover:bg-[#fdfaf5]">
+                    <td className="p-3.5 font-bold text-slate-900">Senior Secondary (Classes 8–10)</td>
+                    <td className="p-3.5 text-slate-600">13 – 15 Years</td>
+                    <td className="p-3.5 text-slate-700">Comprehensive Fiqh, Forty Hadith, Islamic moral ethics, modern challenges</td>
+                    <td className="p-3.5 text-slate-700">Complete Tilawat with full Tajweed, Surah Yaseen, Mulk memorization</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Bottom CTA */}
-        <div className="text-center pt-2">
+      {/* 4. Admission CTA */}
+      <section className="py-10 bg-[#f4f1ea] border-t border-[#e5e0d5]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div>
+            <h4 className="text-base font-bold text-slate-900">
+              Seek Enrolment Guidance for Your Child
+            </h4>
+            <p className="text-xs text-slate-600">
+              Our teachers will assess the student’s current recitation level to assign them to the appropriate class.
+            </p>
+          </div>
+
           <button
             onClick={onOpenAdmissionModal}
-            className="px-6 py-2.5 bg-[#164e37] hover:bg-[#0f3b29] text-white text-xs font-bold rounded-lg transition-colors shadow-xs"
+            className="px-5 py-2.5 bg-[#164e37] hover:bg-[#0f3b29] text-white text-xs font-bold rounded-xl shadow-xs transition-colors flex items-center gap-2 shrink-0"
           >
-            Submit Student Admission Enquiry
+            <GraduationCap className="w-4 h-4 text-[#c59b27]" />
+            <span>Admission Enquiry Form</span>
           </button>
         </div>
-      </div>
+      </section>
     </div>
   );
 };
