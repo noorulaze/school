@@ -40,97 +40,109 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
       {/* 1. Official Notice Ticker */}
       <NoticeTicker onOpenAdmissionModal={onOpenAdmissionModal} />
 
-      {/* 2. MODERN HERO SECTION */}
-      <section className="relative overflow-hidden bg-white border-b border-[#e5e0d5] py-12 lg:py-16">
-        {/* Subtle geometric Islamic border watermark */}
-        <div className="absolute top-0 right-0 w-96 h-96 opacity-[0.03] pointer-events-none">
-          <svg viewBox="0 0 200 200" className="w-full h-full">
-            <polygon points="100,10 190,100 100,190 10,100" fill="#164e37" />
-            <polygon points="100,20 180,100 100,180 20,100" fill="none" stroke="#164e37" strokeWidth="2" />
-            <circle cx="100" cy="100" r="40" fill="none" stroke="#164e37" strokeWidth="2" />
+      {/* 2. MODERN SPLIT-SCREEN HERO SECTION */}
+      <section className="relative overflow-hidden bg-white border-b border-[#e5e0d5] py-12 sm:py-16 lg:py-20">
+        {/* Subtle Islamic geometric pattern in the background */}
+        <div className="absolute inset-0 opacity-[0.035] pointer-events-none select-none overflow-hidden">
+          <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="islamic-hero-pattern" width="80" height="80" patternUnits="userSpaceOnUse">
+                <path d="M 40 0 L 80 40 L 40 80 L 0 40 Z" fill="none" stroke="#164e37" strokeWidth="1" />
+                <path d="M 40 10 L 70 40 L 40 70 L 10 40 Z" fill="none" stroke="#164e37" strokeWidth="0.75" />
+                <circle cx="40" cy="40" r="12" fill="none" stroke="#164e37" strokeWidth="0.75" />
+                <circle cx="0" cy="0" r="10" fill="none" stroke="#164e37" strokeWidth="0.75" />
+                <circle cx="80" cy="0" r="10" fill="none" stroke="#164e37" strokeWidth="0.75" />
+                <circle cx="0" cy="80" r="10" fill="none" stroke="#164e37" strokeWidth="0.75" />
+                <circle cx="80" cy="80" r="10" fill="none" stroke="#164e37" strokeWidth="0.75" />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#islamic-hero-pattern)" />
           </svg>
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-            {/* Left Column: Modern Editorial Typography */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+            {/* LEFT SIDE: Modern Editorial Content */}
             <motion.div
-              initial={{ opacity: 0, y: 18 }}
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease: 'easeOut' }}
-              className="lg:col-span-7 space-y-5"
+              className="lg:col-span-7 space-y-6"
             >
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#f4f1ea] border border-[#d2cabb] text-xs font-semibold text-[#164e37]">
-                <School className="w-3.5 h-3.5 text-[#c59b27]" />
-                <span>Official Institution Portal • Korangath, Tirur</span>
+              {/* Eyebrow */}
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[#c59b27]" />
+                <span className="text-xs uppercase tracking-widest font-extrabold text-[#164e37]">
+                  SHARAFUL ISLAM MADRASSA
+                </span>
               </div>
 
-              <div className="space-y-1.5">
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0f231c] tracking-tight leading-[1.15]">
-                  {SCHOOL_INFO.officialName}
-                </h1>
-                <p className="text-lg sm:text-xl font-bold text-[#164e37]">
-                  {SCHOOL_INFO.localName} <span className="font-normal text-slate-500 text-sm sm:text-base">(ഷറഫിയ്യ കോരങ്ങത്ത്)</span>
-                </p>
-                <p className="font-amiri text-base text-slate-600 pt-1" dir="rtl">
-                  {SCHOOL_INFO.arabicCalligraphySubtitle}
-                </p>
-              </div>
+              {/* Large Heading */}
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#0f231c] tracking-tight leading-[1.12]">
+                Learning. Character. <span className="text-[#164e37]">Faith.</span>
+              </h1>
 
-              <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl">
-                An esteemed Islamic educational institution in Korangath, Tirur, Malappuram, dedicated to nurturing young minds with authentic religious education, Quranic recitation with Tajweed, and enduring moral values.
+              {/* Short Natural Description */}
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-xl">
+                Dedicated to providing authentic Quranic recitation, Islamic studies, and disciplined moral education for young learners in a welcoming, character-building environment at Korangath, Tirur.
               </p>
 
-              {/* Two Clear Primary Action Buttons */}
-              <div className="flex flex-wrap items-center gap-3.5 pt-2">
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
                 <Link
                   to="/about"
-                  className="px-6 py-3 bg-[#164e37] hover:bg-[#0f3b29] text-white text-xs sm:text-sm font-bold rounded-xl shadow-xs transition-all flex items-center gap-2 group hover:shadow-sm"
+                  className="px-6 py-3.5 bg-[#164e37] hover:bg-[#0f3b29] text-white text-xs sm:text-sm font-bold rounded-xl shadow-xs transition-all flex items-center justify-center gap-2 group hover:shadow-sm"
                 >
                   <span>Explore Our School</span>
                   <ArrowRight className="w-4 h-4 text-[#c59b27] transition-transform group-hover:translate-x-1" />
                 </Link>
 
                 <button
+                  type="button"
                   onClick={onOpenAdmissionModal}
-                  className="px-6 py-3 bg-[#f4f1ea] hover:bg-[#ebe6dc] text-slate-800 border border-[#d2cabb] text-xs sm:text-sm font-bold rounded-xl transition-colors flex items-center gap-2"
+                  className="px-6 py-3.5 bg-[#f4f1ea] hover:bg-[#ebe6dc] text-slate-800 border border-[#d2cabb] text-xs sm:text-sm font-bold rounded-xl transition-colors flex items-center justify-center gap-2"
                 >
                   <GraduationCap className="w-4 h-4 text-[#164e37]" />
                   <span>Admission Enquiry</span>
                 </button>
               </div>
-
-              {/* Institution Key Attributes Bar */}
-              <div className="pt-4 border-t border-[#e5e0d5] grid grid-cols-3 gap-3 text-xs">
-                <div>
-                  <span className="block font-bold text-slate-900">Locality</span>
-                  <span className="text-slate-500">Korangath, Tirur</span>
-                </div>
-                <div>
-                  <span className="block font-bold text-slate-900">Curriculum</span>
-                  <span className="text-slate-500">Islamic & General</span>
-                </div>
-                <div>
-                  <span className="block font-bold text-slate-900">Batches</span>
-                  <span className="text-slate-500">Morning & Evening</span>
-                </div>
-              </div>
             </motion.div>
 
-            {/* Right Column: Large Realistic School/Campus Image Showcase */}
+            {/* RIGHT SIDE: Large Rectangular Campus Image with Floating Info Element */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.97 }}
+              initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.15, ease: 'easeOut' }}
-              className="lg:col-span-5"
+              transition={{ duration: 0.55, delay: 0.15, ease: 'easeOut' }}
+              className="lg:col-span-5 relative mt-4 lg:mt-0 pb-6 sm:pb-8 lg:pb-0"
             >
+              {/* Natural Rectangular Image Composition */}
               <RealisticImageSlot
                 scene="campus"
                 aspectRatio="4/3"
                 label="Campus Grounds & Verandah"
-                caption="Main educational building at Korangath, Tirur"
+                caption="Main campus building at Korangath, Tirur"
                 className="shadow-md"
               />
+
+              {/* Small Subtle Floating Information Element */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.45, delay: 0.3, ease: 'easeOut' }}
+                className="absolute -bottom-4 -left-3 sm:-bottom-5 sm:-left-4 bg-white border border-[#d2cabb] rounded-xl px-4 py-3 shadow-md z-20 flex items-center gap-3"
+              >
+                <div className="w-9 h-9 rounded-lg bg-[#f4f1ea] border border-[#d2cabb] flex items-center justify-center shrink-0 text-[#164e37]">
+                  <MapPin className="w-4 h-4 text-[#c59b27]" />
+                </div>
+                <div>
+                  <span className="block text-xs font-extrabold text-[#0f231c] leading-tight">
+                    Sharafiyya Korangath
+                  </span>
+                  <span className="block text-[11px] text-slate-500 font-medium leading-tight mt-0.5">
+                    Korangath, Tirur
+                  </span>
+                </div>
+              </motion.div>
             </motion.div>
           </div>
         </div>
