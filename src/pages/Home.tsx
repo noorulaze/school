@@ -445,81 +445,116 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
         </div>
       </section>
 
-      {/* 6. NOTICE BOARD (Modern Announcement Section with Date Placeholders) */}
-      <section className="py-14 bg-white border-b border-[#e5e0d5]">
+      {/* 6. NOTICE BOARD / LATEST UPDATES (Modern Horizontal Editorial Notice Section) */}
+      <section className="py-14 lg:py-18 bg-white border-b border-[#e5e0d5]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-3">
+          {/* Section Header */}
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 sm:mb-10 gap-4">
             <div>
-              <span className="text-xs font-bold text-[#164e37] uppercase tracking-wider block">
-                Official Circulars
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0f231c]">
-                Institution Notice Board
+              <div className="flex items-center gap-2 mb-2">
+                <span className="h-px w-5 bg-[#c59b27]"></span>
+                <span className="text-[11px] font-bold uppercase tracking-widest text-[#164e37]">
+                  Announcements Desk
+                </span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0f231c] tracking-tight">
+                Latest Updates
               </h2>
+              <p className="text-xs sm:text-sm text-slate-600 mt-1.5 font-normal">
+                Important announcements and updates from the institution.
+              </p>
             </div>
 
-            <div className="flex items-center gap-2">
-              <PlaceholderBadge label="Official Announcements Desk" size="sm" />
+            <div className="flex items-center gap-2.5">
+              <PlaceholderBadge label="Editable Notices" size="sm" />
               <Link
                 to="/events"
-                className="text-xs font-bold text-[#164e37] hover:underline flex items-center gap-1"
+                className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 bg-[#f4f1ea] hover:bg-[#eae5d9] text-[#164e37] text-xs font-bold rounded-lg border border-[#d2cabb] transition-colors group"
               >
-                <span>All Circulars</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <span>View All Notices</span>
+                <ArrowRight className="w-3.5 h-3.5 text-[#c59b27] transition-transform group-hover:translate-x-1" />
               </Link>
             </div>
           </div>
 
-          <div className="border border-[#e5e0d5] rounded-xl overflow-hidden divide-y divide-[#e5e0d5]">
+          {/* Horizontal Editorial Notice Grid: Desktop (3-col horizontal), Tablet (2-col), Mobile (vertical list) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
             {[
               {
-                id: 'NB-01',
-                category: 'Admissions',
-                title: 'Admissions Open for Academic Year 2025–2026',
-                date: '[Admission Date Placeholder — Contact Office]',
-                details: 'Applications for Class 1 and lateral enrolments are being accepted at the madrassa office during working hours.',
-                badgeColor: 'bg-emerald-100 text-emerald-900 border-emerald-200',
+                id: 'notice-1',
+                category: 'Academic Notice',
+                datePlaceholder: '[Date Placeholder]',
+                title: 'Academic Notice',
+                description: 'Important academic announcements will appear here. Regular examination timetables, syllabus progressions, and term schedules are posted by the office.',
+                badgeStyle: 'bg-emerald-50 text-emerald-800 border-emerald-200',
               },
               {
-                id: 'NB-02',
-                category: 'Schedule',
-                title: 'Morning Batch Assembly & Azkar Timetable',
-                date: '[Circular Date Placeholder]',
-                details: 'Students are requested to assemble 10 minutes prior to 6:45 AM for congregational morning invocations.',
-                badgeColor: 'bg-blue-100 text-blue-900 border-blue-200',
+                id: 'notice-2',
+                category: 'Admission Update',
+                datePlaceholder: '[Date Placeholder]',
+                title: 'Admission Update',
+                description: 'Admission-related information will be updated here. Application forms, intake schedules, and enrollment guidelines for upcoming batches will be confirmed here.',
+                badgeStyle: 'bg-blue-50 text-blue-800 border-blue-200',
               },
               {
-                id: 'NB-03',
-                category: 'Parents Meet',
-                title: 'Parent-Teacher Consultative Session Announcement',
-                date: '[Date to be confirmed by Committee]',
-                details: 'Quarterly review meeting schedule will be communicated through the student diary.',
-                badgeColor: 'bg-amber-100 text-amber-900 border-amber-200',
+                id: 'notice-3',
+                category: 'Institution Notice',
+                datePlaceholder: '[Date Placeholder]',
+                title: 'Institution Notice',
+                description: 'Important notices and announcements will appear here. General circulars, institutional schedules, and parent-teacher updates will be communicated here.',
+                badgeStyle: 'bg-amber-50 text-amber-800 border-amber-200',
               },
             ].map((notice) => (
-              <div key={notice.id} className="p-4 sm:p-5 bg-[#fbfaf7] hover:bg-white transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${notice.badgeColor}`}>
+              <Link
+                key={notice.id}
+                to="/events"
+                className="group relative flex flex-col justify-between p-5 sm:p-6 bg-[#fbfaf7] hover:bg-white rounded-lg border border-[#e5e0d5] hover:border-[#164e37]/40 hover:shadow-xs transition-all duration-200"
+              >
+                <div>
+                  {/* Category & Date Placeholder Header */}
+                  <div className="flex items-center justify-between gap-2 pb-3 mb-3 border-b border-[#eee9df]">
+                    <span className={`text-[11px] font-semibold px-2 py-0.5 rounded border ${notice.badgeStyle}`}>
                       {notice.category}
                     </span>
-                    <span className="text-xs font-mono text-slate-400">{notice.id}</span>
+                    <span className="text-[11px] font-mono text-slate-500">
+                      {notice.datePlaceholder}
+                    </span>
                   </div>
-                  <h3 className="text-sm sm:text-base font-bold text-slate-900">
+
+                  {/* Notice Title */}
+                  <h3 className="text-base sm:text-lg font-bold text-[#0f231c] group-hover:text-[#164e37] transition-colors mb-2">
                     {notice.title}
                   </h3>
-                  <p className="text-xs text-slate-600 max-w-2xl">
-                    {notice.details}
+
+                  {/* Short Description */}
+                  <p className="text-xs sm:text-[13px] text-slate-600 leading-relaxed font-normal">
+                    {notice.description}
                   </p>
                 </div>
 
-                <div className="shrink-0 sm:text-right">
-                  <span className="inline-block text-[11px] font-semibold text-slate-500 bg-white sm:bg-transparent px-2 sm:px-0 py-1 sm:py-0 rounded border sm:border-0 border-[#d2cabb]">
-                    {notice.date}
+                {/* Arrow / Read More Indicator */}
+                <div className="pt-4 mt-5 border-t border-[#eee9df] flex items-center justify-between text-xs font-semibold">
+                  <span className="text-slate-500 group-hover:text-[#164e37] transition-colors">
+                    Official Notice
                   </span>
+                  <div className="inline-flex items-center gap-1.5 text-[#164e37]">
+                    <span className="text-xs font-semibold">Read More</span>
+                    <ArrowRight className="w-3.5 h-3.5 text-[#c59b27] transform transition-transform group-hover:translate-x-1" />
+                  </div>
                 </div>
-              </div>
+              </Link>
             ))}
+          </div>
+
+          {/* Button Below (Always visible on mobile / sm screens) */}
+          <div className="mt-8 sm:mt-10 text-center sm:hidden">
+            <Link
+              to="/events"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#f4f1ea] hover:bg-[#eae5d9] text-[#164e37] text-xs sm:text-sm font-bold rounded-lg border border-[#d2cabb] transition-colors group shadow-xs"
+            >
+              <span>View All Notices</span>
+              <ArrowRight className="w-3.5 h-3.5 text-[#c59b27] transition-transform group-hover:translate-x-1" />
+            </Link>
           </div>
         </div>
       </section>
