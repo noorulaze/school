@@ -1,9 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { BookOpen, ShieldCheck, Sparkles, School } from 'lucide-react';
 import { SCHOOL_INFO } from '../data/schoolInfo';
-import { IslamicPattern } from '../components/IslamicPattern';
-import { SectionHeading } from '../components/SectionHeading';
 import { PlaceholderBadge } from '../components/PlaceholderBadge';
 
 interface AboutProps {
@@ -12,242 +9,184 @@ interface AboutProps {
 
 export const About: React.FC<AboutProps> = ({ onOpenAdmissionModal }) => {
   return (
-    <div className="w-full flex flex-col">
-      {/* Page Header Banner */}
-      <section className="relative bg-gradient-to-r from-emerald-950 via-slate-900 to-emerald-900 text-white py-16 sm:py-20 px-4 sm:px-6 overflow-hidden">
-        <IslamicPattern variant="rosette" className="-top-12 -right-12 text-amber-400" opacity={0.08} />
-        <div className="absolute inset-0 bg-islamic-pattern opacity-10 pointer-events-none" />
-
-        <div className="max-w-5xl mx-auto text-center relative z-10 space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-800/80 border border-amber-400/40 text-amber-300 text-xs font-semibold uppercase tracking-wider">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Institutional Identity & Ethos</span>
+    <div className="w-full flex flex-col bg-[#fbfaf7]">
+      {/* Page Breadcrumb & Header */}
+      <section className="bg-white border-b border-[#e5e0d5] py-8 sm:py-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="flex items-center gap-2 text-xs text-slate-500 mb-2">
+            <Link to="/" className="hover:text-[#164e37]">Home</Link>
+            <span>/</span>
+            <span className="text-[#164e37] font-semibold">About Us</span>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
-            About Our Institution
+          <h1 className="text-2xl sm:text-3xl font-bold text-[#0f231c]">
+            About Sharaful Islam Madrassa
           </h1>
-
-          <p className="text-emerald-300 font-medium text-base sm:text-xl max-w-2xl mx-auto">
-            {SCHOOL_INFO.officialName} • <span className="text-amber-400">{SCHOOL_INFO.localName}</span>
-          </p>
-
-          <p className="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto">
-            Located in Korangath, Tirur, Malappuram, Kerala — dedicated to noble values, sound religious education, and nurturing upright Muslim generations.
+          <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl">
+            Information about our institution, educational philosophy, and community service in Korangath, Tirur, Malappuram.
           </p>
         </div>
       </section>
 
-      {/* Main Narrative & History */}
-      <section className="py-16 sm:py-24 bg-white">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 space-y-16">
-          {/* Institutional Overview */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-10 items-center">
-            <div className="md:col-span-7 space-y-5">
-              <SectionHeading
-                badge="Historical Roots"
-                title="A Center of Learning at"
-                highlightedText="Korangath"
-                subtitle="Serving the spiritual and pedagogical aspirations of the community in Tirur."
-                alignment="left"
-              />
-
-              <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-                <strong>{SCHOOL_INFO.officialName}</strong>, widely known and cherished in the locality as <strong>{SCHOOL_INFO.localName}</strong>, is situated in the historic and educational hub of Korangath, Tirur, Malappuram District, Kerala.
-              </p>
-
-              <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-                Established to provide structured, principled, and accessible Islamic religious instruction for children and young adults, the madrassa emphasizes harmonious character development, Tajweed Quranic literacy, and ethical civic living.
-              </p>
-
-              <div className="p-4 bg-emerald-50 rounded-2xl border border-emerald-200/80 flex items-start gap-3">
-                <School className="w-5 h-5 text-emerald-800 shrink-0 mt-0.5" />
-                <div className="text-xs text-emerald-950">
-                  <p className="font-bold">Affiliation & Board Guidance</p>
-                  <p className="text-slate-600 mt-0.5">
-                    Operating under recognized Kerala Islamic educational curriculum standards ({SCHOOL_INFO.institutionalDetails.affiliationBoard}), ensuring consistent textbooks, standardized examinations, and certified pedagogical guidance.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="md:col-span-5 bg-gradient-to-br from-emerald-900 to-slate-900 text-white rounded-3xl p-8 border border-amber-400/30 shadow-xl relative overflow-hidden">
-              <IslamicPattern variant="grid" opacity={0.08} />
-              <div className="relative z-10 space-y-6">
-                <div className="w-12 h-12 rounded-xl bg-emerald-800 flex items-center justify-center text-amber-300 border border-amber-400/40">
-                  <BookOpen className="w-6 h-6" />
-                </div>
-
-                <h3 className="text-xl font-bold text-white">
-                  Institutional Profile
-                </h3>
-
-                <ul className="space-y-3 text-xs text-slate-200">
-                  <li className="flex items-start gap-2">
-                    <span className="text-amber-400 font-bold">•</span>
-                    <span><strong>Official Name:</strong> {SCHOOL_INFO.officialName}</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-amber-400 font-bold">•</span>
-                    <span><strong>Local Affiliation:</strong> {SCHOOL_INFO.localName}</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-amber-400 font-bold">•</span>
-                    <span><strong>Locality:</strong> Korangath, Tirur Taluk</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-amber-400 font-bold">•</span>
-                    <span><strong>District & State:</strong> Malappuram, Kerala, India</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-amber-400 font-bold">•</span>
-                    <span><strong>Curriculum Focus:</strong> Quran, Tajweed, Fiqh, Arabic, Akhlaq</span>
-                  </li>
-                </ul>
-
-                <div className="pt-2 border-t border-white/10 flex justify-between items-center text-[11px] text-slate-400">
-                  <span>Record Status:</span>
-                  <PlaceholderBadge label="Administrative Summary" size="sm" />
-                </div>
-              </div>
-            </div>
+      {/* Main Content: 6 Dedicated Sections */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 space-y-10">
+        {/* 1. Our Institution */}
+        <section className="bg-white p-6 sm:p-8 rounded-xl border border-[#e5e0d5] shadow-2xs space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-bold text-[#164e37] uppercase tracking-wider">
+              Section 1
+            </span>
+            <PlaceholderBadge label="Editable Content" size="sm" />
           </div>
+          <h2 className="text-xl sm:text-2xl font-bold text-[#0f231c]">
+            Our Institution
+          </h2>
+          <div className="text-xs sm:text-sm text-slate-700 leading-relaxed space-y-2">
+            <p>
+              <strong>{SCHOOL_INFO.officialName}</strong> is an Islamic educational institution located in the residential community of Korangath, Tirur, Malappuram District, Kerala. Locally known as <strong>{SCHOOL_INFO.localName}</strong> (ഷറഫിയ്യ കോരങ്ങത്ത്), the madrassa serves children and families by providing structured religious instruction in a warm, welcoming, and disciplined environment.
+            </p>
+            <p>
+              The institution operates with morning and evening sessions, allowing students to pursue both religious foundation and formal general schooling simultaneously. All programs are administered under the recognized Islamic Education Board curriculum standards.
+            </p>
+          </div>
+          <div className="pt-2 text-xs text-slate-500 flex flex-wrap gap-4 border-t border-[#e5e0d5]">
+            <span><strong>Location:</strong> {SCHOOL_INFO.location.area}, Tirur, Malappuram</span>
+            <span><strong>Curricular Board:</strong> {SCHOOL_INFO.institutionalDetails.affiliationBoard}</span>
+          </div>
+        </section>
 
-          {/* Mission & Vision Pillars */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8">
-            <div className="bg-[#FDFBF7] p-8 rounded-3xl border border-slate-200 space-y-4 hover:border-emerald-600 transition-colors">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold">
-                <ShieldCheck className="w-6 h-6" />
-              </div>
-              <h3 className="text-xl font-bold text-slate-900">Our Sacred Mission</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                {SCHOOL_INFO.mission}
+        {/* 2. Our Educational Approach */}
+        <section className="bg-white p-6 sm:p-8 rounded-xl border border-[#e5e0d5] shadow-2xs space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-bold text-[#164e37] uppercase tracking-wider">
+              Section 2
+            </span>
+            <PlaceholderBadge label="Editable Content" size="sm" />
+          </div>
+          <h2 className="text-xl sm:text-2xl font-bold text-[#0f231c]">
+            Our Educational Approach
+          </h2>
+          <div className="text-xs sm:text-sm text-slate-700 leading-relaxed space-y-2">
+            <p>
+              Our educational approach focuses on gentle pedagogy (Rifq) and gradual progression. In the foundational years, primary emphasis is placed on Noorani Qaida phonetics, correct pronunciation of Arabic letters (Makharij), and habitual recitation of daily Duas and Azkar.
+            </p>
+            <p>
+              As students advance, instruction deepens into structured Tajweed rules, memorization of key Surahs, essential Islamic rulings (Fiqh of purification, prayers, and fasting), and the study of Prophetic character (Seerah). We believe in continuous reinforcement, constructive teacher-student interaction, and frequent progress dialogue with parents.
+            </p>
+          </div>
+        </section>
+
+        {/* 3. Islamic and Academic Learning */}
+        <section className="bg-white p-6 sm:p-8 rounded-xl border border-[#e5e0d5] shadow-2xs space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-bold text-[#164e37] uppercase tracking-wider">
+              Section 3
+            </span>
+            <PlaceholderBadge label="Editable Content" size="sm" />
+          </div>
+          <h2 className="text-xl sm:text-2xl font-bold text-[#0f231c]">
+            Islamic and Academic Learning
+          </h2>
+          <div className="text-xs sm:text-sm text-slate-700 leading-relaxed space-y-2">
+            <p>
+              At Sharaful Islam Madrassa, religious education is designed to harmonize with regular academic schooling. We recognize that students attend general daytime schools, and therefore our class timings are organized before general school hours (6:45 AM to 8:30 AM) and in supplementary evening batches.
+            </p>
+            <p>
+              This balance ensures students excel in their regular academic examinations while remaining firmly grounded in Islamic knowledge, ethical boundaries, and spiritual discipline.
+            </p>
+          </div>
+        </section>
+
+        {/* 4. Our Values */}
+        <section className="bg-white p-6 sm:p-8 rounded-xl border border-[#e5e0d5] shadow-2xs space-y-4">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-bold text-[#164e37] uppercase tracking-wider">
+              Section 4
+            </span>
+            <PlaceholderBadge label="Editable Content" size="sm" />
+          </div>
+          <h2 className="text-xl sm:text-2xl font-bold text-[#0f231c]">
+            Our Values
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+            <div className="p-4 rounded-lg bg-[#fbfaf7] border border-[#e5e0d5] space-y-1">
+              <strong className="block text-slate-900 text-sm">Sincerity (Ikhlas)</strong>
+              <p className="text-slate-600 leading-relaxed">
+                Seeking sacred knowledge with purity of intention to please Allah and benefit family and community.
               </p>
             </div>
-
-            <div className="bg-[#FDFBF7] p-8 rounded-3xl border border-slate-200 space-y-4 hover:border-amber-500 transition-colors">
-              <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold">
-                <Sparkles className="w-6 h-6" />
-              </div>
-              <h3 className="text-xl font-bold text-slate-900">Our Future Vision</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                {SCHOOL_INFO.vision}
+            <div className="p-4 rounded-lg bg-[#fbfaf7] border border-[#e5e0d5] space-y-1">
+              <strong className="block text-slate-900 text-sm">Character (Akhlaq)</strong>
+              <p className="text-slate-600 leading-relaxed">
+                Demonstrating honesty, humility, respectful speech, and kindness to parents and elders.
               </p>
             </div>
-          </div>
-
-          {/* Core Values */}
-          <div className="space-y-8 pt-6">
-            <SectionHeading
-              badge="Guiding Principles"
-              title="Four Foundational Pillars of"
-              highlightedText="Student Growth"
-              subtitle="Every lesson, prayer assembly, and moral class is anchored in these values."
-              alignment="center"
-            />
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-                <div className="w-8 h-8 rounded-lg bg-emerald-800 text-white flex items-center justify-center text-xs font-bold mb-2">
-                  1
-                </div>
-                <h4 className="text-base font-bold text-slate-900">Ikhlas (Sincerity)</h4>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Seeking knowledge for spiritual elevation and closeness to Allah with purity of intention.
-                </p>
-              </div>
-
-              <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-                <div className="w-8 h-8 rounded-lg bg-emerald-800 text-white flex items-center justify-center text-xs font-bold mb-2">
-                  2
-                </div>
-                <h4 className="text-base font-bold text-slate-900">Itqan (Excellence)</h4>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Striving for perfection in Quranic articulation (Tajweed) and academic diligence.
-                </p>
-              </div>
-
-              <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-                <div className="w-8 h-8 rounded-lg bg-emerald-800 text-white flex items-center justify-center text-xs font-bold mb-2">
-                  3
-                </div>
-                <h4 className="text-base font-bold text-slate-900">Akhlaq (Noble Manners)</h4>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Exemplifying courteous speech, humility, filial respect, and kindness to all creatures.
-                </p>
-              </div>
-
-              <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-                <div className="w-8 h-8 rounded-lg bg-emerald-800 text-white flex items-center justify-center text-xs font-bold mb-2">
-                  4
-                </div>
-                <h4 className="text-base font-bold text-slate-900">Khidmah (Service)</h4>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Contributing positively to neighborhood welfare and social harmony across Korangath & Tirur.
-                </p>
-              </div>
+            <div className="p-4 rounded-lg bg-[#fbfaf7] border border-[#e5e0d5] space-y-1">
+              <strong className="block text-slate-900 text-sm">Patience (Sabr)</strong>
+              <p className="text-slate-600 leading-relaxed">
+                Developing consistency, diligence in daily attendance, and persevering in Quranic memorization.
+              </p>
             </div>
-          </div>
-
-          {/* School Governance / Committee Placeholder */}
-          <div className="p-8 rounded-3xl bg-slate-900 text-white space-y-6 border border-emerald-800/40 relative overflow-hidden">
-            <IslamicPattern variant="grid" opacity={0.06} />
-            <div className="relative z-10">
-              <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
-                <div>
-                  <h3 className="text-xl font-bold text-white">
-                    Madrasa Management & Advisory Committee
-                  </h3>
-                  <p className="text-xs text-slate-300">
-                    Governing body overseeing administrative, infrastructural, and student welfare decisions.
-                  </p>
-                </div>
-                <PlaceholderBadge label="Official Roster Pending" size="sm" />
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-                <div className="p-4 bg-white/5 rounded-xl border border-white/10 text-xs">
-                  <p className="text-amber-400 font-semibold mb-1">President / Leadership</p>
-                  <p className="text-slate-300 font-mono">[Committee President Name - Pending Update]</p>
-                  <p className="text-[10px] text-slate-400 mt-1">Management Committee</p>
-                </div>
-
-                <div className="p-4 bg-white/5 rounded-xl border border-white/10 text-xs">
-                  <p className="text-amber-400 font-semibold mb-1">General Secretary</p>
-                  <p className="text-slate-300 font-mono">[General Secretary Name - Pending Update]</p>
-                  <p className="text-[10px] text-slate-400 mt-1">Administrative Operations</p>
-                </div>
-
-                <div className="p-4 bg-white/5 rounded-xl border border-white/10 text-xs">
-                  <p className="text-amber-400 font-semibold mb-1">Treasurer & Welfare</p>
-                  <p className="text-slate-300 font-mono">[Treasurer Name - Pending Update]</p>
-                  <p className="text-[10px] text-slate-400 mt-1">Finance & Development</p>
-                </div>
-              </div>
-
-              <p className="text-[11px] text-slate-400 pt-3 italic">
-                * Committee appointments and audited reports are maintained by the local Mahal / Madrassa management in Korangath.
+            <div className="p-4 rounded-lg bg-[#fbfaf7] border border-[#e5e0d5] space-y-1">
+              <strong className="block text-slate-900 text-sm">Responsibility (Amanah)</strong>
+              <p className="text-slate-600 leading-relaxed">
+                Upholding civic duty, neighborhood harmony, and care for community property and environment.
               </p>
             </div>
           </div>
+        </section>
 
-          {/* Bottom CTA */}
-          <div className="text-center pt-8 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button
-              onClick={onOpenAdmissionModal}
-              className="px-6 py-3 bg-emerald-800 hover:bg-emerald-900 text-white font-bold text-sm rounded-xl transition-all shadow-md"
-            >
-              Enquire for Student Admission
-            </button>
-            <Link
-              to="/departments"
-              className="px-6 py-3 border border-slate-300 hover:border-emerald-800 text-slate-700 hover:text-emerald-900 font-semibold text-sm rounded-xl transition-colors"
-            >
-              Explore Educational Departments
-            </Link>
+        {/* 5 & 6. Our Vision and Our Mission */}
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Our Vision */}
+          <div className="bg-white p-6 sm:p-8 rounded-xl border border-[#e5e0d5] shadow-2xs space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-bold text-[#8c6512] uppercase tracking-wider">
+                Section 5
+              </span>
+              <PlaceholderBadge label="Editable Content" size="sm" />
+            </div>
+            <h2 className="text-xl font-bold text-slate-900">
+              Our Vision
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+              {SCHOOL_INFO.vision}
+            </p>
           </div>
+
+          {/* Our Mission */}
+          <div className="bg-white p-6 sm:p-8 rounded-xl border border-[#e5e0d5] shadow-2xs space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-bold text-[#164e37] uppercase tracking-wider">
+                Section 6
+              </span>
+              <PlaceholderBadge label="Editable Content" size="sm" />
+            </div>
+            <h2 className="text-xl font-bold text-slate-900">
+              Our Mission
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+              {SCHOOL_INFO.mission}
+            </p>
+          </div>
+        </section>
+
+        {/* Action Link */}
+        <div className="text-center pt-2 flex flex-wrap items-center justify-center gap-3">
+          <button
+            onClick={onOpenAdmissionModal}
+            className="px-5 py-2.5 bg-[#164e37] hover:bg-[#0f3b29] text-white text-xs font-bold rounded-lg transition-colors shadow-xs"
+          >
+            Submit Admission Enquiry
+          </button>
+          <Link
+            to="/departments"
+            className="px-5 py-2.5 bg-white border border-[#d2cabb] text-slate-800 text-xs font-semibold rounded-lg hover:bg-slate-50 transition-colors"
+          >
+            Explore Department Streams
+          </Link>
         </div>
-      </section>
+      </div>
     </div>
   );
 };

@@ -1,32 +1,34 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary-950: #021a13;
-  --color-primary-900: #062e24;
-  --color-primary-850: #063d30;
-  --color-primary-800: #064e3b;
-  --color-primary-700: #047857;
-  --color-primary-600: #059669;
-  --color-primary-500: #10b981;
+  --color-primary-950: #0a251b;
+  --color-primary-900: #0f3b2b;
+  --color-primary-850: #124432;
+  --color-primary-800: #164e37;
+  --color-primary-700: #1b5f43;
+  --color-primary-600: #237855;
+  --color-primary-500: #2d966a;
 
-  --color-navy-950: #060d17;
-  --color-navy-900: #0b192c;
-  --color-navy-800: #13243c;
+  --color-navy-950: #0b1320;
+  --color-navy-900: #111d2e;
+  --color-navy-850: #162438;
+  --color-navy-800: #1e314b;
 
-  --color-gold-300: #fde68a;
-  --color-gold-400: #fbbf24;
-  --color-gold-500: #f59e0b;
-  --color-gold-600: #d4af37;
-  --color-gold-700: #b45309;
+  --color-ochre-700: #8c6512;
+  --color-ochre-600: #b48318;
+  --color-ochre-500: #c59b27;
+  --color-ochre-400: #d8b247;
+  --color-ochre-100: #fbf5e5;
+  --color-ochre-50: #fdfaf2;
 
-  --color-cream-50: #fdfbf7;
-  --color-cream-100: #fbf7ee;
-  --color-cream-200: #f4ecdc;
-  --color-cream-300: #e8dbbf;
-  --color-cream-400: #d5c29a;
+  --color-surface-base: #fbfaf7;
+  --color-surface-card: #ffffff;
+  --color-surface-alt: #f4f1ea;
+  --color-border-subtle: #e5e0d5;
+  --color-border-strong: #d2cabb;
 
   --font-amiri: 'Amiri', serif;
-  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
 @layer base {
@@ -35,42 +37,59 @@
   }
 
   body {
-    background-color: #FDFBF7;
-    color: #1E293B;
+    background-color: #fbfaf7;
+    color: #1e293b;
     font-family: var(--font-sans);
+    line-height: 1.6;
     overflow-x: hidden;
+  }
+
+  /* Academic print-like crispness */
+  h1, h2, h3, h4, h5, h6 {
+    color: #0f231c;
+    letter-spacing: -0.015em;
   }
 }
 
-/* Islamic Geometric & Motif CSS Patterns */
-.bg-islamic-pattern {
-  background-image: radial-gradient(rgba(212, 175, 55, 0.12) 1px, transparent 1px), radial-gradient(rgba(6, 78, 59, 0.08) 1px, transparent 1px);
-  background-size: 24px 24px;
-  background-position: 0 0, 12px 12px;
+/* Subtle architectural divider */
+.academic-rule {
+  height: 2px;
+  background: linear-gradient(90deg, #164e37 0%, #c59b27 50%, #164e37 100%);
 }
 
-.bg-islamic-pattern-dark {
-  background-image: radial-gradient(rgba(212, 175, 55, 0.18) 1.2px, transparent 1.2px), radial-gradient(rgba(16, 185, 129, 0.1) 1.2px, transparent 1.2px);
-  background-size: 28px 28px;
-  background-position: 0 0, 14px 14px;
+/* Restrained classic table styling */
+.school-table th {
+  background-color: #f4f1ea;
+  color: #124432;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  border-bottom: 2px solid #d2cabb;
+  padding: 0.75rem 1rem;
 }
 
-.bg-stars-pattern {
-  background-image: radial-gradient(#d4af37 0.75px, transparent 0.75px);
-  background-size: 18px 18px;
+.school-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e5e0d5;
+  font-size: 0.875rem;
+}
+
+.school-table tr:hover td {
+  background-color: #fdfaf2;
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 7px;
 }
 ::-webkit-scrollbar-track {
-  background: #FDFBF7;
+  background: #fbfaf7;
 }
 ::-webkit-scrollbar-thumb {
-  background: #064E3B;
-  border-radius: 4px;
+  background: #164e37;
+  border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #047857;
+  background: #0f3b2b;
 }

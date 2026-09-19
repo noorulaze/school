@@ -1,30 +1,20 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  BookOpen,
-  Users,
-  Compass,
-  ArrowRight,
-  Sparkles,
-  Calendar,
-  Clock,
   MapPin,
+  Clock,
+  Calendar,
+  ChevronRight,
   GraduationCap,
-  HeartHandshake,
-  CheckCircle2,
+  CheckCircle,
   FileText,
-  School,
-  Send,
-  Eye
+  Building,
+  School
 } from 'lucide-react';
 import { SCHOOL_INFO } from '../data/schoolInfo';
-import { DEPARTMENTS } from '../data/departments';
-import { TEACHERS, FACULTY_EDITORIAL_NOTICE } from '../data/teachers';
-import { EVENTS, EVENTS_EDITORIAL_NOTICE } from '../data/events';
-import { GALLERY_ITEMS } from '../data/gallery';
-import { IslamicPattern } from '../components/IslamicPattern';
-import { SectionHeading } from '../components/SectionHeading';
+import { EVENTS } from '../data/events';
 import { PlaceholderBadge } from '../components/PlaceholderBadge';
+import { NoticeTicker } from '../components/NoticeTicker';
 
 interface HomeProps {
   onOpenAdmissionModal: () => void;
@@ -32,679 +22,477 @@ interface HomeProps {
 
 export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
   const [quickContactSent, setQuickContactSent] = useState(false);
-  const [quickMessage, setQuickMessage] = useState({ name: '', phone: '', message: '' });
+  const [quickForm, setQuickForm] = useState({ name: '', phone: '', message: '' });
 
-  const handleQuickContact = (e: React.FormEvent) => {
+  const handleQuickSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setQuickContactSent(true);
   };
 
   return (
-    <div className="flex flex-col w-full overflow-hidden">
-      {/* 1. HERO SECTION */}
-      <section className="relative min-h-[85vh] lg:min-h-[88vh] bg-gradient-to-br from-emerald-950 via-slate-950 to-emerald-900 text-white flex items-center justify-center py-20 px-4 sm:px-6 relative overflow-hidden">
-        {/* Subtle Islamic Geometric Accents */}
-        <IslamicPattern variant="rosette" className="-top-24 -left-24 text-emerald-400" opacity={0.08} />
-        <IslamicPattern variant="rosette" className="-bottom-24 -right-24 text-amber-400" opacity={0.08} />
-        <div className="absolute inset-0 bg-islamic-pattern opacity-10 pointer-events-none" />
+    <div className="w-full flex flex-col bg-[#fbfaf7]">
+      {/* Official Notice Ticker */}
+      <NoticeTicker onOpenAdmissionModal={onOpenAdmissionModal} />
 
-        {/* Ambient Glows */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-emerald-600/15 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-10 right-10 w-72 h-72 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+      {/* 1. WELCOME & SCHOOL INTRODUCTION */}
+      <section className="bg-white border-b border-[#e5e0d5] py-10 sm:py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div className="lg:col-span-7 space-y-4">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-[#f4f1ea] border border-[#d2cabb] text-xs font-semibold text-[#164e37]">
+                <School className="w-3.5 h-3.5 text-[#c59b27]" />
+                <span>Official Institution Portal • Korangath, Tirur</span>
+              </div>
 
-        <div className="max-w-5xl mx-auto text-center relative z-10 space-y-6 sm:space-y-8">
-          {/* Arabic Calligraphy & Subtitle */}
-          <div className="inline-flex flex-col items-center space-y-2">
-            <span className="font-amiri text-2xl sm:text-3xl md:text-4xl text-amber-300 tracking-widest drop-shadow-sm" dir="rtl">
-              {SCHOOL_INFO.arabicCalligraphySubtitle}
-            </span>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-900/80 border border-amber-400/40 text-amber-300 text-xs font-semibold tracking-wider uppercase">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Official Institutional Portal</span>
+              <div className="space-y-1">
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0f231c] tracking-tight">
+                  {SCHOOL_INFO.officialName}
+                </h1>
+                <p className="text-base sm:text-lg font-semibold text-[#164e37]">
+                  Affiliated Locally as {SCHOOL_INFO.localName} <span className="font-normal text-slate-500 text-sm">(ഷറഫിയ്യ കോരങ്ങത്ത്)</span>
+                </p>
+                <p className="font-amiri text-sm text-slate-600 pt-0.5" dir="rtl">
+                  {SCHOOL_INFO.arabicCalligraphySubtitle}
+                </p>
+              </div>
+
+              <div className="text-sm text-slate-700 leading-relaxed space-y-2 max-w-2xl">
+                <p>
+                  <strong>Sharaful Islam Madrassa</strong> is a dedicated Islamic educational institution situated in Korangath, Tirur, Malappuram District, Kerala. Known locally and held in high esteem as <strong>Sharafiyya Korangath</strong>, our institution has been serving the community by nurturing young minds with authentic religious education and noble Islamic character.
+                </p>
+                <p>
+                  Our curriculum combines Quranic recitation with Tajweed, Islamic jurisprudence (Fiqh), Arabic literacy, and moral guidance (Akhlaq), structured with convenient morning and evening batches that support students attending regular daytime schools.
+                </p>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-wrap items-center gap-3 pt-2">
+                <button
+                  onClick={onOpenAdmissionModal}
+                  className="px-5 py-2.5 bg-[#164e37] hover:bg-[#0f3b29] text-white text-xs sm:text-sm font-bold rounded-lg shadow-xs transition-colors flex items-center gap-2"
+                >
+                  <GraduationCap className="w-4 h-4 text-[#c59b27]" />
+                  <span>Admission Enquiry</span>
+                </button>
+
+                <Link
+                  to="/about"
+                  className="px-5 py-2.5 bg-[#f4f1ea] hover:bg-[#eae5da] text-slate-800 border border-[#d2cabb] text-xs sm:text-sm font-semibold rounded-lg transition-colors flex items-center gap-1.5"
+                >
+                  <span>About Our Institution</span>
+                  <ChevronRight className="w-3.5 h-3.5 text-slate-500" />
+                </Link>
+
+                <Link
+                  to="/students"
+                  className="px-5 py-2.5 bg-white hover:bg-slate-50 text-[#164e37] border border-[#164e37] text-xs sm:text-sm font-semibold rounded-lg transition-colors flex items-center gap-1.5"
+                >
+                  <Clock className="w-4 h-4 text-[#c59b27]" />
+                  <span>Class Timetable</span>
+                </Link>
+              </div>
+
+              <div className="pt-3 border-t border-[#e5e0d5] text-xs text-slate-600 flex flex-wrap gap-4">
+                <span><strong>Location:</strong> Korangath, Tirur, Malappuram</span>
+                <span><strong>Batches:</strong> Morning & Evening</span>
+                <span><strong>Board:</strong> {SCHOOL_INFO.institutionalDetails.affiliationBoard}</span>
+              </div>
+            </div>
+
+            {/* Campus Photo Placeholder */}
+            <div className="lg:col-span-5">
+              <div className="rounded-xl border border-[#d2cabb] bg-[#f4f1ea] p-4 shadow-2xs space-y-3">
+                <div className="aspect-4/3 rounded-lg bg-[#e9e4d8] border border-[#d2cabb] flex flex-col items-center justify-center p-6 text-center">
+                  <Building className="w-10 h-10 text-[#164e37] mb-2" />
+                  <p className="text-xs font-bold text-slate-800">
+                    Campus Premises & Assembly Grounds
+                  </p>
+                  <p className="text-[11px] text-slate-500 mt-1 max-w-xs">
+                    [Campus Photograph Placeholder — Official photo to be uploaded by the administration]
+                  </p>
+                  <div className="mt-3">
+                    <PlaceholderBadge label="Official Photo Slot" size="sm" />
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between text-[11px] text-slate-600 px-1">
+                  <span>Sharaful Islam Madrassa (Sharafiyya Korangath)</span>
+                  <span className="font-semibold text-[#164e37]">Tirur, Kerala</span>
+                </div>
+              </div>
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* School Name & Location */}
-          <div className="space-y-3">
-            <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight leading-tight sm:leading-none">
-              {SCHOOL_INFO.officialName}
-            </h1>
-            <p className="text-xl sm:text-2xl md:text-3xl font-medium text-emerald-300">
-              Affiliated as <span className="text-amber-400 font-semibold">{SCHOOL_INFO.localName}</span>
-            </p>
-            <div className="flex items-center justify-center gap-2 text-xs sm:text-sm text-slate-300">
-              <MapPin className="w-4 h-4 text-amber-400 shrink-0" />
-              <span>{SCHOOL_INFO.location.area}, {SCHOOL_INFO.location.city}, {SCHOOL_INFO.location.district}, {SCHOOL_INFO.location.state}</span>
-            </div>
-          </div>
-
-          {/* Short Introduction */}
-          <p className="max-w-2xl mx-auto text-sm sm:text-base md:text-lg text-slate-200/90 leading-relaxed font-light">
-            An established center for Islamic enlightenment and moral discipline in Tirur. Imparting classical Quranic recitation, authentic Islamic jurisprudence, Arabic language mastery, and refined Prophetic character.
-          </p>
-
-          {/* Primary Action Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 pt-2">
+      {/* 2. QUICK LINKS STRIP */}
+      <section className="bg-[#f4f1ea] border-b border-[#e5e0d5] py-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5 text-center">
             <Link
               to="/about"
-              className="w-full sm:w-auto px-7 py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-bold text-sm sm:text-base rounded-xl transition-all shadow-lg hover:shadow-xl hover:scale-[1.02] flex items-center justify-center gap-2"
+              className="p-2.5 bg-white rounded-lg border border-[#e5e0d5] hover:border-[#164e37] text-xs font-semibold text-slate-800 transition-colors flex items-center justify-center gap-1.5"
             >
-              <Compass className="w-4 h-4" />
-              <span>Explore Our School</span>
+              <School className="w-3.5 h-3.5 text-[#164e37]" />
+              <span>About Us</span>
             </Link>
 
             <button
               onClick={onOpenAdmissionModal}
-              className="w-full sm:w-auto px-7 py-3.5 bg-emerald-800/90 hover:bg-emerald-800 text-white font-semibold text-sm sm:text-base rounded-xl border border-emerald-600/60 hover:border-amber-400 transition-all shadow-md hover:shadow-lg hover:scale-[1.02] flex items-center justify-center gap-2"
+              className="p-2.5 bg-white rounded-lg border border-[#e5e0d5] hover:border-[#164e37] text-xs font-semibold text-slate-800 transition-colors flex items-center justify-center gap-1.5"
             >
-              <GraduationCap className="w-4 h-4 text-amber-400" />
-              <span>Admission Enquiry</span>
+              <GraduationCap className="w-3.5 h-3.5 text-[#c59b27]" />
+              <span>Admissions</span>
             </button>
+
+            <Link
+              to="/students"
+              className="p-2.5 bg-white rounded-lg border border-[#e5e0d5] hover:border-[#164e37] text-xs font-semibold text-slate-800 transition-colors flex items-center justify-center gap-1.5"
+            >
+              <FileText className="w-3.5 h-3.5 text-[#164e37]" />
+              <span>Student Portal</span>
+            </Link>
+
+            <Link
+              to="/events"
+              className="p-2.5 bg-white rounded-lg border border-[#e5e0d5] hover:border-[#164e37] text-xs font-semibold text-slate-800 transition-colors flex items-center justify-center gap-1.5"
+            >
+              <Calendar className="w-3.5 h-3.5 text-[#164e37]" />
+              <span>Events & Notices</span>
+            </Link>
+
+            <Link
+              to="/contact"
+              className="p-2.5 bg-white rounded-lg border border-[#e5e0d5] hover:border-[#164e37] text-xs font-semibold text-slate-800 transition-colors flex items-center justify-center gap-1.5 col-span-2 sm:col-span-1"
+            >
+              <MapPin className="w-3.5 h-3.5 text-[#c59b27]" />
+              <span>Contact & Office</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. NOTICE BOARD SECTION */}
+      <section className="py-10 bg-white border-b border-[#e5e0d5]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-5 gap-2">
+            <div>
+              <span className="text-[11px] font-bold text-[#164e37] uppercase tracking-wider">
+                Official Announcements
+              </span>
+              <h2 className="text-xl sm:text-2xl font-bold text-[#0f231c]">
+                Notice Board
+              </h2>
+            </div>
+            <Link
+              to="/events"
+              className="text-xs font-semibold text-[#164e37] hover:underline flex items-center gap-1"
+            >
+              <span>View All Circulars & Calendar</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </Link>
           </div>
 
-          {/* Institutional Trust Indicators */}
-          <div className="pt-8 border-t border-emerald-800/40 grid grid-cols-2 md:grid-cols-4 gap-4 text-left">
-            <div className="p-3 bg-white/5 rounded-xl border border-white/10 backdrop-blur-xs">
-              <div className="flex items-center gap-2 text-amber-400 text-xs font-semibold mb-1">
-                <School className="w-4 h-4" />
-                <span>Affiliation</span>
-              </div>
-              <p className="text-xs text-slate-300">Board Curriculum</p>
-              <p className="text-[10px] text-amber-400/80 font-mono">[Board Placeholder]</p>
-            </div>
+          {/* Clean Notice Table */}
+          <div className="border border-[#e5e0d5] rounded-xl overflow-hidden bg-white shadow-2xs">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left school-table text-xs">
+                <thead>
+                  <tr>
+                    <th className="w-28">Date</th>
+                    <th className="w-28">Category</th>
+                    <th>Notice Title & Description</th>
+                    <th className="w-32 text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#e5e0d5]">
+                  <tr>
+                    <td className="font-mono text-slate-500">[Date Pending]</td>
+                    <td>
+                      <span className="inline-block px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-100 text-emerald-900">
+                        Admissions
+                      </span>
+                    </td>
+                    <td>
+                      <strong className="block text-slate-900 text-xs">Admission Open for Academic Session 2025–2026</strong>
+                      <p className="text-slate-500 text-[11px]">Enrolment forms available for Class 1 & preparatory streams. Register interest online or at the office.</p>
+                    </td>
+                    <td className="text-right">
+                      <button
+                        onClick={onOpenAdmissionModal}
+                        className="font-bold text-[#164e37] hover:underline"
+                      >
+                        Enquire Form
+                      </button>
+                    </td>
+                  </tr>
 
-            <div className="p-3 bg-white/5 rounded-xl border border-white/10 backdrop-blur-xs">
-              <div className="flex items-center gap-2 text-emerald-400 text-xs font-semibold mb-1">
-                <BookOpen className="w-4 h-4" />
-                <span>Instruction</span>
-              </div>
-              <p className="text-xs text-slate-300">Quran, Tajweed & Fiqh</p>
-              <p className="text-[10px] text-slate-400">Junior to Senior</p>
-            </div>
+                  <tr>
+                    <td className="font-mono text-slate-500">[Date Pending]</td>
+                    <td>
+                      <span className="inline-block px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-100 text-amber-900">
+                        Examination
+                      </span>
+                    </td>
+                    <td>
+                      <strong className="block text-slate-900 text-xs">Mid-Term Academic Assessment Circular</strong>
+                      <p className="text-slate-500 text-[11px]">Timetable for oral Tajweed evaluations and written Islamic studies assessments.</p>
+                    </td>
+                    <td className="text-right">
+                      <Link to="/events" className="font-bold text-[#164e37] hover:underline">
+                        Read Details
+                      </Link>
+                    </td>
+                  </tr>
 
-            <div className="p-3 bg-white/5 rounded-xl border border-white/10 backdrop-blur-xs">
-              <div className="flex items-center gap-2 text-amber-400 text-xs font-semibold mb-1">
-                <HeartHandshake className="w-4 h-4" />
-                <span>Ethos</span>
-              </div>
-              <p className="text-xs text-slate-300">Tarbiyyah & Akhlaq</p>
-              <p className="text-[10px] text-slate-400">Character Mentorship</p>
-            </div>
-
-            <div className="p-3 bg-white/5 rounded-xl border border-white/10 backdrop-blur-xs">
-              <div className="flex items-center gap-2 text-emerald-400 text-xs font-semibold mb-1">
-                <MapPin className="w-4 h-4" />
-                <span>Locality</span>
-              </div>
-              <p className="text-xs text-slate-300">Korangath, Tirur</p>
-              <p className="text-[10px] text-slate-400">Malappuram, Kerala</p>
+                  <tr>
+                    <td className="font-mono text-slate-500">[Date Pending]</td>
+                    <td>
+                      <span className="inline-block px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-100 text-blue-900">
+                        Meeting
+                      </span>
+                    </td>
+                    <td>
+                      <strong className="block text-slate-900 text-xs">Parent-Teacher Consultation Meeting (PTA)</strong>
+                      <p className="text-slate-500 text-[11px]">Quarterly meeting to discuss student attendance regularity, prayer habits, and moral development.</p>
+                    </td>
+                    <td className="text-right">
+                      <Link to="/events" className="font-bold text-[#164e37] hover:underline">
+                        Details
+                      </Link>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 2. ABOUT PREVIEW SECTION */}
-      <section className="py-16 sm:py-24 bg-white relative">
+      {/* 4. ABOUT PREVIEW SECTION */}
+      <section className="py-10 bg-[#f4f1ea] border-b border-[#e5e0d5]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            {/* Left Visual Column */}
-            <div className="lg:col-span-5 relative">
-              <div className="relative mx-auto max-w-md rounded-2xl overflow-hidden bg-gradient-to-br from-emerald-900 to-slate-900 p-8 text-white shadow-xl border border-amber-400/30">
-                <IslamicPattern variant="grid" opacity={0.08} />
-                
-                <div className="relative z-10 space-y-6">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-800/80 border border-emerald-600 text-xs text-amber-300 font-semibold">
-                    <Sparkles className="w-3.5 h-3.5" />
-                    <span>Institutional Legacy</span>
-                  </div>
-
-                  <h3 className="text-2xl font-bold leading-snug">
-                    Rooted in Values, Nurturing Generations at Korangath
-                  </h3>
-
-                  <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed">
-                    {SCHOOL_INFO.officialName} ({SCHOOL_INFO.localName}) is committed to nurturing children through comprehensive Islamic religious education, building strong roots in religious practice and ethical community citizenship.
-                  </p>
-
-                  <div className="p-4 bg-white/10 rounded-xl border border-white/15 space-y-2">
-                    <p className="text-xs font-semibold text-amber-300 uppercase tracking-wider">
-                      Core Institutional Pledge
-                    </p>
-                    <p className="text-xs text-slate-200 italic">
-                      "{SCHOOL_INFO.mission}"
-                    </p>
-                  </div>
-
-                  <div className="flex items-center justify-between text-xs text-slate-300 pt-2 border-t border-white/10">
-                    <span>Location: Tirur, Malappuram</span>
-                    <PlaceholderBadge label="Official Record" size="sm" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Text Column */}
-            <div className="lg:col-span-7 space-y-6">
-              <SectionHeading
-                badge="About Our Madrassa"
-                arabicAccent="مَنْ سَلَكَ طَرِيقًا يَلْتَمِسُ فِيهِ عِلْمًا سَهَّلَ اللهُ لَهُ بِهِ طَرِيقًا إِلَى الجَنَّةِ"
-                title="A Sanctuaried Center of"
-                highlightedText="Faith & Knowledge"
-                subtitle="Nurturing disciplined minds and compassionate souls through authentic Islamic curricular education."
-                alignment="left"
-              />
-
-              <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-                Situated in the culturally vibrant town of <strong>Tirur</strong> in Malappuram, <strong>{SCHOOL_INFO.officialName}</strong> (locally honored as <strong>{SCHOOL_INFO.localName}</strong>) serves the spiritual and ethical needs of young learners across Korangath and adjoining areas.
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+            <div className="md:col-span-8 space-y-3">
+              <span className="text-[11px] font-bold text-[#164e37] uppercase tracking-wider">
+                Institutional Ethos
+              </span>
+              <h2 className="text-xl sm:text-2xl font-bold text-[#0f231c]">
+                About Sharaful Islam Madrassa (Sharafiyya Korangath)
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                Founded to impart authentic Islamic learning in Korangath, Tirur, our institution focuses on sound Quran recitation with Tajweed, classical Islamic jurisprudence, Arabic literacy, and moral tarbiyyah. We work in close partnership with parents to ensure students grow with strong spiritual foundations and exemplary conduct.
               </p>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80">
-                  <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center mb-3">
-                    <BookOpen className="w-4 h-4" />
-                  </div>
-                  <h4 className="text-sm font-bold text-slate-900 mb-1">Authentic Curriculum</h4>
-                  <p className="text-xs text-slate-600 leading-relaxed">
-                    Structured syllabus covering Quran recitation, Tajweed, Fiqh, Hadith, and Islamic history.
-                  </p>
-                </div>
-
-                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80">
-                  <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center mb-3">
-                    <HeartHandshake className="w-4 h-4" />
-                  </div>
-                  <h4 className="text-sm font-bold text-slate-900 mb-1">Tarbiyyah & Character</h4>
-                  <p className="text-xs text-slate-600 leading-relaxed">
-                    Instilling compassion, filial respect, moral honesty, and civic responsibility into every pupil.
-                  </p>
-                </div>
-              </div>
-
               <div className="pt-2">
                 <Link
                   to="/about"
-                  className="inline-flex items-center gap-2 text-sm font-bold text-emerald-800 hover:text-emerald-950 transition-colors group"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#164e37] hover:underline"
                 >
-                  <span>Learn more about our history and administrative ethos</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform text-amber-500" />
+                  <span>Read full institutional history, mission, vision & values</span>
+                  <ChevronRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
+            </div>
+
+            <div className="md:col-span-4 bg-white p-5 rounded-xl border border-[#e5e0d5] text-xs space-y-2">
+              <span className="font-bold text-[#164e37] uppercase text-[10px] tracking-wider block">
+                Our Core Mission
+              </span>
+              <p className="text-slate-600 leading-relaxed italic">
+                "{SCHOOL_INFO.mission}"
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 3. EDUCATIONAL DEPARTMENTS PREVIEW */}
-      <section className="py-16 sm:py-24 bg-[#F7F4EC] relative">
-        <IslamicPattern variant="star" opacity={0.06} />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-          <SectionHeading
-            badge="Academic Disciplines"
-            title="Educational Departments &"
-            highlightedText="Curriculum Wings"
-            subtitle="Explore our comprehensive streams designed to develop Quranic mastery, theological understanding, and linguistic fluency."
-            alignment="center"
-          />
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {DEPARTMENTS.slice(0, 3).map((dept) => (
-              <div
-                key={dept.id}
-                className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow border border-emerald-900/10 flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-[11px] font-bold text-emerald-800 uppercase tracking-wider bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200">
-                      {dept.category}
-                    </span>
-                    <PlaceholderBadge label="Editable Department" size="sm" />
-                  </div>
-
-                  <h3 className="text-lg font-bold text-slate-900 mb-1">
-                    {dept.name}
-                  </h3>
-                  {dept.arabicName && (
-                    <p className="font-amiri text-base text-emerald-700 mb-2" dir="rtl">
-                      {dept.arabicName}
-                    </p>
-                  )}
-
-                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
-                    {dept.shortSummary}
-                  </p>
-
-                  <div className="space-y-1.5 mb-4">
-                    <p className="text-xs font-semibold text-slate-800">Curriculum Highlights:</p>
-                    {dept.syllabusOverview.slice(0, 2).map((item, idx) => (
-                      <div key={idx} className="flex items-start gap-2 text-xs text-slate-600">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
-                        <span>{item}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-                  <span className="text-xs text-slate-500">{dept.targetLevels}</span>
-                  <Link
-                    to="/departments"
-                    className="text-xs font-semibold text-emerald-800 hover:text-amber-600 flex items-center gap-1"
-                  >
-                    <span>Details</span>
-                    <ArrowRight className="w-3 h-3" />
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center mt-10">
-            <Link
-              to="/departments"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-800 hover:bg-emerald-900 text-white text-sm font-semibold rounded-xl shadow-sm transition-all hover:gap-3"
-            >
-              <span>View All 6 Educational Wings & Detailed Syllabi</span>
-              <ArrowRight className="w-4 h-4 text-amber-400" />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. TEACHERS PREVIEW SECTION */}
-      <section className="py-16 sm:py-24 bg-white relative">
+      {/* 5. STUDENT PORTAL PREVIEW */}
+      <section className="py-10 bg-white border-b border-[#e5e0d5]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <SectionHeading
-            badge="Teaching Faculty"
-            title="Honored Muallims &"
-            highlightedText="Faculty Mentors"
-            subtitle="Meet the pedagogical leadership and scholars guiding our students in knowledge and noble manners."
-            alignment="center"
-          />
-
-          {/* Editorial Integrity Alert */}
-          <div className="max-w-3xl mx-auto mb-8 p-3.5 bg-amber-50/80 rounded-xl border border-amber-200/80 flex items-start gap-3 text-xs text-amber-900">
-            <PlaceholderBadge label="Administrative Notice" size="sm" className="shrink-0 mt-0.5" />
-            <p>
-              {FACULTY_EDITORIAL_NOTICE}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {TEACHERS.slice(0, 3).map((teacher) => (
-              <div
-                key={teacher.id}
-                className="bg-slate-50/80 rounded-2xl p-6 border border-slate-200/80 hover:border-emerald-700/30 transition-all flex flex-col justify-between"
-              >
-                <div>
-                  <div className="w-14 h-14 rounded-2xl bg-emerald-900 text-amber-300 flex items-center justify-center mb-4 border border-amber-400/40 shadow-xs">
-                    <Users className="w-7 h-7" />
-                  </div>
-
-                  <span className="text-xs font-semibold text-emerald-800 uppercase tracking-wider">
-                    {teacher.designation}
-                  </span>
-
-                  <h3 className="text-base font-bold text-slate-900 mt-1 mb-2">
-                    {teacher.namePlaceholder}
-                  </h3>
-
-                  <p className="text-xs text-slate-600 leading-relaxed mb-4">
-                    {teacher.bioPlaceholder}
-                  </p>
-
-                  <div className="p-2.5 bg-white rounded-lg border border-slate-200/70 text-[11px] text-slate-600 space-y-1">
-                    <p><strong>Department:</strong> {teacher.departmentRole}</p>
-                    <p><strong>Credentials:</strong> {teacher.qualificationPlaceholder}</p>
-                  </div>
-                </div>
-
-                <div className="pt-4 mt-4 border-t border-slate-200/60 flex items-center justify-between text-xs">
-                  <span className="text-slate-500">{teacher.schedulePlaceholder}</span>
-                  <PlaceholderBadge label="Slot Editable" size="sm" />
-                </div>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-2">
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] font-bold text-[#164e37] uppercase tracking-wider">
+                  Student Services Foundation
+                </span>
+                <span className="text-[10px] font-semibold bg-amber-100 text-amber-900 px-2 py-0.5 rounded">
+                  Coming Soon
+                </span>
               </div>
-            ))}
+              <h2 className="text-xl sm:text-2xl font-bold text-[#0f231c] mt-0.5">
+                Student & Parent Portal Preview
+              </h2>
+            </div>
+            <Link
+              to="/students"
+              className="text-xs font-semibold text-[#164e37] hover:underline flex items-center gap-1"
+            >
+              <span>Access Student Portal Page</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </Link>
           </div>
 
-          <div className="text-center mt-10">
-            <Link
-              to="/teachers"
-              className="inline-flex items-center gap-2 text-sm font-bold text-emerald-800 hover:text-emerald-950 transition-colors"
-            >
-              <span>View complete faculty roster & academic assignments</span>
-              <ArrowRight className="w-4 h-4 text-amber-500" />
-            </Link>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+            <div className="p-4 rounded-xl bg-[#fbfaf7] border border-[#e5e0d5] space-y-1.5">
+              <strong className="block text-slate-900 text-sm">Class Timetable</strong>
+              <p className="text-slate-600">Morning (6:45 AM – 8:30 AM) and Evening batch schedules across all class grades.</p>
+              <span className="text-[10px] text-emerald-800 font-semibold block pt-1">Active Schedule</span>
+            </div>
+
+            <div className="p-4 rounded-xl bg-[#fbfaf7] border border-[#e5e0d5] space-y-1.5">
+              <strong className="block text-slate-900 text-sm">Digital Attendance</strong>
+              <p className="text-slate-600">Upcoming feature for parents to check student daily attendance records.</p>
+              <span className="text-[10px] text-amber-800 font-semibold block pt-1">Coming Soon</span>
+            </div>
+
+            <div className="p-4 rounded-xl bg-[#fbfaf7] border border-[#e5e0d5] space-y-1.5">
+              <strong className="block text-slate-900 text-sm">Examination Circulars</strong>
+              <p className="text-slate-600">Standardized board assessment notices, terminal reports, and grading guidelines.</p>
+              <span className="text-[10px] text-emerald-800 font-semibold block pt-1">Notices Active</span>
+            </div>
+
+            <div className="p-4 rounded-xl bg-[#fbfaf7] border border-[#e5e0d5] space-y-1.5">
+              <strong className="block text-slate-900 text-sm">Student Etiquette</strong>
+              <p className="text-slate-600">Prescribed Islamic manners, wudhu rules, punctuality, and code of conduct.</p>
+              <span className="text-[10px] text-emerald-800 font-semibold block pt-1">Guidelines Active</span>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* 5. UPCOMING EVENTS PREVIEW */}
-      <section className="py-16 sm:py-24 bg-gradient-to-b from-slate-900 to-emerald-950 text-white relative overflow-hidden">
-        <IslamicPattern variant="grid" opacity={0.06} />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-          <SectionHeading
-            badge="Academic Calendar & Notices"
-            title="Upcoming Events &"
-            highlightedText="Annual Milestones"
-            subtitle="Key academic dates, community programs, examinations, and admissions notices."
-            alignment="center"
-            theme="dark"
-          />
+      {/* 6. UPCOMING EVENTS PREVIEW */}
+      <section className="py-10 bg-[#f4f1ea] border-b border-[#e5e0d5]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-2">
+            <div>
+              <span className="text-[11px] font-bold text-[#164e37] uppercase tracking-wider">
+                Academic & Spiritual Calendar
+              </span>
+              <h2 className="text-xl sm:text-2xl font-bold text-[#0f231c]">
+                Upcoming Programs & Events Preview
+              </h2>
+            </div>
+            <Link
+              to="/events"
+              className="text-xs font-semibold text-[#164e37] hover:underline flex items-center gap-1"
+            >
+              <span>View Full Calendar</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {EVENTS.slice(0, 3).map((event) => (
               <div
                 key={event.id}
-                className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-amber-400/40 transition-all flex flex-col justify-between"
+                className="bg-white p-5 rounded-xl border border-[#e5e0d5] space-y-2.5 flex flex-col justify-between"
               >
                 <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-bold text-amber-400 px-2.5 py-0.5 rounded-full bg-amber-400/10 border border-amber-400/20">
-                      {event.category}
-                    </span>
-                    <span className="text-[11px] text-slate-300 font-mono">
-                      {event.statusBadge}
-                    </span>
+                  <div className="flex items-center justify-between text-[11px] text-slate-500 mb-1">
+                    <span className="font-bold text-[#164e37] uppercase">{event.category}</span>
+                    <PlaceholderBadge label="Editable" size="sm" />
                   </div>
-
-                  <h3 className="text-lg font-bold text-white mb-2">
+                  <h3 className="text-sm font-bold text-slate-900">
                     {event.title}
                   </h3>
-
-                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4">
+                  <p className="text-xs text-slate-600 mt-1 leading-relaxed">
                     {event.summary}
                   </p>
-
-                  <div className="space-y-1.5 text-xs text-emerald-200/90 mb-4 bg-emerald-950/40 p-3 rounded-xl border border-emerald-800/50">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-3.5 h-3.5 text-amber-400" />
-                      <span>{event.datePlaceholder}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Clock className="w-3.5 h-3.5 text-amber-400" />
-                      <span>{event.timePlaceholder}</span>
-                    </div>
-                  </div>
                 </div>
 
-                <div className="pt-3 border-t border-white/10 flex items-center justify-between text-xs">
-                  <span className="text-slate-400">{event.venuePlaceholder}</span>
-                  <Link
-                    to="/events"
-                    className="text-amber-400 hover:text-amber-300 font-semibold flex items-center gap-1"
-                  >
-                    <span>Read Notice</span>
-                    <ArrowRight className="w-3 h-3" />
-                  </Link>
+                <div className="pt-2 border-t border-[#e5e0d5] text-[11px] text-slate-500 flex justify-between">
+                  <span>{event.datePlaceholder}</span>
+                  <span>{event.venuePlaceholder}</span>
                 </div>
               </div>
             ))}
           </div>
-
-          <div className="mt-8 text-center text-xs text-slate-400">
-            <span>{EVENTS_EDITORIAL_NOTICE}</span>
-          </div>
-
-          <div className="text-center mt-8">
-            <Link
-              to="/events"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 text-sm font-bold rounded-xl transition-all shadow-md"
-            >
-              <span>View Full Calendar of Events</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
         </div>
       </section>
 
-      {/* 6. GALLERY PREVIEW */}
-      <section className="py-16 sm:py-24 bg-[#FDFBF7] relative">
+      {/* 7. CONTACT PREVIEW */}
+      <section className="py-10 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <SectionHeading
-            badge="Visual Impressions"
-            title="Campus & Learning"
-            highlightedText="Atmosphere"
-            subtitle="A glimpse into daily academic sessions, student assemblies, and campus facilities in Korangath."
-            alignment="center"
-          />
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {GALLERY_ITEMS.slice(0, 4).map((item) => (
-              <div
-                key={item.id}
-                className="group relative rounded-2xl overflow-hidden bg-gradient-to-br from-slate-900 to-emerald-950 border border-emerald-900/20 aspect-4/3 flex flex-col justify-end p-5 shadow-sm hover:shadow-lg transition-all"
-              >
-                <div className="absolute inset-0 bg-islamic-pattern opacity-10 group-hover:opacity-20 transition-opacity" />
-                
-                <div className="absolute top-4 left-4">
-                  <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-emerald-800 text-amber-300 border border-amber-400/30">
-                    {item.category}
-                  </span>
-                </div>
-
-                <div className="absolute top-4 right-4">
-                  <PlaceholderBadge label="Photo Slot" size="sm" />
-                </div>
-
-                <div className="relative z-10">
-                  <p className="text-xs font-mono text-amber-400/90 mb-1">
-                    {item.placeholderLabel}
-                  </p>
-                  <h4 className="text-sm font-bold text-white mb-1 leading-snug">
-                    {item.title}
-                  </h4>
-                  <p className="text-[11px] text-slate-300 line-clamp-2">
-                    {item.caption}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center mt-10">
-            <Link
-              to="/gallery"
-              className="inline-flex items-center gap-2 px-6 py-3 border-2 border-emerald-800 text-emerald-800 hover:bg-emerald-800 hover:text-white text-sm font-semibold rounded-xl transition-colors"
-            >
-              <Eye className="w-4 h-4" />
-              <span>Browse All Campus Photographs & Event Galleries</span>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* 7. STUDENT PORTAL CALL-TO-ACTION */}
-      <section className="py-16 bg-gradient-to-r from-emerald-900 via-emerald-800 to-slate-900 text-white relative overflow-hidden">
-        <IslamicPattern variant="rosette" className="top-0 right-0 text-amber-400" opacity={0.06} />
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-          <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 sm:p-12 border border-amber-400/30 shadow-2xl">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-              <div className="lg:col-span-8 space-y-4">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 text-xs font-bold uppercase tracking-wider border border-amber-400/40">
-                  <GraduationCap className="w-4 h-4" />
-                  <span>Student & Parent Portal Foundation</span>
-                </div>
-
-                <h2 className="text-2xl sm:text-4xl font-extrabold text-white leading-tight">
-                  Modernizing Madrassa Management with Digital Ease
-                </h2>
-
-                <p className="text-sm sm:text-base text-slate-200 leading-relaxed max-w-2xl font-light">
-                  Our official website provides the foundation for digital school management — tracking student attendance, viewing period-wise daily timetables, accessing examination circulars, and downloading prescribed study materials.
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div className="lg:col-span-6 space-y-3">
+              <span className="text-[11px] font-bold text-[#164e37] uppercase tracking-wider">
+                Contact & Office Desk
+              </span>
+              <h2 className="text-xl sm:text-2xl font-bold text-[#0f231c]">
+                Visit Us at Korangath or Send an Enquiry
+              </h2>
+              <div className="text-xs text-slate-600 space-y-1.5 leading-relaxed">
+                <p>
+                  <strong>Postal Address:</strong> {SCHOOL_INFO.location.fullAddress}
                 </p>
-
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
-                  <div className="p-2.5 rounded-lg bg-emerald-950/60 border border-emerald-700/40 text-xs text-slate-200 flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <span>Attendance Records</span>
-                  </div>
-                  <div className="p-2.5 rounded-lg bg-emerald-950/60 border border-emerald-700/40 text-xs text-slate-200 flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <span>Class Timetables</span>
-                  </div>
-                  <div className="p-2.5 rounded-lg bg-emerald-950/60 border border-emerald-700/40 text-xs text-slate-200 flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <span>Exam Circulars</span>
-                  </div>
-                </div>
+                <p>
+                  <strong>Office Hours:</strong> {SCHOOL_INFO.contact.officeHours}
+                </p>
+                <p>
+                  <strong>Administrative Desk:</strong> {SCHOOL_INFO.contact.phone}
+                </p>
               </div>
 
-              <div className="lg:col-span-4 flex flex-col gap-3">
+              <div className="pt-2 flex gap-3">
                 <Link
-                  to="/students"
-                  className="w-full py-3.5 px-6 bg-amber-400 hover:bg-amber-500 text-slate-950 font-bold text-center rounded-xl transition-all shadow-lg hover:shadow-xl text-sm flex items-center justify-center gap-2"
+                  to="/contact"
+                  className="px-4 py-2 bg-[#164e37] text-white text-xs font-bold rounded-lg hover:bg-[#0f3b29] transition-colors"
                 >
-                  <GraduationCap className="w-5 h-5" />
-                  <span>Launch Student Portal</span>
+                  View Directions & Map
                 </Link>
-
                 <button
                   onClick={onOpenAdmissionModal}
-                  className="w-full py-3.5 px-6 bg-white/15 hover:bg-white/20 text-white font-semibold text-center rounded-xl transition-all border border-white/30 text-sm flex items-center justify-center gap-2"
+                  className="px-4 py-2 bg-[#f4f1ea] border border-[#d2cabb] text-slate-800 text-xs font-semibold rounded-lg hover:bg-[#eae5da] transition-colors"
                 >
-                  <FileText className="w-4 h-4" />
-                  <span>New Student Admission Form</span>
+                  Admission Enquiry Form
                 </button>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
 
-      {/* 8. CONTACT & LOCATION PREVIEW */}
-      <section className="py-16 sm:py-24 bg-white relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <SectionHeading
-            badge="Get in Touch"
-            title="Visit Sharafiyya Korangath or"
-            highlightedText="Send an Enquiry"
-            subtitle="Conveniently situated in Korangath, Tirur. Our office welcomes parents and prospective students."
-            alignment="center"
-          />
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            {/* Contact Information & Landmark Details */}
-            <div className="lg:col-span-6 bg-[#FDFBF7] p-8 rounded-2xl border border-slate-200 space-y-6">
-              <div>
-                <h3 className="text-xl font-bold text-slate-900 mb-1">
-                  Official Administrative Office
-                </h3>
-                <p className="text-xs text-emerald-800 font-semibold">
-                  {SCHOOL_INFO.officialName} ({SCHOOL_INFO.localName})
-                </p>
-              </div>
-
-              <div className="space-y-4 text-sm">
-                <div className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-emerald-700 shrink-0 mt-0.5" />
-                  <div>
-                    <p className="font-semibold text-slate-800">Campus Address:</p>
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                      {SCHOOL_INFO.location.fullAddress}
-                    </p>
-                    <p className="text-[11px] text-amber-700 font-medium mt-1">
-                      Landmark: {SCHOOL_INFO.location.landmarkPlaceholder}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <Clock className="w-5 h-5 text-emerald-700 shrink-0" />
-                  <div>
-                    <p className="font-semibold text-slate-800">Visiting Hours:</p>
-                    <p className="text-xs text-slate-600">{SCHOOL_INFO.contact.officeHours}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <Clock className="w-5 h-5 text-emerald-700 shrink-0" />
-                  <div>
-                    <p className="font-semibold text-slate-800">Direct Desk Phone:</p>
-                    <p className="text-xs font-mono text-slate-600">{SCHOOL_INFO.contact.phone}</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="pt-2 border-t border-slate-200 flex items-center justify-between">
-                <PlaceholderBadge label="Official Contact Placeholder" size="sm" />
-                <Link
-                  to="/contact"
-                  className="text-xs font-bold text-emerald-800 hover:text-amber-600 flex items-center gap-1"
-                >
-                  <span>Detailed Location & Map</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-            </div>
-
-            {/* Quick Interactive Contact Box */}
-            <div className="lg:col-span-6 bg-slate-50 p-8 rounded-2xl border border-slate-200">
-              <h3 className="text-lg font-bold text-slate-900 mb-1">
-                Direct Administrative Enquiry
+            {/* Quick Query Form */}
+            <div className="lg:col-span-6 bg-[#fbfaf7] p-5 rounded-xl border border-[#e5e0d5]">
+              <h3 className="text-sm font-bold text-slate-900 mb-2">
+                Quick Administrative Enquiry
               </h3>
-              <p className="text-xs text-slate-600 mb-4">
-                Have a question regarding timings, admission status, or syllabus? Send a message directly.
-              </p>
-
               {quickContactSent ? (
-                <div className="p-6 bg-emerald-50 rounded-xl border border-emerald-200 text-center">
-                  <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto mb-2" />
-                  <h4 className="text-sm font-bold text-emerald-950">Enquiry Received</h4>
-                  <p className="text-xs text-emerald-800 mt-1">
-                    Thank you, {quickMessage.name}. Your enquiry has been captured for demonstration purposes.
-                  </p>
-                  <button
-                    onClick={() => setQuickContactSent(false)}
-                    className="mt-4 text-xs font-semibold text-emerald-700 underline"
-                  >
-                    Send another query
-                  </button>
+                <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-lg text-xs text-emerald-950 text-center space-y-1">
+                  <CheckCircle className="w-6 h-6 text-emerald-700 mx-auto" />
+                  <p className="font-bold">Thank you, {quickForm.name}</p>
+                  <p className="text-slate-600">Your query has been logged in demonstration mode.</p>
                 </div>
               ) : (
-                <form onSubmit={handleQuickContact} className="space-y-3">
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">Your Name</label>
+                <form onSubmit={handleQuickSubmit} className="space-y-2.5 text-xs">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     <input
                       type="text"
                       required
-                      placeholder="e.g. Mohammed / Parent"
-                      value={quickMessage.name}
-                      onChange={(e) => setQuickMessage({ ...quickMessage, name: e.target.value })}
-                      className="w-full px-3 py-2 text-xs sm:text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-700 bg-white"
+                      placeholder="Your Name *"
+                      value={quickForm.name}
+                      onChange={(e) => setQuickForm({ ...quickForm, name: e.target.value })}
+                      className="w-full px-3 py-2 border border-[#d2cabb] rounded-md bg-white focus:outline-none focus:ring-1 focus:ring-[#164e37]"
                     />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">Phone Number</label>
                     <input
                       type="tel"
                       required
-                      placeholder="+91 Mobile number"
-                      value={quickMessage.phone}
-                      onChange={(e) => setQuickMessage({ ...quickMessage, phone: e.target.value })}
-                      className="w-full px-3 py-2 text-xs sm:text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-700 bg-white"
+                      placeholder="Contact Mobile *"
+                      value={quickForm.phone}
+                      onChange={(e) => setQuickForm({ ...quickForm, phone: e.target.value })}
+                      className="w-full px-3 py-2 border border-[#d2cabb] rounded-md bg-white focus:outline-none focus:ring-1 focus:ring-[#164e37]"
                     />
                   </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">Your Message / Query</label>
-                    <textarea
-                      rows={3}
-                      required
-                      placeholder="Write your query here regarding admission, bus transport, or class timings..."
-                      value={quickMessage.message}
-                      onChange={(e) => setQuickMessage({ ...quickMessage, message: e.target.value })}
-                      className="w-full px-3 py-2 text-xs sm:text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-700 bg-white resize-none"
-                    />
-                  </div>
-
+                  <textarea
+                    rows={2}
+                    required
+                    placeholder="Your Question / Message *"
+                    value={quickForm.message}
+                    onChange={(e) => setQuickForm({ ...quickForm, message: e.target.value })}
+                    className="w-full px-3 py-2 border border-[#d2cabb] rounded-md bg-white focus:outline-none focus:ring-1 focus:ring-[#164e37] resize-none"
+                  />
                   <button
                     type="submit"
-                    className="w-full py-2.5 px-4 bg-emerald-800 hover:bg-emerald-900 text-white font-semibold text-xs sm:text-sm rounded-xl transition-colors shadow-xs flex items-center justify-center gap-2"
+                    className="w-full py-2 bg-[#164e37] hover:bg-[#0f3b29] text-white font-bold rounded-md transition-colors text-xs"
                   >
-                    <Send className="w-3.5 h-3.5 text-amber-400" />
-                    <span>Send Message to Office</span>
+                    Submit Query
                   </button>
                 </form>
               )}

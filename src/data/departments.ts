@@ -3,7 +3,7 @@ export interface DepartmentItem {
   code: string;
   name: string;
   arabicName?: string;
-  category: "Foundational" | "Theological" | "Language" | "Character & Ethics";
+  category: "Islamic Studies" | "Qur’an and Hadith Studies" | "Arabic Language" | "General Education";
   shortSummary: string;
   fullDescription: string;
   targetLevels: string;
@@ -15,141 +15,97 @@ export interface DepartmentItem {
 
 export const DEPARTMENTS: DepartmentItem[] = [
   {
-    id: "quranic-studies-tajweed",
-    code: "DEPT-QRN",
-    name: "[Sample: Department of Quranic Studies & Tajweed]",
-    arabicName: "قسم القرآن الكريم والتجويد",
-    category: "Foundational",
-    shortSummary: "Foundational recitation with precise Makharij, Hifz guidance, and understanding of essential verses.",
-    fullDescription: "Dedicated to systematic Quranic literacy from introductory phonetics (Noorani Qaida principles) through complete recitation with classical Tajweed rules, memorization of selected Surahs, and spiritual contemplation.",
+    id: "dept-islamic-studies",
+    code: "DEPT-IS",
+    name: "Islamic Studies",
+    arabicName: "الدراسات الإسلامية والفقه",
+    category: "Islamic Studies",
+    shortSummary: "Instruction in Islamic theology (Aqeedah), ritual rulings (Fiqh), and moral living.",
+    fullDescription: "Covers essential Islamic beliefs, daily prayers, fasting, and ethical community behavior in accordance with authentic Islamic jurisprudence.",
     targetLevels: "[Classes 1 through 10 / Editable Placeholder]",
     syllabusOverview: [
-      "[Makharij & Sifaat principles / Editable Syllabus]",
-      "[Hifz of Amma Juz & Selected Surahs / Editable]",
-      "[Practical Recitation under Qualified Muallims / Editable]",
-      "[Memorization of Daily Azkar and Duas / Editable]"
+      "[Fundamentals of Iman & Islamic Creed / Editable]",
+      "[Practical rulings of Salah & Taharah (Purity) / Editable]",
+      "[Fasting (Sawm), Zakah & Daily Ethics / Editable]",
+      "[Basic Islamic History & Ethics / Editable]"
     ],
     keyOutcomes: [
-      "Precise Arabic phonetics and flawless recitation cadence",
-      "Retention of core chapters essential for daily prayers",
-      "Deep reverence and affection for the Holy Quran"
+      "Understanding foundational Islamic creed and worship",
+      "Confidence in performing daily prayers with correct rulings",
+      "Grounded moral guidance for personal life"
     ],
     isPlaceholder: true,
-    statusNotice: "Editable placeholder — Replace with official department syllabus and details."
+    statusNotice: "Editable example — To be updated with official curriculum syllabus by the madrassa."
   },
   {
-    id: "aqeedah-jurisprudence",
-    code: "DEPT-FIQH",
-    name: "[Sample: Department of Islamic Jurisprudence & Aqeedah]",
-    arabicName: "قسم العقيدة والفقه الإسلامي",
-    category: "Theological",
-    shortSummary: "Essential theological foundations (Aqeedah) and practical rulings (Fiqh) for daily worship and life.",
-    fullDescription: "Structured instruction in sound Islamic monotheistic creed (Aqeedah of Ahl al-Sunnah wal-Jama'ah) and ritual purity, Salah, Fasting, Zakah, and societal interactions in accordance with authentic jurisprudence.",
-    targetLevels: "[Junior to Senior Madrasa Wings / Editable Placeholder]",
+    id: "dept-quran-hadith",
+    code: "DEPT-QH",
+    name: "Qur’an and Hadith Studies",
+    arabicName: "علوم القرآن والحديث النبوي",
+    category: "Qur’an and Hadith Studies",
+    shortSummary: "Quranic recitation with Tajweed phonetics, memorization (Hifz), and Prophetic traditions.",
+    fullDescription: "Dedicated to systematic Quranic literacy from foundational Arabic articulation rules (Makharij) to fluent recitation, selected Surah memorization, and study of practical Hadiths.",
+    targetLevels: "[Primary to Senior Wings / Editable Placeholder]",
     syllabusOverview: [
-      "[Fundamentals of Iman and Articles of Faith / Editable]",
-      "[Taharah (Purification) and Salah Practicals / Editable]",
-      "[Fasting (Sawm) & Zakah Rulings / Editable]",
-      "[Permissible (Halal) and Prohibited (Haram) in Daily Life / Editable]"
+      "[Noorani Qaida & Makharij rules / Editable]",
+      "[Tajweed practical recitation under teachers / Editable]",
+      "[Memorization of Amma Juz & Essential Surahs / Editable]",
+      "[Selected Prophetic Hadiths on character / Editable]"
     ],
     keyOutcomes: [
-      "Solid, unwavering understanding of Islamic creed",
-      "Practical mastery of personal prayer and ritual duties",
-      "Clarity on ethical everyday boundaries"
+      "Accurate articulation and beautiful recitation",
+      "Retention of core chapters essential for prayer",
+      "Reverence and love for the Book of Allah and Sunnah"
     ],
     isPlaceholder: true,
-    statusNotice: "Editable placeholder — Replace with official department syllabus and details."
+    statusNotice: "Editable example — To be updated with official curriculum syllabus by the madrassa."
   },
   {
-    id: "arabic-language",
+    id: "dept-arabic-language",
     code: "DEPT-ARB",
-    name: "[Sample: Department of Arabic Language & Grammar]",
-    arabicName: "قسم اللغة العربية وقواعدها",
-    category: "Language",
-    shortSummary: "Development of Arabic vocabulary, functional grammar (Nahw & Sarf), and reading comprehension.",
-    fullDescription: "Equips students with the linguistic keys to unlock classical Islamic texts, liturgical prayers, and authentic prophetic literature through graduated grammar instruction and conversational vocabulary.",
+    name: "Arabic Language",
+    arabicName: "اللغة العربية وقواعدها",
+    category: "Arabic Language",
+    shortSummary: "Foundations of Arabic script, grammar (Nahw & Sarf), and Quranic vocabulary.",
+    fullDescription: "Enables students to understand and appreciate Arabic, the language of the Holy Quran, liturgical prayers, and classical Islamic literature through graduated grammar instruction.",
     targetLevels: "[Primary through Secondary Levels / Editable Placeholder]",
     syllabusOverview: [
-      "[Arabic Alphabet, Script & Handwriting Drills / Editable]",
-      "[Fundamental Nahw (Syntax) and Sarf (Morphology) / Editable]",
-      "[Quranic Vocabulary & Comprehension / Editable]",
-      "[Oral Recitation & Expression / Editable]"
+      "[Arabic script handwriting & reading drills / Editable]",
+      "[Core Nahw (Syntax) and Sarf (Morphology) / Editable]",
+      "[Quranic vocabulary comprehension / Editable]",
+      "[Basic conversational and reading exercises / Editable]"
     ],
     keyOutcomes: [
-      "Comprehension of Quranic Arabic vocabulary",
-      "Capacity to read and interpret classical curriculum texts",
-      "Enhanced linguistic appreciation of religious discourse"
+      "Reading fluency in classical Arabic texts",
+      "Direct comprehension of common Quranic vocabulary",
+      "Appreciation of the linguistic beauty of Islamic texts"
     ],
     isPlaceholder: true,
-    statusNotice: "Editable placeholder — Replace with official department syllabus and details."
+    statusNotice: "Editable example — To be updated with official curriculum syllabus by the madrassa."
   },
   {
-    id: "hadith-seerah",
-    code: "DEPT-SRH",
-    name: "[Sample: Department of Hadith & Prophetic Biography (Seerah)]",
-    arabicName: "قسم الحديث والسيرة النبوية",
-    category: "Theological",
-    shortSummary: "Study of the blessed life of Prophet Muhammad (PBUH) and selected authentic Prophetic traditions.",
-    fullDescription: "Nurtures deep love for the Messenger of Allah (PBUH) through studying key milestones of the Seerah, Islamic history, and selected collections of Hadith focusing on manners, honesty, and compassion.",
-    targetLevels: "[Intermediate & Senior Grades / Editable Placeholder]",
+    id: "dept-general-education",
+    code: "DEPT-GEN",
+    name: "General Education",
+    arabicName: "التربية العامة والآداب",
+    category: "General Education",
+    shortSummary: "Moral tarbiyyah, civic responsibilities, personal discipline, and student guidance.",
+    fullDescription: "Complements religious study with character formation, environmental cleanliness, respectful conduct towards parents and elders, and constructive civic coexistence in Kerala.",
+    targetLevels: "[All Enrolled Students / Editable Placeholder]",
     syllabusOverview: [
-      "[Meccan & Medinan Eras of the Seerah / Editable]",
-      "[Selected Hadith on Good Character & Honesty / Editable]",
-      "[Lives of the Sahabah (Companions) / Editable]",
-      "[Practical Application of the Sunnah in Contemporary Life / Editable]"
+      "[Respect for parents, teachers, and neighbors / Editable]",
+      "[Cleanliness, health, and personal hygiene / Editable]",
+      "[Digital etiquette and moral integrity / Editable]",
+      "[Community harmony and civic duties / Editable]"
     ],
     keyOutcomes: [
-      "Emulation of Prophetic morality and etiquette",
-      "Broad historical awareness of early Islamic civilization",
-      "Moral resilience and truthfulness in community life"
+      "Courteous and compassionate social behavior",
+      "Respect for diversity and community harmony",
+      "Emotional balance anchored in religious mindfulness"
     ],
     isPlaceholder: true,
-    statusNotice: "Editable placeholder — Replace with official department syllabus and details."
-  },
-  {
-    id: "akhlaq-tarbiyyah",
-    code: "DEPT-TRB",
-    name: "[Sample: Department of Moral Ethics (Akhlaq) & Tarbiyyah]",
-    arabicName: "قسم الأخلاق والتربية الإسلامية",
-    category: "Character & Ethics",
-    shortSummary: "Practical character refinement, civic values, respect for elders, and community harmony.",
-    fullDescription: "A core pillar of the madrassa focusing on student personality cultivation, filial piety, neighborly kindness, emotional discipline, and holistic Islamic manners (Adaab) tailored for everyday life in Kerala's diverse society.",
-    targetLevels: "[All Enrolled Students / All Grades]",
-    syllabusOverview: [
-      "[Respect to Parents, Teachers, and Elders / Editable]",
-      "[Honesty, Humility, and Digital/Social Etiquette / Editable]",
-      "[Cleanliness, Health, and Environmental Stewardship in Islam / Editable]",
-      "[Community Harmony & Peaceful Coexistence / Editable]"
-    ],
-    keyOutcomes: [
-      "Exemplary personal conduct and respectfulness",
-      "Responsible community membership and helpfulness",
-      "Emotional balance anchored in spiritual mindfulness"
-    ],
-    isPlaceholder: true,
-    statusNotice: "Editable placeholder — Replace with official department syllabus and details."
-  },
-  {
-    id: "primary-foundations",
-    code: "DEPT-PRI",
-    name: "[Sample: Primary Madrasa Foundation Wing]",
-    arabicName: "قسم المرحلة الابتدائية والتمهيدي",
-    category: "Foundational",
-    shortSummary: "Gentle, engaging early-childhood Islamic orientation for young learners starting their spiritual journey.",
-    fullDescription: "Created to give young children a warm, encouraging first experience with the madrassa, emphasizing phonetic alphabet games, basic prayers, joyful recitation, and memorable moral stories.",
-    targetLevels: "[Nursery / Lower Primary Classes / Editable Placeholder]",
-    syllabusOverview: [
-      "[Alphabet recognition and interactive sound drills / Editable]",
-      "[Basic short Surahs and daily eating/sleeping duas / Editable]",
-      "[Illustrated moral stories of the Prophets / Editable]",
-      "[Child-friendly behavioral etiquette / Editable]"
-    ],
-    keyOutcomes: [
-      "Joyful eagerness to attend and participate in madrassa",
-      "Early mastery of core daily remembrances",
-      "Strong foundation for higher religious classes"
-    ],
-    isPlaceholder: true,
-    statusNotice: "Editable placeholder — Replace with official department syllabus and details."
+    statusNotice: "Editable example — To be updated with official curriculum syllabus by the madrassa."
   }
 ];
+
+export const DEPARTMENTS_EDITORIAL_NOTICE = "The departments and curriculum topics listed above are editable examples for Sharaful Islam Madrassa. Official department syllabi will be published upon approval from the school managing committee.";

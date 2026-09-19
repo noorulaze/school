@@ -1,77 +1,82 @@
 export interface SchoolEvent {
   id: string;
   title: string;
-  category: "Academic" | "Cultural" | "Spiritual" | "Admissions" | "Meeting";
+  category: "Upcoming Events" | "Academic Programs" | "Islamic Programs" | "Notices";
   datePlaceholder: string;
   timePlaceholder: string;
   venuePlaceholder: string;
   summary: string;
   fullDetails: string;
   isPlaceholder: boolean;
-  statusBadge: "Upcoming Placeholder" | "Annual Fixture" | "Notice Pending";
 }
 
 export const EVENTS: SchoolEvent[] = [
   {
     id: "event-annual-day",
-    title: "[Annual Madrassa Day & Cultural Exhibition / Editable]",
-    category: "Cultural",
-    datePlaceholder: "[Date: To Be Announced for Current Academic Session]",
-    timePlaceholder: "[Time: 4:00 PM – 9:30 PM / Editable]",
-    venuePlaceholder: "Sharafiyya Korangath Campus Auditorium",
-    summary: "Annual celebratory gathering highlighting student speech presentations, Quran recitation, and academic excellence awards.",
-    fullDetails: "A signature campus gathering bringing together parents, alumni, and local well-wishers to witness student recitation honors, elocution, moral skits, and academic certificates.",
+    title: "[Event Name: Annual Day & Exhibition / Editable Placeholder]",
+    category: "Upcoming Events",
+    datePlaceholder: "[Date: To be announced by Administration]",
+    timePlaceholder: "[Time: To be notified]",
+    venuePlaceholder: "Madrassa Main Hall, Korangath",
+    summary: "Annual institutional program featuring student presentations and academic recognition.",
+    fullDetails: "Detailed program schedule, guest speakers, and student stage timings will be circulated prior to the event.",
     isPlaceholder: true,
-    statusBadge: "Upcoming Placeholder"
   },
   {
-    id: "event-meelad-fest",
-    title: "[Milad-un-Nabi Celebrations & Inter-Class Competitions / Editable]",
-    category: "Spiritual",
-    datePlaceholder: "[Date: Month of Rabi-ul-Awwal / Schedule TBA]",
-    timePlaceholder: "[Schedule to be Notified / Editable]",
-    venuePlaceholder: "Main Madrassa Hall & Grounds",
-    summary: "Prophetic tributes, Naat recitation, Qira'at contests, and community sweet distributions commemorating the blessed birth.",
-    fullDetails: "Special devotional programs, Seerah quizzes, calligraphy displays, and ethical story-telling events organized across all student wings.",
+    id: "event-term-exam",
+    title: "[Academic Program: Term-End Examinations / Editable Placeholder]",
+    category: "Academic Programs",
+    datePlaceholder: "[Exam Schedule: Circular to be issued]",
+    timePlaceholder: "[Class Timings: Regular Batches]",
+    venuePlaceholder: "Designated Classrooms, Sharafiyya Korangath",
+    summary: "Oral recitation evaluation and written assessment of Islamic studies subjects.",
+    fullDetails: "Portions, question paper patterns, and grading guidelines follow the authorized Islamic education board syllabus.",
     isPlaceholder: true,
-    statusBadge: "Annual Fixture"
   },
   {
-    id: "event-admissions-session",
-    title: "[New Admissions Enquiry & Enrollment Phase / Editable]",
-    category: "Admissions",
-    datePlaceholder: "[Enrollment Dates: Academic Session 2025–2026 TBA]",
-    timePlaceholder: "[Office Hours: 8:00 AM – 1:00 PM / Editable]",
-    venuePlaceholder: "Madrassa Administrative Office, Korangath",
-    summary: "Application registration for Class 1 and lateral admissions across foundational Islamic and Quranic studies wings.",
-    fullDetails: "Parents seeking admission for their wards can obtain application forms from the administrative office or register intent through the online Admission Enquiry portal.",
+    id: "event-milad-program",
+    title: "[Islamic Program: Prophetic Seerah & Milad Observance / Editable Placeholder]",
+    category: "Islamic Programs",
+    datePlaceholder: "[Date: Month of Rabi-ul-Awwal / Schedule to be announced]",
+    timePlaceholder: "[Time: To be announced]",
+    venuePlaceholder: "Campus Grounds, Korangath",
+    summary: "Commemorative devotional gathering, Quran recitation, and Prophetic character lessons.",
+    fullDetails: "Special assemblies and inter-class speech presentations highlighting the blessed life of the Holy Prophet.",
     isPlaceholder: true,
-    statusBadge: "Notice Pending"
   },
   {
-    id: "event-term-examinations",
-    title: "[Mid-Term & Board Academic Assessments / Editable]",
-    category: "Academic",
-    datePlaceholder: "[Assessment Timetable: Official Circular Pending]",
-    timePlaceholder: "[Morning Sessions / Editable]",
-    venuePlaceholder: "Designated Examination Classrooms",
-    summary: "Comprehensive evaluation of Quran recitation fluency, Arabic comprehension, and written Islamic studies.",
-    fullDetails: "Standardized oral and written evaluations supervised by teaching faculty, followed by parent-teacher progress evaluations.",
+    id: "event-notice-admissions",
+    title: "[Notice: Admission Application Circular / Editable Placeholder]",
+    category: "Notices",
+    datePlaceholder: "[Notice Date: Academic Session 2025–2026]",
+    timePlaceholder: "[Office Desk: Working Hours]",
+    venuePlaceholder: "Administrative Office, Korangath",
+    summary: "Notification regarding registration of new students for foundational and primary classes.",
+    fullDetails: "Parents seeking admission for their children can submit an enquiry online or visit the office during working hours.",
     isPlaceholder: true,
-    statusBadge: "Notice Pending"
   },
   {
-    id: "event-parent-meeting",
-    title: "[Parent-Teacher General Body Meeting / Editable]",
-    category: "Meeting",
-    datePlaceholder: "[Date: Quarterly Schedule to be Announced]",
-    timePlaceholder: "[Time: 10:00 AM – 12:30 PM / Editable]",
-    venuePlaceholder: "Sharafiyya Korangath Campus Conference Hall",
-    summary: "Constructive discussion on student moral progression, attendance regularity, and madrasa welfare initiatives.",
-    fullDetails: "Interactive session fostering partnership between parents and muallims to support each child's home spiritual habits and punctuality.",
+    id: "event-pta-meet",
+    title: "[Academic Program: Parent-Teacher Consultation / Editable Placeholder]",
+    category: "Academic Programs",
+    datePlaceholder: "[Date: Quarterly Meeting Schedule to be announced]",
+    timePlaceholder: "[Time: Morning Session]",
+    venuePlaceholder: "Campus Meeting Hall, Korangath",
+    summary: "Discussion on student attendance regularity, homework, and moral tarbiyyah progress.",
+    fullDetails: "Constructive dialogue between muallims and parents to review each child's recitation development.",
     isPlaceholder: true,
-    statusBadge: "Upcoming Placeholder"
+  },
+  {
+    id: "event-quran-contest",
+    title: "[Islamic Program: Annual Qira’at & Azkar Competition / Editable Placeholder]",
+    category: "Islamic Programs",
+    datePlaceholder: "[Date: To be announced]",
+    timePlaceholder: "[Time: To be announced]",
+    venuePlaceholder: "Main Recitation Hall",
+    summary: "Friendly inter-class Quranic Tajweed recitation contest for students.",
+    fullDetails: "Encouraging accuracy in Arabic articulation (Makharij) and confident stage presence.",
+    isPlaceholder: true,
   }
 ];
 
-export const EVENTS_EDITORIAL_NOTICE = "Event titles, schedules, and dates listed here are representative sample placeholders. Official dates are issued via administrative circulars.";
+export const EVENTS_EDITORIAL_NOTICE = "Event names and dates shown above are editable placeholders. Official notices and schedules are published by the Sharaful Islam Madrassa management.";
