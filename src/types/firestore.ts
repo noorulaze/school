@@ -38,6 +38,9 @@ export interface TeacherItem {
   role: string;
   department: string;
   photo?: string;
+  photoUrl?: string;
+  qualification?: string;
+  subjects?: string[];
   bio: string;
   published: boolean;
   createdAt?: string;
@@ -155,6 +158,8 @@ export interface DashboardStats {
   totalNotices: number;
   totalEvents: number;
   totalTeachers: number;
+  publishedTeachers?: number;
+  draftTeachers?: number;
   totalDepartments: number;
   totalGallery: number;
   totalStudents: number;
