@@ -59,7 +59,7 @@ export const AdminLogin: React.FC = () => {
             Administrative Portal
           </h1>
           <p className="text-xs text-emerald-200/90 mt-1 font-medium">
-            Sharaful Islam Madrassa • Sharafiyya Korangath
+            Sharafiyya English Medium School • Korangath, Tirur
           </p>
         </div>
 

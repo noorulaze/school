@@ -12,6 +12,7 @@ export const Footer: React.FC = () => {
     { name: 'Student Portal', path: '/students' },
     { name: 'Events & Calendar', path: '/events' },
     { name: 'Photo Gallery', path: '/gallery' },
+    { name: 'Admissions', path: '/admissions' },
     { name: 'Contact Office', path: '/contact' },
   ];
 
@@ -111,7 +112,7 @@ export const Footer: React.FC = () => {
               eligibility and the enrolment process.
             </p>
             <Link
-              to="/contact"
+              to="/admissions"
               className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#164e37] hover:bg-[#0f3b29] text-white text-xs font-bold rounded-xl border border-[#c59b27]/30 transition-all group shadow-sm"
             >
               <GraduationCap className="w-3.5 h-3.5 text-[#c59b27]" />
@@ -136,7 +137,6 @@ export const Footer: React.FC = () => {
           <div className="flex items-center gap-4">
             <Link to="/about" className="hover:text-slate-300 transition-colors">About</Link>
             <Link to="/contact" className="hover:text-slate-300 transition-colors">Contact</Link>
-            <Link to="/admin" className="hover:text-slate-300 transition-colors">Admin</Link>
           </div>
         </div>
       </div>

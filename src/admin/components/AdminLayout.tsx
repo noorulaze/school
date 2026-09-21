@@ -71,7 +71,7 @@ export const AdminLayout: React.FC = () => {
                 </span>
                 <span className="hidden sm:inline text-xs text-slate-400">•</span>
                 <span className="hidden sm:inline text-xs font-medium text-slate-500">
-                  Sharaful Islam Madrassa
+                  Sharafiyya English Medium School
                 </span>
               </div>
             </div>

@@ -13,6 +13,7 @@ import { Students } from './pages/Students';
 import { Events } from './pages/Events';
 import { Gallery } from './pages/Gallery';
 import { Contact } from './pages/Contact';
+import { Admissions } from './pages/Admissions';
 import { NoticeDetail } from './pages/NoticeDetail';
 import { EventDetail } from './pages/EventDetail';
 
@@ -92,6 +93,7 @@ function MainLayout({ onOpenAdmissionModal }: { onOpenAdmissionModal: () => void
           <Route path="/events/:id" element={<EventDetail />} />
           <Route path="/notice/:id" element={<NoticeDetail />} />
           <Route path="/gallery" element={<Gallery />} />
+          <Route path="/admissions" element={<Admissions onOpenAdmissionModal={onOpenAdmissionModal} />} />
           <Route path="/contact" element={<Contact onOpenAdmissionModal={onOpenAdmissionModal} />} />
 
           {/* Admin Routes */}

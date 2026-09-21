@@ -255,7 +255,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
           <div className="flex items-center gap-2 overflow-x-auto scrollbar-none -mx-1 px-1">
             {[
               { label: 'About Us', to: '/about', icon: BookOpen },
-              { label: 'Admissions', to: '/contact', icon: GraduationCap },
+              { label: 'Admissions', to: '/admissions', icon: GraduationCap },
               { label: 'Student Portal', to: '/students', icon: Users },
               { label: 'Events', to: '/events', icon: Calendar },
               { label: 'Contact', to: '/contact', icon: MapPin },

@@ -51,7 +51,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ onCloseMobile }) => 
             </div>
             <div className="min-w-0">
               <h2 className="text-white font-extrabold text-sm tracking-tight truncate leading-tight">
-                Sharaful Islam
+                Sharafiyya Admin
               </h2>
               <span className="text-[10px] text-emerald-300/80 font-medium block truncate">
                 Admin Control Panel

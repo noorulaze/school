@@ -125,7 +125,7 @@ export const AdminDashboard: React.FC = () => {
             Administration Portal Overview
           </span>
           <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
-            Sharaful Islam Madrassa Dashboard
+            Sharafiyya English Medium School Dashboard
           </h1>
           <p className="text-xs sm:text-sm text-emerald-100/90 mt-2 leading-relaxed">
             Welcome to the centralized administration management portal. Monitor real-time student records, publish official notices, organize upcoming events, and review admission enquiries.

@@ -54,6 +54,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAdmissionModal }) => {
     { name: 'Students', path: '/students' },
     { name: 'Events', path: '/events' },
     { name: 'Gallery', path: '/gallery' },
+    { name: 'Admissions', path: '/admissions' },
     { name: 'Contact', path: '/contact' },
   ];
 
