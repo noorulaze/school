@@ -30,7 +30,7 @@ export const About: React.FC<AboutProps> = ({ onOpenAdmissionModal }) => {
 
           <div className="max-w-3xl">
             <h1 className="text-2xl sm:text-4xl font-extrabold text-[#0f231c] tracking-tight">
-              About Sharaful Islam Madrassa
+              About Sharafiyya English Medium School
             </h1>
             <p className="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">
               Serving the community of Korangath, Tirur, Malappuram, with dedicated Islamic educational programs, Quranic recitation with Tajweed, and enduring moral guidance.

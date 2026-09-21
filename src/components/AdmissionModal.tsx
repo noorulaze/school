@@ -266,7 +266,7 @@ export const AdmissionModal: React.FC<AdmissionModalProps> = ({ isOpen, onClose 
               </div>
 
               <p className="text-[10px] text-center text-slate-400">
-                Official records are reviewed by the Sharaful Islam Madrassa administrative staff.
+                Official records are reviewed by the Sharafiyya English Medium School administrative staff.
               </p>
             </form>
           )}

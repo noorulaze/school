@@ -30,7 +30,7 @@ export interface SchoolInfo {
 }
 
 export const SCHOOL_INFO: SchoolInfo = {
-  officialName: "Sharaful Islam Madrassa",
+  officialName: "Sharafiyya English Medium School",
   localName: "Sharafiyya Korangath",
   arabicCalligraphySubtitle: "مَدْرَسَةُ شَرَفِ الإِسْلَامِ - كُورَنغَاثْ",
   location: {
@@ -39,7 +39,7 @@ export const SCHOOL_INFO: SchoolInfo = {
     district: "Malappuram",
     state: "Kerala",
     country: "India",
-    fullAddress: "Sharaful Islam Madrassa (Sharafiyya Korangath), Korangath, Tirur, Malappuram District, Kerala - [Pincode Placeholder: 676101], India",
+    fullAddress: "Sharafiyya English Medium School (Sharafiyya Korangath), Korangath, Tirur, Malappuram District, Kerala - [Pincode Placeholder: 676101], India",
     landmarkPlaceholder: "Near Korangath Juma Masjid / Landmark [Editable Placeholder]",
   },
   contact: {

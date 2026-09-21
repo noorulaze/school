@@ -13,7 +13,7 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     title: "Campus Building & Entrance",
     category: "Campus",
     placeholderLabel: "Campus Photograph Placeholder",
-    caption: "Front view of Sharaful Islam Madrassa premises in Korangath, Tirur.",
+    caption: "Front view of Sharafiyya English Medium School premises in Korangath, Tirur.",
     isPlaceholder: true,
   },
   {
@@ -74,4 +74,4 @@ export const GALLERY_ITEMS: GalleryItem[] = [
   }
 ];
 
-export const GALLERY_EDITORIAL_NOTICE = "Image placeholders shown above are reserved for genuine photographs of the Sharaful Islam Madrassa campus and student activities. High-resolution photographs will be uploaded upon authorization from the school committee.";
+export const GALLERY_EDITORIAL_NOTICE = "Image placeholders shown above are reserved for genuine photographs of the Sharafiyya English Medium School campus and student activities. High-resolution photographs will be uploaded upon authorization from the school committee.";

@@ -79,4 +79,4 @@ export const EVENTS: SchoolEvent[] = [
   }
 ];
 
-export const EVENTS_EDITORIAL_NOTICE = "Event names and dates shown above are editable placeholders. Official notices and schedules are published by the Sharaful Islam Madrassa management.";
+export const EVENTS_EDITORIAL_NOTICE = "Event names and dates shown above are editable placeholders. Official notices and schedules are published by the Sharafiyya English Medium School management.";

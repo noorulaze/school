@@ -59,7 +59,7 @@ function NotFound() {
       <h1 className="text-4xl sm:text-6xl font-extrabold text-emerald-900 mb-4">404</h1>
       <h2 className="text-xl sm:text-2xl font-bold text-slate-800 mb-2">Page Not Found</h2>
       <p className="text-sm text-slate-600 max-w-md mb-6">
-        The page you are looking for might have been moved or does not exist on the Sharaful Islam Madrassa portal.
+        The page you are looking for might have been moved or does not exist on the Sharafiyya English Medium School portal.
       </p>
       <Link
         to="/"

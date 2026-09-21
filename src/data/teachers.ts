@@ -51,4 +51,4 @@ export const TEACHERS: TeacherPlaceholder[] = [
   }
 ];
 
-export const FACULTY_EDITORIAL_NOTICE = "Teacher names, qualifications, and specific assignments are not displayed here to maintain official accuracy. Teacher profiles will be added once approved and provided by the Sharaful Islam Madrassa (Sharafiyya Korangath) managing committee.";
+export const FACULTY_EDITORIAL_NOTICE = "Teacher names, qualifications, and specific assignments are not displayed here to maintain official accuracy. Teacher profiles will be added once approved and provided by the Sharafiyya English Medium School managing committee.";

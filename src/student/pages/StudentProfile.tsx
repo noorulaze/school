@@ -45,7 +45,7 @@ export const StudentProfile: React.FC = () => {
           Student Profile & Enrollment Details
         </h1>
         <p className="text-xs sm:text-sm text-slate-500 mt-1">
-          Official academic enrollment record registered at Sharaful Islam Madrassa.
+          Official academic enrollment record registered at Sharafiyya English Medium School.
         </p>
       </div>
 

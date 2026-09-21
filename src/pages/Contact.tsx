@@ -190,7 +190,7 @@ export const Contact: React.FC<ContactProps> = ({ onOpenAdmissionModal }) => {
                   Inquiry Successfully Received
                 </h3>
                 <p className="text-xs text-slate-700 max-w-md mx-auto leading-relaxed">
-                  Thank you, <strong>{formData.name}</strong>. Your inquiry has been forwarded to the office desk of Sharaful Islam Madrassa. Our staff will respond to <strong>{formData.email}</strong> or <strong>{formData.phone}</strong> during working hours.
+                  Thank you, <strong>{formData.name}</strong>. Your inquiry has been forwarded to the office desk of Sharafiyya English Medium School. Our staff will respond to <strong>{formData.email}</strong> or <strong>{formData.phone}</strong> during working hours.
                 </p>
                 <div className="pt-2">
                   <button

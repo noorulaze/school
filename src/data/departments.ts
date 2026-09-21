@@ -108,4 +108,4 @@ export const DEPARTMENTS: DepartmentItem[] = [
   }
 ];
 
-export const DEPARTMENTS_EDITORIAL_NOTICE = "The departments and curriculum topics listed above are editable examples for Sharaful Islam Madrassa. Official department syllabi will be published upon approval from the school managing committee.";
+export const DEPARTMENTS_EDITORIAL_NOTICE = "The departments and curriculum topics listed above are editable examples for Sharafiyya English Medium School. Official department syllabi will be published upon approval from the school managing committee.";

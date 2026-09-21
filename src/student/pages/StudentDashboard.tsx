@@ -209,7 +209,7 @@ export const StudentDashboard: React.FC = () => {
           </div>
 
           <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
-            <span>Curriculum Board: Sharaful Islam</span>
+            <span>Curriculum Board: Sharafiyya</span>
             <span className="text-emerald-800 font-semibold">Semester in Progress</span>
           </div>
         </div>

@@ -118,7 +118,7 @@ export const RealisticImageSlot: React.FC<RealisticImageSlotProps> = ({
             </text>
             <line x1="200" y1="185" x2="600" y2="185" stroke="#486e58" strokeWidth="1.5" />
             <text x="400" y="215" fill="#c2d6cb" fontFamily="sans-serif" fontSize="13" textAnchor="middle">
-              Class Session • Sharaful Islam Madrassa • Sharafiyya Korangath
+              Class Session • Sharafiyya English Medium School • Korangath
             </text>
             <polygon points="320,420 480,420 460,320 340,320" fill="#8c5828" stroke="#5f3711" strokeWidth="2" />
             <rect x="330" y="310" width="140" height="15" rx="3" fill="#a86e36" stroke="#5f3711" strokeWidth="1.5" />
@@ -266,7 +266,7 @@ export const RealisticImageSlot: React.FC<RealisticImageSlotProps> = ({
         <div className="absolute bottom-0 inset-x-0 p-3.5 z-10 text-white">
           <p className="text-xs sm:text-sm font-semibold drop-shadow-xs">{caption}</p>
           <p className="text-[10px] text-slate-200/90 mt-0.5">
-            Sharaful Islam Madrassa • Sharafiyya Korangath, Tirur
+            Sharafiyya English Medium School • Korangath, Tirur
           </p>
         </div>
       )}

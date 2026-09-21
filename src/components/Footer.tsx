@@ -1,149 +1,142 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MapPin, Phone, Mail, Clock, ArrowRight, Shield } from 'lucide-react';
-import { SCHOOL_INFO } from '../data/schoolInfo';
+import { ArrowRight, GraduationCap } from 'lucide-react';
 
 export const Footer: React.FC = () => {
+  const year = new Date().getFullYear();
+
+  const quickLinks = [
+    { name: 'About Us', path: '/about' },
+    { name: 'Academics', path: '/departments' },
+    { name: 'Faculty & Staff', path: '/teachers' },
+    { name: 'Student Portal', path: '/students' },
+    { name: 'Events & Calendar', path: '/events' },
+    { name: 'Photo Gallery', path: '/gallery' },
+    { name: 'Contact Office', path: '/contact' },
+  ];
+
+  const programmes = [
+    "Qur'an & Tajweed",
+    'Islamic Studies (Fiqh)',
+    'Arabic Language',
+    'Moral Education',
+    'Daily Azkar & Sunnah',
+  ];
+
   return (
-    <footer className="w-full bg-[#0d281e] text-slate-300 border-t-2 border-[#c59b27]">
-      {/* 1. Traditional Bismillah Inscription Bar */}
-      <div className="py-5 bg-[#0a2018] border-b border-[#1b4332] text-center px-4">
-        <p className="font-amiri text-lg sm:text-xl text-[#d4af37] tracking-wider" dir="rtl">
+    <footer className="w-full bg-[#0b2118] text-slate-300 border-t-2 border-[#c59b27]">
+      {/* Bismillah bar */}
+      <div className="py-4 bg-[#081912] border-b border-[#1a3d2b] text-center px-4">
+        <p className="font-amiri text-xl text-[#d4af37] tracking-wider" dir="rtl">
           بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
         </p>
-        <p className="text-[11px] text-emerald-200/80 mt-1 uppercase tracking-widest font-semibold">
-          Sharaful Islam Madrassa • Sharafiyya Korangath • Korangath, Tirur
+        <p className="text-[11px] text-emerald-200/70 mt-1 uppercase tracking-widest font-medium">
+          Sharafiyya English Medium School · Islamic Education · Korangath, Tirur
         </p>
       </div>
 
-      {/* 2. Main 4-Column Directory */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10">
-          {/* Col 1: Institutional Profile (4 cols) */}
-          <div className="lg:col-span-4 space-y-4">
+      {/* Main footer content */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-10 sm:py-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10">
+
+          {/* Brand column */}
+          <div className="sm:col-span-2 lg:col-span-4 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-[#164e37] text-white flex items-center justify-center shrink-0 border border-[#c59b27]">
-                <Shield className="w-5 h-5 text-[#c59b27]" />
+              <div className="w-10 h-10 rounded-xl bg-[#164e37] flex items-center justify-center shrink-0 border border-[#c59b27]/50">
+                <GraduationCap className="w-5 h-5 text-[#c59b27]" />
               </div>
               <div>
-                <h3 className="text-white font-extrabold text-base tracking-tight leading-tight">
-                  {SCHOOL_INFO.officialName}
+                <h3 className="text-white font-extrabold text-sm tracking-tight leading-snug">
+                  Sharafiyya English Medium School
                 </h3>
-                <p className="text-xs text-emerald-300 font-medium">
-                  {SCHOOL_INFO.localName} <span className="text-slate-400 font-normal">(ഷറഫിയ്യ കോരങ്ങത്ത്)</span>
+                <p className="text-[11px] text-emerald-300/80 font-medium mt-0.5">
+                  Islamic English Medium School · Korangath, Tirur
                 </p>
               </div>
             </div>
 
-            <p className="text-xs text-slate-300 leading-relaxed">
-              Dedicated Islamic educational institution in Korangath, Tirur, providing authentic religious education, Quranic literacy, and moral guidance to nurture knowledgeable, upright students.
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Nurturing young minds through authentic Quranic education, Islamic values, and modern learning
+              at Korangath, Tirur, Malappuram, Kerala.
             </p>
 
-            <div className="p-3 rounded-lg bg-[#123628] border border-[#1e4d3b] text-[11px] text-emerald-200/90 space-y-1">
-              <p className="break-words"><strong>Board:</strong> {SCHOOL_INFO.institutionalDetails.affiliationBoard}</p>
-              <p><strong>Locality:</strong> Korangath, Tirur, Malappuram, Kerala</p>
+            <div className="p-3.5 rounded-xl bg-[#112a1e] border border-[#1e4d3b] text-[11px] text-emerald-200/80 space-y-1">
+              <p><span className="text-slate-400">Location:</span> Korangath, Tirur, Malappuram, Kerala</p>
+              <p><span className="text-slate-400">Type:</span> Islamic English Medium School</p>
             </div>
           </div>
 
-          {/* Col 2: Quick Links (3 cols) */}
+          {/* Quick links */}
           <div className="lg:col-span-3 space-y-3">
-            <h4 className="text-white font-bold text-xs uppercase tracking-wider border-b border-[#1b4332] pb-2">
-              Institution Navigation
+            <h4 className="text-white font-bold text-xs uppercase tracking-wider border-b border-[#1e4d3b] pb-2">
+              Quick Links
             </h4>
-            <ul className="space-y-2 text-xs">
-              {[
-                { name: 'About Our Institution', path: '/about' },
-                { name: 'Curriculum & Departments', path: '/departments' },
-                { name: 'Faculty & Muallims Directory', path: '/teachers' },
-                { name: 'Student Services & Portal', path: '/students' },
-                { name: 'Events & Academic Calendar', path: '/events' },
-                { name: 'Campus Photo Gallery', path: '/gallery' },
-                { name: 'Contact Administrative Office', path: '/contact' },
-              ].map((item) => (
+            <ul className="space-y-1.5">
+              {quickLinks.map((item) => (
                 <li key={item.path}>
                   <Link
                     to={item.path}
-                    className="hover:text-white hover:translate-x-1 transition-all inline-flex items-center gap-1.5 text-slate-300 min-h-[36px] py-0.5"
+                    className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white hover:translate-x-1 transition-all duration-150 min-h-[32px] py-0.5"
                   >
                     <ArrowRight className="w-3 h-3 text-[#c59b27] shrink-0" />
-                    <span>{item.name}</span>
+                    {item.name}
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Col 3: Academic Streams (2 cols) */}
+          {/* Programmes */}
           <div className="lg:col-span-2 space-y-3">
-            <h4 className="text-white font-bold text-xs uppercase tracking-wider border-b border-[#1b4332] pb-2">
-              Academic Streams
+            <h4 className="text-white font-bold text-xs uppercase tracking-wider border-b border-[#1e4d3b] pb-2">
+              Programmes
             </h4>
-            <ul className="space-y-2 text-xs text-slate-300">
-              <li className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#c59b27]" />
-                <span>Islamic Studies (Fiqh)</span>
-              </li>
-              <li className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#c59b27]" />
-                <span>Qur’an & Tajweed</span>
-              </li>
-              <li className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#c59b27]" />
-                <span>Arabic Language</span>
-              </li>
-              <li className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#c59b27]" />
-                <span>General & Moral Studies</span>
-              </li>
-              <li className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#c59b27]" />
-                <span>Daily Azkar & Sunnah</span>
-              </li>
+            <ul className="space-y-2">
+              {programmes.map((p) => (
+                <li key={p} className="flex items-center gap-2 text-xs text-slate-400">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#c59b27] shrink-0" />
+                  {p}
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Col 4: Administrative Contact & Hours (3 cols) */}
+          {/* Admissions CTA */}
           <div className="lg:col-span-3 space-y-3">
-            <h4 className="text-white font-bold text-xs uppercase tracking-wider border-b border-[#1b4332] pb-2">
-              Administrative Desk
+            <h4 className="text-white font-bold text-xs uppercase tracking-wider border-b border-[#1e4d3b] pb-2">
+              Admissions
             </h4>
-            <div className="space-y-2 text-xs text-slate-300">
-              <div className="flex items-start gap-2">
-                <MapPin className="w-3.5 h-3.5 text-[#c59b27] shrink-0 mt-0.5" />
-                <span className="break-words">Korangath, Tirur, Malappuram District, Kerala – 676101</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Phone className="w-3.5 h-3.5 text-[#c59b27] shrink-0" />
-                <span className="break-all sm:break-normal">Desk: {SCHOOL_INFO.contact.phone}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Mail className="w-3.5 h-3.5 text-[#c59b27] shrink-0" />
-                <span className="break-all sm:break-normal">{SCHOOL_INFO.contact.email}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Clock className="w-3.5 h-3.5 text-[#c59b27] shrink-0" />
-                <span className="break-words">Office: {SCHOOL_INFO.contact.officeHours}</span>
-              </div>
-              <div className="pt-2 text-[11px] text-slate-400 border-t border-[#1b4332]">
-                <p>Transit: ~3.5 km from Tirur Railway Station</p>
-              </div>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Enquiries for new admissions are welcome. Contact the administrative office for details on
+              eligibility and the enrolment process.
+            </p>
+            <Link
+              to="/contact"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#164e37] hover:bg-[#0f3b29] text-white text-xs font-bold rounded-xl border border-[#c59b27]/30 transition-all group shadow-sm"
+            >
+              <GraduationCap className="w-3.5 h-3.5 text-[#c59b27]" />
+              <span>Admission Enquiry</span>
+              <ArrowRight className="w-3 h-3 text-[#c59b27] group-hover:translate-x-1 transition-transform" />
+            </Link>
+            <div className="pt-1">
+              <p className="text-[11px] text-slate-500">
+                Contact: <span className="text-slate-400">[Office details to be updated]</span>
+              </p>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* 3. Sub-footer & Portal Links */}
-        <div className="mt-10 pt-6 border-t border-[#1b4332] flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left text-[11px] text-slate-400">
+      {/* Bottom bar */}
+      <div className="border-t border-[#1a3d2b] py-4 px-4">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-slate-500">
           <p>
-            © {new Date().getFullYear()} {SCHOOL_INFO.officialName} ({SCHOOL_INFO.localName}). All rights reserved.
+            © {year} Sharafiyya English Medium School, Korangath. All rights reserved.
           </p>
-          <div className="flex items-center gap-4 text-xs font-semibold">
-            <Link to="/student/login" className="text-emerald-300 hover:text-white transition-colors">
-              Student Portal
-            </Link>
-            <span className="text-slate-600">•</span>
-            <Link to="/admin/login" className="text-slate-400 hover:text-[#c59b27] transition-colors">
-              Staff / Admin Access
-            </Link>
+          <div className="flex items-center gap-4">
+            <Link to="/about" className="hover:text-slate-300 transition-colors">About</Link>
+            <Link to="/contact" className="hover:text-slate-300 transition-colors">Contact</Link>
+            <Link to="/admin" className="hover:text-slate-300 transition-colors">Admin</Link>
           </div>
         </div>
       </div>
