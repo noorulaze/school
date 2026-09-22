@@ -13,15 +13,15 @@ export const NoticeTicker: React.FC<NoticeTickerProps> = ({ onOpenAdmissionModal
 
   return (
     <div className="bg-[#123827] text-white text-xs border-b border-[#1b5038]">
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 py-2 flex items-center justify-between gap-2 sm:gap-3">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 py-1 flex items-center justify-between gap-2 sm:gap-3">
         <div className="flex items-center gap-2 sm:gap-2.5 flex-1 min-w-0">
-          <span className="shrink-0 inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded bg-[#c59b27] text-[#0a251b] font-bold text-[9px] sm:text-[10px] tracking-wide uppercase">
-            <Bell className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+          <span className="shrink-0 inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-[#c59b27] text-[#0a251b] font-bold text-[9px] sm:text-[10px] tracking-wide uppercase">
+            <Bell className="w-2.5 h-2.5" />
             <span className="hidden xs:inline sm:inline">Notice</span>
             <span className="xs:hidden sm:hidden">Info</span>
           </span>
 
-          <p className="truncate text-slate-100 text-[11px] sm:text-xs">
+          <p className="truncate text-slate-100 text-[11px]">
             <strong className="font-semibold text-amber-300">Session 2025–2026:</strong> Admission enquiry is currently open.
           </p>
         </div>
@@ -30,7 +30,7 @@ export const NoticeTicker: React.FC<NoticeTickerProps> = ({ onOpenAdmissionModal
           {onOpenAdmissionModal ? (
             <button
               onClick={onOpenAdmissionModal}
-              className="text-amber-300 hover:text-white font-semibold underline text-[10px] sm:text-xs flex items-center gap-0.5 min-h-[36px] px-1"
+              className="text-amber-300 hover:text-white font-semibold underline text-[10px] sm:text-[11px] flex items-center gap-0.5 px-1 cursor-pointer"
             >
               <span>Enquire</span>
               <ChevronRight className="w-3 h-3" />

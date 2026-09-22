@@ -12,7 +12,7 @@ import {
   Sparkles,
   Bell,
   ChevronRight,
-  CheckCircle2,
+  Play,
 } from 'lucide-react';
 import { motion, type Variants } from 'framer-motion';
 import { NoticeTicker } from '../components/NoticeTicker';
@@ -25,17 +25,18 @@ interface HomeProps {
 }
 
 const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 16 },
+  hidden: { opacity: 0, y: 12 },
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.45 },
+    transition: { duration: 0.4 },
   },
 };
 
 export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
   const [latestNotice, setLatestNotice] = useState<NoticeItem | null>(null);
   const [latestEvent, setLatestEvent] = useState<EventItem | null>(null);
+  const [imgError, setImgError] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -46,7 +47,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
         if (notices.length > 0) setLatestNotice(notices[0]);
         if (events.length > 0) setLatestEvent(events[0]);
       } catch {
-        // Fallback gracefully to placeholder updates
+        // Silent fallback
       }
     };
     loadUpdates();
@@ -55,7 +56,6 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
     };
   }, []);
 
-  // Show only ONE single update (prefer notice, fallback to event)
   const singleUpdate = latestNotice
     ? {
         type: 'Notice',
@@ -110,204 +110,237 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
   ];
 
   return (
-    <div className="w-full flex flex-col bg-[#fbfaf7] text-slate-800 antialiased">
-      {/* ── Top Notice Bar ─────────────────────────────────────────── */}
+    <div className="w-full flex flex-col bg-[#fcfbf9] text-slate-800 antialiased selection:bg-[#164e37] selection:text-white">
+      {/* ── 1. Compact Notice Bar ──────────────────────────────────── */}
       <NoticeTicker onOpenAdmissionModal={onOpenAdmissionModal} />
 
       {/* ══════════════════════════════════════════════════════════
-          1. HERO SECTION (Immersive Visual & Confident Typography)
+          2. COMPACT IMMERSIVE HERO (Side-by-Side 45/55 Layout)
       ══════════════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden bg-white border-b border-[#e5e0d5] pt-8 pb-12 sm:pt-12 sm:pb-16 lg:pt-14 lg:pb-20">
-        {/* Subtle geometric background detail */}
-        <div className="absolute inset-0 pointer-events-none select-none opacity-[0.035]">
+      <section className="relative overflow-hidden bg-gradient-to-b from-[#f8fbf9] to-white border-b border-[#e7e2d7] pt-5 pb-6 sm:pt-7 sm:pb-8 lg:py-8">
+        {/* Very subtle background texture */}
+        <div className="absolute inset-0 pointer-events-none select-none opacity-[0.025]">
           <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <pattern id="hero-pattern" width="64" height="64" patternUnits="userSpaceOnUse">
-                <path d="M 32 0 L 64 32 L 32 64 L 0 32 Z" fill="none" stroke="#164e37" strokeWidth="1" />
-                <circle cx="32" cy="32" r="6" fill="none" stroke="#c59b27" strokeWidth="0.75" />
+              <pattern id="hero-subtle" width="48" height="48" patternUnits="userSpaceOnUse">
+                <path d="M 24 0 L 48 24 L 24 48 L 0 24 Z" fill="none" stroke="#164e37" strokeWidth="0.8" />
               </pattern>
             </defs>
-            <rect width="100%" height="100%" fill="url(#hero-pattern)" />
+            <rect width="100%" height="100%" fill="url(#hero-subtle)" />
           </svg>
         </div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
-          {/* Hero Content Header */}
-          <div className="max-w-3xl mx-auto text-center space-y-4 mb-8 sm:mb-10">
-            {/* Eyebrow */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center min-h-0 lg:min-h-[480px] xl:min-h-[510px]">
+
+            {/* ── LEFT COLUMN: Text, Buttons, Features (~45%) ────── */}
             <motion.div
               initial="hidden"
               animate="show"
               variants={fadeUp}
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#164e37]/8 border border-[#164e37]/20 text-[11px] font-bold text-[#164e37] uppercase tracking-widest"
+              className="lg:col-span-5 flex flex-col justify-center space-y-3.5 sm:space-y-4"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-[#c59b27]" />
-              <span>Islamic English Medium School</span>
-            </motion.div>
-
-            {/* Main Headline */}
-            <motion.h1
-              initial="hidden"
-              animate="show"
-              variants={fadeUp}
-              className="text-3xl sm:text-5xl lg:text-6xl font-black text-[#0f231c] tracking-tight leading-[1.12]"
-            >
-              Nurturing Knowledge,{' '}
-              <span className="text-[#164e37] relative inline-block">
-                Building Better Futures.
-                <span className="absolute -bottom-1 left-0 right-0 h-1 bg-[#c59b27]/30 rounded-full" />
-              </span>
-            </motion.h1>
-
-            {/* Short Supporting Text */}
-            <motion.p
-              initial="hidden"
-              animate="show"
-              variants={fadeUp}
-              className="text-sm sm:text-base text-slate-600 max-w-xl mx-auto leading-relaxed"
-            >
-              A modern English medium education rooted in Islamic values, character and lifelong learning.
-            </motion.p>
-
-            {/* Action Buttons */}
-            <motion.div
-              initial="hidden"
-              animate="show"
-              variants={fadeUp}
-              className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2"
-            >
-              <Link
-                to="/about"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#164e37] hover:bg-[#0f3b29] text-white text-xs sm:text-sm font-bold rounded-xl shadow-sm hover:shadow-md transition-all duration-200 min-h-[46px] group"
-              >
-                <span>Explore Our School</span>
-                <ArrowRight className="w-4 h-4 text-[#c59b27] group-hover:translate-x-1 transition-transform" />
-              </Link>
-              <button
-                type="button"
-                onClick={onOpenAdmissionModal}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#fbfaf7] hover:bg-[#f4f1ea] text-[#0f231c] border-2 border-[#164e37]/20 hover:border-[#164e37]/40 text-xs sm:text-sm font-semibold rounded-xl transition-all duration-200 min-h-[46px]"
-              >
-                <GraduationCap className="w-4 h-4 text-[#164e37]" />
-                <span>Admission Enquiry</span>
-              </button>
-            </motion.div>
-
-            {/* 3 Compact Feature Indicators */}
-            <motion.div
-              initial="hidden"
-              animate="show"
-              variants={fadeUp}
-              className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 pt-2 text-xs font-semibold text-slate-700"
-            >
-              <div className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-[#164e37]" />
-                <span>English Medium</span>
+              {/* Pill Eyebrow */}
+              <div>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#164e37]/8 border border-[#164e37]/20 text-[10px] sm:text-[11px] font-bold text-[#164e37] uppercase tracking-widest">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#c59b27]" />
+                  <span>ISLAMIC ENGLISH MEDIUM SCHOOL</span>
+                </span>
               </div>
-              <span className="text-slate-300 hidden sm:inline">•</span>
-              <div className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-[#164e37]" />
-                <span>Islamic Values</span>
-              </div>
-              <span className="text-slate-300 hidden sm:inline">•</span>
-              <div className="flex items-center gap-1.5">
-                <MapPin className="w-3.5 h-3.5 text-[#c59b27]" />
-                <span>Korangath, Tirur</span>
-              </div>
-            </motion.div>
-          </div>
 
-          {/* Large Immersive Campus Visual */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.98, y: 12 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.15, ease: 'easeOut' }}
-            className="relative rounded-2xl sm:rounded-3xl overflow-hidden border border-[#e5e0d5] shadow-lg max-w-5xl mx-auto"
-          >
-            <div className="w-full">
-              <RealisticImageSlot
-                scene="campus"
-                aspectRatio="16/10"
-                label="Sharafiyya English Medium School Campus"
-                caption="Main campus environment at Korangath, Tirur"
-                className="w-full"
-              />
-            </div>
+              {/* Main Headline */}
+              <h1 className="text-2xl sm:text-3xl lg:text-[2.45rem] xl:text-[2.85rem] font-black text-[#0f231c] tracking-tight leading-[1.12]">
+                Nurturing Knowledge,{' '}
+                <span className="text-[#164e37] block">
+                  Building Better Futures.
+                </span>
+              </h1>
 
-            {/* Subtle Floating Location Card */}
-            <div className="absolute bottom-3 right-3 sm:bottom-5 sm:right-5 bg-white/95 backdrop-blur-sm border border-[#e5e0d5] rounded-xl px-3.5 py-2 sm:px-4 sm:py-2.5 shadow-md flex items-center gap-2.5 z-10">
-              <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-[#164e37] flex items-center justify-center shrink-0">
-                <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#c59b27]" />
-              </div>
-              <div className="min-w-0">
-                <p className="text-xs font-bold text-[#0f231c] leading-tight">Campus at Korangath, Tirur</p>
-                <p className="text-[10px] text-slate-500 leading-tight mt-0.5">Malappuram District, Kerala</p>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+              {/* Short Supporting Paragraph */}
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-md">
+                A premier Islamic English Medium School at Korangath, Tirur — blending Quranic education, strong values, and modern learning.
+              </p>
 
-      {/* ══════════════════════════════════════════════════════════
-          2. QUICK NAVIGATION STRIP
-      ══════════════════════════════════════════════════════════ */}
-      <section className="bg-white border-b border-[#e5e0d5] py-3.5 sticky top-[60px] z-20 shadow-2xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
-          <div className="flex items-center gap-2 overflow-x-auto scrollbar-none py-1 -mx-1 px-1">
-            {quickNavItems.map((item) => {
-              const Icon = item.icon;
-              return (
+              {/* Action Buttons */}
+              <div className="flex flex-wrap items-center gap-2.5 pt-1">
                 <Link
-                  key={item.label}
-                  to={item.path}
-                  className="flex items-center gap-1.5 px-3.5 py-2 bg-[#fbfaf7] hover:bg-[#164e37] hover:text-white border border-[#e5e0d5] hover:border-[#164e37] text-slate-700 text-xs font-semibold rounded-xl transition-all whitespace-nowrap min-h-[38px] group shrink-0"
+                  to="/about"
+                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 bg-[#164e37] hover:bg-[#0f3b29] text-white text-xs sm:text-sm font-bold rounded-xl sm:rounded-2xl shadow-xs hover:shadow-md transition-all duration-200 group min-h-[42px] sm:min-h-[46px]"
                 >
-                  <Icon className="w-3.5 h-3.5 text-[#164e37] group-hover:text-[#c59b27] transition-colors shrink-0" />
-                  <span>{item.label}</span>
-                  <ChevronRight className="w-3 h-3 text-slate-400 group-hover:text-white group-hover:translate-x-0.5 transition-all" />
+                  <span>Explore Our School</span>
+                  <ArrowRight className="w-4 h-4 text-[#c59b27] group-hover:translate-x-1 transition-transform" />
                 </Link>
-              );
-            })}
+                <button
+                  type="button"
+                  onClick={onOpenAdmissionModal}
+                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 bg-white hover:bg-[#fbfaf7] text-[#0f231c] border border-[#d2cabb] hover:border-[#164e37]/40 text-xs sm:text-sm font-bold rounded-xl sm:rounded-2xl shadow-2xs transition-all duration-200 min-h-[42px] sm:min-h-[46px]"
+                >
+                  <GraduationCap className="w-4 h-4 text-[#164e37]" />
+                  <span>Admission Enquiry</span>
+                </button>
+              </div>
+
+              {/* 3 Compact Feature Indicators */}
+              <div className="grid grid-cols-3 gap-2 sm:gap-3 pt-3 border-t border-[#ede8de] max-w-md">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#eef6f2] border border-[#d3e5da] flex items-center justify-center text-[#164e37] shrink-0">
+                    <BookOpen className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-[11px] sm:text-xs font-black text-[#0f231c] leading-tight truncate">English</p>
+                    <p className="text-[8px] sm:text-[9px] font-bold text-slate-400 uppercase tracking-wider">MEDIUM</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#eef6f2] border border-[#d3e5da] flex items-center justify-center text-[#164e37] shrink-0">
+                    <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#c59b27]" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-[11px] sm:text-xs font-black text-[#0f231c] leading-tight truncate">Islamic</p>
+                    <p className="text-[8px] sm:text-[9px] font-bold text-slate-400 uppercase tracking-wider">VALUES</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#eef6f2] border border-[#d3e5da] flex items-center justify-center text-[#164e37] shrink-0">
+                    <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#164e37]" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-[11px] sm:text-xs font-black text-[#0f231c] leading-tight truncate">Korangath</p>
+                    <p className="text-[8px] sm:text-[9px] font-bold text-slate-400 uppercase tracking-wider">TIRUR</p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* ── RIGHT COLUMN: Campus Visual (~55%) ─────────────── */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="lg:col-span-7 relative h-full flex items-center"
+            >
+              <div className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden border border-[#ded8cc] shadow-md bg-white">
+                {!imgError ? (
+                  <div className="relative aspect-[16/10] sm:aspect-[16/9.5] lg:aspect-[16/9.2] w-full overflow-hidden">
+                    <img
+                      src="/images/campus-hero.png"
+                      alt="Sharafiyya English Medium School Campus"
+                      className="w-full h-full object-cover object-center transform hover:scale-[1.01] transition-transform duration-500"
+                      onError={() => setImgError(true)}
+                    />
+                    {/* Natural subtle gradient on the left edge for smooth integration */}
+                    <div className="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-[#f8fbf9]/30 to-transparent pointer-events-none hidden lg:block" />
+                  </div>
+                ) : (
+                  <RealisticImageSlot
+                    scene="campus"
+                    aspectRatio="16/10"
+                    label="Sharafiyya English Medium School Campus"
+                    caption="Campus at Korangath, Tirur, Malappuram"
+                    className="w-full"
+                  />
+                )}
+
+                {/* Floating Location Card at Bottom Right */}
+                <div className="absolute bottom-2.5 right-2.5 sm:bottom-3.5 sm:right-3.5 bg-white/95 backdrop-blur-md border border-[#e5e0d5] rounded-xl sm:rounded-2xl px-3 py-2 sm:px-3.5 sm:py-2.5 shadow-md flex items-center gap-2.5 z-10 max-w-[90%] sm:max-w-none">
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-[#164e37] flex items-center justify-center text-[#c59b27] shrink-0">
+                    <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                  </div>
+                  <div className="min-w-0 pr-1">
+                    <p className="text-[11px] sm:text-xs font-black text-[#0f231c] leading-tight truncate">
+                      Campus at Korangath, Tirur
+                    </p>
+                    <p className="text-[9px] sm:text-[10px] text-slate-500 leading-tight truncate">
+                      Korangath, Tirur, Malappuram - 676101
+                    </p>
+                  </div>
+                  <Link
+                    to="/contact"
+                    className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-slate-100 hover:bg-[#164e37] hover:text-white text-slate-600 flex items-center justify-center transition-colors shrink-0"
+                    title="View Campus Location"
+                  >
+                    <ArrowRight className="w-3 h-3" />
+                  </Link>
+                </div>
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* ══════════════════════════════════════════════════════════
-          3. ABOUT SECTION (Compact Editorial Layout)
+          3. QUICK NAVIGATION STRIP (Floating Horizontal Bar)
       ══════════════════════════════════════════════════════════ */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-[#fbfaf7] border-b border-[#e5e0d5]">
+      <section className="relative -mt-3 sm:-mt-4 z-10 px-4 sm:px-6 lg:px-8 xl:px-10">
+        <div className="max-w-7xl mx-auto">
+          <div className="bg-white/95 backdrop-blur-md border border-[#e2ddd1] rounded-2xl shadow-sm px-3 py-2.5 sm:px-4 sm:py-3">
+            <div className="flex items-center justify-between gap-1 sm:gap-2 overflow-x-auto scrollbar-none">
+              {quickNavItems.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.label}
+                    to={item.path}
+                    className="flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold text-slate-700 hover:text-[#164e37] hover:bg-[#164e37]/5 transition-all whitespace-nowrap group shrink-0"
+                  >
+                    <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-[#eef6f2] group-hover:bg-[#164e37] text-[#164e37] group-hover:text-white flex items-center justify-center transition-colors shrink-0">
+                      <Icon className="w-3.5 h-3.5" />
+                    </div>
+                    <span>{item.label}</span>
+                    <ChevronRight className="w-3 h-3 text-slate-400 group-hover:text-[#164e37] group-hover:translate-x-0.5 transition-all" />
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════
+          4. ABOUT SECTION (Compact Editorial Layout)
+      ══════════════════════════════════════════════════════════ */}
+      <section className="py-10 sm:py-14 lg:py-16 bg-[#fcfbf9] border-b border-[#e7e2d7]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
-            {/* Left: School / Classroom Image */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            {/* Left: School Image / Video Slot */}
             <motion.div
               initial={{ opacity: 0, x: -16 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="lg:col-span-6"
+              transition={{ duration: 0.4 }}
+              className="lg:col-span-6 relative"
             >
-              <div className="rounded-2xl overflow-hidden border border-[#e5e0d5] shadow-md bg-white">
+              <div className="rounded-2xl sm:rounded-3xl overflow-hidden border border-[#ded8cc] shadow-sm bg-white relative">
                 <RealisticImageSlot
                   scene="classroom"
-                  aspectRatio="4/3"
+                  aspectRatio="16/10"
                   label="Classroom at Sharafiyya"
                   caption="Dedicated learning spaces at Sharafiyya English Medium School"
                 />
+                {/* Watch Video Badge */}
+                <div className="absolute top-3 left-3 bg-black/50 backdrop-blur-md border border-white/20 text-white rounded-full px-3 py-1.5 flex items-center gap-2 text-xs font-semibold shadow-xs pointer-events-none">
+                  <div className="w-5 h-5 rounded-full bg-white text-[#0f231c] flex items-center justify-center">
+                    <Play className="w-2.5 h-2.5 fill-current" />
+                  </div>
+                  <span>Campus Environment</span>
+                </div>
               </div>
             </motion.div>
 
-            {/* Right: Editorial Story */}
+            {/* Right: Editorial Narrative */}
             <motion.div
               initial={{ opacity: 0, x: 16 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="lg:col-span-6 space-y-4"
+              transition={{ duration: 0.4 }}
+              className="lg:col-span-6 space-y-3.5 sm:space-y-4"
             >
               <div className="flex items-center gap-2">
                 <span className="h-px w-6 bg-[#c59b27]" />
                 <span className="text-[11px] uppercase tracking-widest font-extrabold text-[#164e37]">
-                  About Us
+                  ABOUT US
                 </span>
               </div>
 
@@ -316,14 +349,14 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
                 <span className="text-[#164e37]">It's a Foundation for Life.</span>
               </h2>
 
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Sharafiyya English Medium School provides structured Islamic learning combined with modern English medium academics in Korangath, Tirur. We nurture intellectual curiosity, moral uprightness, and spiritual clarity in every student.
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                At Sharafiyya English Medium School, we believe in nurturing well-rounded individuals through quality education, Islamic values, and modern scholastic discipline. Located in Korangath, Tirur, we prepare our students to excel in academic knowledge and moral character.
               </p>
 
               <div className="pt-2">
                 <Link
                   to="/about"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#164e37] hover:bg-[#0f3b29] text-white text-xs sm:text-sm font-bold rounded-xl shadow-xs transition-all duration-200 group min-h-[44px]"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 bg-[#164e37] hover:bg-[#0f3b29] text-white text-xs sm:text-sm font-bold rounded-xl sm:rounded-2xl shadow-xs transition-all duration-200 group min-h-[44px]"
                 >
                   <span>Learn More</span>
                   <ArrowRight className="w-3.5 h-3.5 text-[#c59b27] group-hover:translate-x-1 transition-transform" />
@@ -335,19 +368,19 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
       </section>
 
       {/* ══════════════════════════════════════════════════════════
-          4. ACADEMICS PREVIEW (Compact, Focused Programme Cards)
+          5. ACADEMICS PREVIEW (Compact Programme Cards)
       ══════════════════════════════════════════════════════════ */}
-      <section className="py-12 sm:py-16 bg-white border-b border-[#e5e0d5]">
+      <section className="py-10 sm:py-14 bg-white border-b border-[#e7e2d7]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 sm:mb-8 gap-3">
             <div>
-              <div className="flex items-center gap-2 mb-1.5">
+              <div className="flex items-center gap-2 mb-1">
                 <span className="h-px w-6 bg-[#c59b27]" />
                 <span className="text-[11px] uppercase tracking-widest font-extrabold text-[#164e37]">
-                  Our Academics
+                  OUR ACADEMICS
                 </span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0f231c] tracking-tight">
+              <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-[#0f231c] tracking-tight">
                 Academic Excellence with Islamic Values
               </h2>
             </div>
@@ -364,23 +397,23 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
             {academicCards.map((card, idx) => (
               <motion.div
                 key={card.num}
-                initial={{ opacity: 0, y: 14 }}
+                initial={{ opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: idx * 0.08 }}
+                transition={{ duration: 0.35, delay: idx * 0.06 }}
               >
                 <Link
                   to="/departments"
-                  className="group flex flex-col h-full bg-[#fbfaf7] hover:bg-white rounded-2xl border border-[#e5e0d5] hover:border-[#164e37]/40 hover:shadow-md p-5 transition-all duration-200"
+                  className="group flex flex-col h-full bg-[#fcfbf9] hover:bg-white rounded-2xl border border-[#e5e0d5] hover:border-[#164e37]/40 hover:shadow-sm p-4 sm:p-5 transition-all duration-200"
                 >
-                  <span className="text-2xl font-serif font-bold text-[#164e37]/30 group-hover:text-[#164e37] transition-colors">
+                  <span className="text-xl font-serif font-bold text-[#164e37]/30 group-hover:text-[#164e37] transition-colors">
                     {card.num}
                   </span>
-                  <h3 className="text-sm font-bold text-[#0f231c] mt-2 mb-1.5 group-hover:text-[#164e37] transition-colors">
+                  <h3 className="text-sm font-bold text-[#0f231c] mt-1.5 mb-1 group-hover:text-[#164e37] transition-colors">
                     {card.title}
                   </h3>
                   <p className="text-xs text-slate-600 leading-relaxed flex-1">{card.desc}</p>
-                  <div className="flex items-center gap-1 mt-4 text-[11px] font-bold text-[#164e37] opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="flex items-center gap-1 mt-3 text-[11px] font-bold text-[#164e37] opacity-0 group-hover:opacity-100 transition-opacity">
                     <span>Curriculum details</span>
                     <ArrowRight className="w-3 h-3 text-[#c59b27]" />
                   </div>
@@ -388,29 +421,19 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
               </motion.div>
             ))}
           </div>
-
-          <div className="mt-8 text-center sm:hidden">
-            <Link
-              to="/departments"
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#164e37] hover:bg-[#0f3b29] text-white text-xs font-bold rounded-xl transition-colors group min-h-[44px]"
-            >
-              <span>Explore Academics</span>
-              <ArrowRight className="w-3.5 h-3.5 text-[#c59b27]" />
-            </Link>
-          </div>
         </div>
       </section>
 
       {/* ══════════════════════════════════════════════════════════
-          5. LATEST UPDATE (Compact Single Item Notice/Event)
+          6. LATEST UPDATE (Compact Single Item Notice/Event)
       ══════════════════════════════════════════════════════════ */}
-      <section className="py-10 sm:py-12 bg-[#fbfaf7] border-b border-[#e5e0d5]">
+      <section className="py-8 sm:py-10 bg-[#fcfbf9] border-b border-[#e7e2d7]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-3.5">
             <div className="flex items-center gap-2">
               <span className="h-px w-5 bg-[#c59b27]" />
               <span className="text-[11px] uppercase tracking-widest font-extrabold text-[#164e37]">
-                Latest Update
+                LATEST UPDATE
               </span>
             </div>
             <Link
@@ -427,14 +450,14 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4 }}
+              transition={{ duration: 0.35 }}
             >
               <Link
                 to={singleUpdate.href}
-                className="group flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-6 bg-white hover:border-[#164e37]/40 rounded-2xl border border-[#e5e0d5] hover:shadow-xs p-4 sm:p-5 transition-all duration-200"
+                className="group flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-6 bg-white hover:border-[#164e37]/40 rounded-2xl border border-[#e5e0d5] hover:shadow-2xs p-4 sm:p-5 transition-all duration-200"
               >
-                <div className="flex items-start sm:items-center gap-3.5 min-w-0">
-                  <div className="w-9 h-9 rounded-xl bg-[#164e37]/8 border border-[#164e37]/15 flex items-center justify-center shrink-0">
+                <div className="flex items-start sm:items-center gap-3 min-w-0">
+                  <div className="w-8 h-8 rounded-xl bg-[#164e37]/8 border border-[#164e37]/15 flex items-center justify-center shrink-0">
                     <singleUpdate.icon className="w-4 h-4 text-[#164e37]" />
                   </div>
                   <div className="min-w-0">
@@ -446,7 +469,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
                         <span className="text-[11px] font-mono text-slate-400">{singleUpdate.date}</span>
                       )}
                     </div>
-                    <h3 className="text-sm sm:text-base font-bold text-[#0f231c] group-hover:text-[#164e37] transition-colors truncate">
+                    <h3 className="text-xs sm:text-sm font-bold text-[#0f231c] group-hover:text-[#164e37] transition-colors truncate">
                       {singleUpdate.title}
                     </h3>
                   </div>
@@ -459,7 +482,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
               </Link>
             </motion.div>
           ) : (
-            <div className="bg-white rounded-2xl border border-[#e5e0d5] p-5 text-center text-xs text-slate-500">
+            <div className="bg-white rounded-2xl border border-[#e5e0d5] p-4 text-center text-xs text-slate-500">
               No recent announcements posted.{' '}
               <Link to="/events" className="text-[#164e37] font-semibold hover:underline">
                 Browse calendar updates →
@@ -470,30 +493,30 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
       </section>
 
       {/* ══════════════════════════════════════════════════════════
-          6. ADMISSIONS CTA (Horizontal Banner, No Bulky Form)
+          7. ADMISSIONS CTA (Horizontal Banner, No Bulky Form)
       ══════════════════════════════════════════════════════════ */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-[#0d281e] text-white relative overflow-hidden">
+      <section className="py-10 sm:py-14 lg:py-16 bg-[#0d281e] text-white relative overflow-hidden">
         {/* Subtle geometric pattern */}
-        <div className="absolute inset-0 pointer-events-none opacity-[0.045]">
+        <div className="absolute inset-0 pointer-events-none opacity-[0.035]">
           <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <pattern id="cta-pattern" width="56" height="56" patternUnits="userSpaceOnUse">
+              <pattern id="cta-subtle" width="56" height="56" patternUnits="userSpaceOnUse">
                 <path d="M 28 0 L 56 28 L 28 56 L 0 28 Z" fill="none" stroke="#ffffff" strokeWidth="1" />
                 <circle cx="28" cy="28" r="7" fill="none" stroke="#c59b27" strokeWidth="0.75" />
               </pattern>
             </defs>
-            <rect width="100%" height="100%" fill="url(#cta-pattern)" />
+            <rect width="100%" height="100%" fill="url(#cta-subtle)" />
           </svg>
         </div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
-          <div className="max-w-3xl mx-auto text-center space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-[11px] font-bold text-emerald-300 uppercase tracking-widest">
+          <div className="max-w-3xl mx-auto text-center space-y-3.5 sm:space-y-4">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-[10px] sm:text-[11px] font-bold text-emerald-300 uppercase tracking-widest">
               <Sparkles className="w-3 h-3 text-[#c59b27]" />
               <span>Admissions Open</span>
             </div>
 
-            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-tight">
               Begin Your Child's Journey With Us
             </h2>
 
@@ -501,11 +524,11 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
               Give your child the foundation of authentic Islamic education combined with modern English-medium learning. Enquire today — our administrative office will get back to you promptly.
             </p>
 
-            <div className="pt-3 flex flex-col sm:flex-row items-center justify-center gap-3">
+            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
               <button
                 type="button"
                 onClick={onOpenAdmissionModal}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-[#c59b27] hover:bg-[#d6a933] text-slate-950 text-xs sm:text-sm font-bold rounded-xl shadow-md hover:shadow-lg transition-all min-h-[46px] group"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#c59b27] hover:bg-[#d6a933] text-slate-950 text-xs sm:text-sm font-bold rounded-xl shadow-sm hover:shadow-md transition-all min-h-[44px] group"
               >
                 <GraduationCap className="w-4 h-4" />
                 <span>Admission Enquiry</span>
@@ -514,7 +537,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
 
               <Link
                 to="/admissions"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-white/10 hover:bg-white/15 text-white text-xs sm:text-sm font-semibold border border-white/20 rounded-xl transition-colors min-h-[46px]"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/15 text-white text-xs sm:text-sm font-semibold border border-white/20 rounded-xl transition-colors min-h-[44px]"
               >
                 <span>View Admission Guidelines</span>
               </Link>
