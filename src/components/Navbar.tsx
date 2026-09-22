@@ -69,8 +69,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAdmissionModal }) => {
       ref={headerRef}
       className={`sticky top-0 z-50 w-full transition-all duration-300 ease-in-out ${
         isScrolled
-          ? 'bg-white/98 backdrop-blur-md border-b border-[#ded8cc] shadow-[0_2px_16px_-4px_rgba(15,35,28,0.08)] py-2'
-          : 'bg-[#fbfaf7] border-b border-[#e5e0d5] py-3'
+          ? 'bg-white/98 backdrop-blur-md border-b border-[#ded8cc] shadow-[0_2px_14px_-4px_rgba(15,35,28,0.08)] py-1.5 sm:py-2 lg:py-2.5'
+          : 'bg-[#fbfaf7] border-b border-[#e5e0d5] py-2 sm:py-2.5 lg:py-3'
       }`}
     >
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 xl:px-10 flex items-center justify-between gap-2">
@@ -78,11 +78,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAdmissionModal }) => {
         <Link
           to="/"
           aria-label="Sharafiyya English Medium School Home"
-          className="flex items-center gap-2.5 group shrink min-w-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#164e37] rounded-lg p-0.5"
+          className="flex items-center gap-2 sm:gap-2.5 group shrink min-w-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#164e37] rounded-lg p-0.5"
         >
           {/* Crest */}
-          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#164e37] flex items-center justify-center shrink-0 border border-[#c59b27]/50 shadow-sm transition-transform duration-300 group-hover:scale-105 overflow-hidden">
-            <svg viewBox="0 0 100 100" className="w-6 h-6 sm:w-7 sm:h-7" aria-hidden="true">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 rounded-xl bg-[#164e37] flex items-center justify-center shrink-0 border border-[#c59b27]/50 shadow-xs transition-transform duration-300 group-hover:scale-105 overflow-hidden">
+            <svg viewBox="0 0 100 100" className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7" aria-hidden="true">
               <circle cx="50" cy="50" r="46" fill="none" stroke="#c59b27" strokeWidth="2.5" strokeDasharray="3 2" />
               <path d="M24 64 C36 58, 45 61, 50 67 C55 61, 64 58, 76 64 L76 38 C64 34, 55 37, 50 43 C45 37, 36 34, 24 38 Z" fill="#ffffff" />
               <circle cx="50" cy="27" r="5" fill="#c59b27" />
@@ -93,10 +93,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAdmissionModal }) => {
 
           {/* Text */}
           <div className="flex flex-col min-w-0">
-            <span className="text-xs sm:text-sm font-extrabold text-[#0f231c] tracking-tight leading-snug group-hover:text-[#164e37] transition-colors truncate">
+            <span className="text-xs sm:text-sm font-extrabold text-[#0f231c] tracking-tight leading-tight group-hover:text-[#164e37] transition-colors truncate">
               Sharafiyya English Medium School
             </span>
-            <span className="text-[10px] text-[#164e37] font-medium leading-none tracking-wide mt-0.5 truncate">
+            <span className="text-[9px] sm:text-[10px] text-[#164e37] font-medium leading-none tracking-wide mt-0.5 truncate">
               Korangath, Tirur · Islamic School
             </span>
           </div>
@@ -127,10 +127,20 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAdmissionModal }) => {
         </nav>
 
         {/* Right: CTA + Mobile toggle */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          {/* Mobile compact student icon */}
           <Link
             to="/student/login"
-            className="inline-flex items-center gap-1.5 px-3 py-2 bg-[#f4f9f6] hover:bg-[#e6f2ec] text-[#164e37] text-[11px] xl:text-xs font-bold rounded-xl border border-[#cbe3d5] shadow-2xs hover:shadow-xs transition-all duration-200 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#164e37]"
+            aria-label="Student Portal"
+            className="sm:hidden p-2 rounded-xl bg-[#f4f9f6] text-[#164e37] border border-[#cbe3d5] flex items-center justify-center hover:bg-[#e6f2ec] transition-colors"
+          >
+            <User className="w-4 h-4 text-[#164e37]" />
+          </Link>
+
+          {/* Desktop/Tablet Student button */}
+          <Link
+            to="/student/login"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 bg-[#f4f9f6] hover:bg-[#e6f2ec] text-[#164e37] text-[11px] xl:text-xs font-bold rounded-xl border border-[#cbe3d5] shadow-2xs hover:shadow-xs transition-all duration-200 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#164e37]"
           >
             <User className="w-3.5 h-3.5 text-[#164e37]" />
             <span>Student Login</span>
@@ -151,7 +161,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAdmissionModal }) => {
             aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={isMobileMenuOpen}
             aria-controls="mobile-nav"
-            className="lg:hidden p-2 rounded-lg text-slate-700 hover:text-[#164e37] hover:bg-[#164e37]/5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#164e37]"
+            className="lg:hidden p-2 rounded-xl text-slate-700 hover:text-[#164e37] hover:bg-[#164e37]/5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#164e37]"
           >
             {isMobileMenuOpen ? <X className="w-5 h-5 text-[#164e37]" /> : <Menu className="w-5 h-5" />}
           </button>

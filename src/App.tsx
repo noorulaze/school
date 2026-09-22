@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation, Link } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
+import { MobileBottomNav } from './components/MobileBottomNav';
 import { AdmissionModal } from './components/AdmissionModal';
 
 // Public Pages
@@ -80,7 +81,7 @@ function MainLayout({ onOpenAdmissionModal }: { onOpenAdmissionModal: () => void
     <div className="min-h-screen flex flex-col bg-[#FDFBF7] text-slate-800 font-sans selection:bg-emerald-800 selection:text-white">
       {!isAdminOrStudent && <Navbar onOpenAdmissionModal={onOpenAdmissionModal} />}
 
-      <main className="flex-grow">
+      <main className={`flex-grow ${!isAdminOrStudent ? 'pb-16 lg:pb-0' : ''}`}>
         <Routes>
           {/* Public Website Routes */}
           <Route path="/" element={<Home onOpenAdmissionModal={onOpenAdmissionModal} />} />
@@ -131,6 +132,7 @@ function MainLayout({ onOpenAdmissionModal }: { onOpenAdmissionModal: () => void
       </main>
 
       {!isAdminOrStudent && <Footer />}
+      {!isAdminOrStudent && <MobileBottomNav onOpenAdmissionModal={onOpenAdmissionModal} />}
     </div>
   );
 }
