@@ -44,7 +44,7 @@ export const StudentLogin: React.FC = () => {
           className="inline-flex items-center gap-2 text-xs font-semibold text-emerald-300 hover:text-white transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Return to Madrassa Website</span>
+          <span>Return to Public Website</span>
         </Link>
       </div>
 
