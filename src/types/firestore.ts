@@ -109,10 +109,18 @@ export interface StudentDocument {
   name: string;
   email: string;
   className: string; // e.g. "Class 5 - Intermediate"
+  section?: string; // e.g. "Section A"
   department: string; // e.g. "Qur’an & Tajweed"
   profileImage?: string;
   academicYear: string; // e.g. "2025–2026"
   accountStatus: 'Active' | 'Disabled';
+  documents?: Array<{
+    id: string;
+    title: string;
+    fileUrl: string;
+    type?: string;
+    uploadedAt: string;
+  }>;
   createdAt: string;
   updatedAt: string;
 }

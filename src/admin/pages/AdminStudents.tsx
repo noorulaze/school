@@ -29,6 +29,7 @@ interface StudentFormData {
   studentId: string;
   email: string;
   className: string;
+  section?: string;
   department: string;
   academicYear: string;
   accountStatus: 'Active' | 'Disabled';
@@ -40,6 +41,7 @@ const INITIAL_FORM: StudentFormData = {
   studentId: '',
   email: '',
   className: 'Class 5 - Intermediate',
+  section: 'A',
   department: 'Qur’an & Tajweed',
   academicYear: '2025–2026',
   accountStatus: 'Active',
@@ -128,6 +130,7 @@ export const AdminStudents: React.FC = () => {
       studentId: student.studentId,
       email: student.email,
       className: student.className,
+      section: student.section || 'A',
       department: student.department,
       academicYear: student.academicYear,
       accountStatus: student.accountStatus,
@@ -138,6 +141,7 @@ export const AdminStudents: React.FC = () => {
       studentId: student.studentId,
       email: student.email,
       className: student.className,
+      section: student.section || 'A',
       department: student.department,
       academicYear: student.academicYear,
       accountStatus: student.accountStatus,
@@ -176,6 +180,7 @@ export const AdminStudents: React.FC = () => {
         studentId: formData.studentId.trim().toUpperCase(),
         email: formData.email.trim().toLowerCase(),
         className: formData.className,
+        section: formData.section?.trim() || 'A',
         department: formData.department,
         academicYear: formData.academicYear,
         accountStatus: formData.accountStatus,
@@ -678,9 +683,9 @@ export const AdminStudents: React.FC = () => {
                 </div>
               </div>
 
-              {/* Class & Department */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
+              {/* Class & Section */}
+              <div className="grid grid-cols-3 gap-4">
+                <div className="col-span-2">
                   <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
                     Class / Level *
                   </label>
@@ -704,22 +709,37 @@ export const AdminStudents: React.FC = () => {
 
                 <div>
                   <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                    Department *
+                    Section
                   </label>
-                  <select
-                    value={formData.department}
-                    onChange={(e) => setFormData({ ...formData, department: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-emerald-700"
-                  >
-                    <option value="Qur’an & Tajweed">Qur’an & Tajweed</option>
-                    <option value="Fiqh & Islamic Jurisprudence">Fiqh & Islamic Jurisprudence</option>
-                    <option value="Aqeedah & Fundamentals">Aqeedah & Fundamentals</option>
-                    <option value="Hadith & Sunnah Studies">Hadith & Sunnah Studies</option>
-                    <option value="Tarikh & Islamic History">Tarikh & Islamic History</option>
-                    <option value="Arabic Language & Grammar">Arabic Language & Grammar</option>
-                    <option value="Akhlaq & Moral Education">Akhlaq & Moral Education</option>
-                  </select>
+                  <input
+                    type="text"
+                    value={formData.section || ''}
+                    onChange={(e) => setFormData({ ...formData, section: e.target.value.toUpperCase() })}
+                    placeholder="A"
+                    maxLength={5}
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-emerald-700 focus:bg-white"
+                  />
                 </div>
+              </div>
+
+              {/* Department */}
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                  Department *
+                </label>
+                <select
+                  value={formData.department}
+                  onChange={(e) => setFormData({ ...formData, department: e.target.value })}
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-emerald-700"
+                >
+                  <option value="Qur’an & Tajweed">Qur’an & Tajweed</option>
+                  <option value="Fiqh & Islamic Jurisprudence">Fiqh & Islamic Jurisprudence</option>
+                  <option value="Aqeedah & Fundamentals">Aqeedah & Fundamentals</option>
+                  <option value="Hadith & Sunnah Studies">Hadith & Sunnah Studies</option>
+                  <option value="Tarikh & Islamic History">Tarikh & Islamic History</option>
+                  <option value="Arabic Language & Grammar">Arabic Language & Grammar</option>
+                  <option value="Akhlaq & Moral Education">Akhlaq & Moral Education</option>
+                </select>
               </div>
 
               {/* Academic Year & Account Status */}
@@ -821,8 +841,10 @@ export const AdminStudents: React.FC = () => {
                 <span className="font-mono font-semibold text-slate-800">{viewingStudent.email}</span>
               </div>
               <div className="flex justify-between py-2 border-b border-slate-100">
-                <span className="text-slate-500 font-medium">Class / Standard:</span>
-                <span className="font-bold text-slate-800">{viewingStudent.className}</span>
+                <span className="text-slate-500 font-medium">Class & Section:</span>
+                <span className="font-bold text-slate-800">
+                  {viewingStudent.className} {viewingStudent.section ? `(Sec ${viewingStudent.section})` : ''}
+                </span>
               </div>
               <div className="flex justify-between py-2 border-b border-slate-100">
                 <span className="text-slate-500 font-medium">Department:</span>

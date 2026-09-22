@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, GraduationCap, ChevronRight } from 'lucide-react';
+import { Menu, X, GraduationCap, ChevronRight, User } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface NavbarProps {
@@ -128,6 +128,14 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAdmissionModal }) => {
 
         {/* Right: CTA + Mobile toggle */}
         <div className="flex items-center gap-2 shrink-0">
+          <Link
+            to="/student/login"
+            className="inline-flex items-center gap-1.5 px-3 py-2 bg-[#f4f9f6] hover:bg-[#e6f2ec] text-[#164e37] text-[11px] xl:text-xs font-bold rounded-xl border border-[#cbe3d5] shadow-2xs hover:shadow-xs transition-all duration-200 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#164e37]"
+          >
+            <User className="w-3.5 h-3.5 text-[#164e37]" />
+            <span>Student Login</span>
+          </Link>
+
           <button
             type="button"
             onClick={onOpenAdmissionModal}
@@ -191,6 +199,15 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAdmissionModal }) => {
                 </nav>
 
                 <div className="pt-3 border-t border-[#e5e0d5] space-y-2">
+                  <Link
+                    to="/student/login"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="w-full py-2.5 px-4 bg-[#f4f9f6] hover:bg-[#e6f2ec] text-[#164e37] text-xs font-bold rounded-xl border border-[#cbe3d5] flex items-center justify-center gap-2 transition-colors"
+                  >
+                    <User className="w-4 h-4 text-[#164e37]" />
+                    <span>Student Login</span>
+                  </Link>
+
                   <button
                     type="button"
                     onClick={() => { setIsMobileMenuOpen(false); onOpenAdmissionModal(); }}

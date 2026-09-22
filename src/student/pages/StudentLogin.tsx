@@ -1,7 +1,18 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { loginStudent } from '../../services/authService';
-import { GraduationCap, Lock, User, AlertCircle, Loader2, ArrowLeft, KeyRound } from 'lucide-react';
+import {
+  GraduationCap,
+  Lock,
+  User,
+  AlertCircle,
+  Loader2,
+  ArrowLeft,
+  KeyRound,
+  ShieldCheck,
+  CheckCircle2,
+} from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export const StudentLogin: React.FC = () => {
   const navigate = useNavigate();
@@ -32,118 +43,156 @@ export const StudentLogin: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#071912] flex flex-col justify-center items-center px-4 py-12 relative overflow-hidden font-sans">
-      {/* Background Decorative Rings */}
-      <div className="absolute -top-32 -right-32 w-80 h-80 bg-[#164e37]/40 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-32 -left-32 w-80 h-80 bg-[#c59b27]/20 rounded-full blur-3xl pointer-events-none" />
-
-      {/* Return to website */}
-      <div className="w-full max-w-md mb-6 flex justify-between items-center z-10">
-        <Link
-          to="/"
-          className="inline-flex items-center gap-2 text-xs font-semibold text-emerald-300 hover:text-white transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Return to Public Website</span>
-        </Link>
+    <div className="min-h-screen bg-[#fcfbf9] text-slate-800 flex flex-col justify-center items-center px-4 py-8 sm:py-12 relative overflow-hidden font-sans">
+      {/* Subtle background ambient details */}
+      <div className="absolute inset-0 pointer-events-none select-none opacity-[0.03]">
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="login-subtle-geo" width="60" height="60" patternUnits="userSpaceOnUse">
+              <path d="M 30 0 L 60 30 L 30 60 L 0 30 Z" fill="none" stroke="#164e37" strokeWidth="1" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#login-subtle-geo)" />
+        </svg>
       </div>
 
-      {/* Card */}
-      <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden border border-emerald-900/40 z-10">
-        {/* Banner */}
-        <div className="bg-[#091f17] p-8 text-center text-white border-b border-[#14392b]">
-          <div className="w-14 h-14 mx-auto mb-3 rounded-2xl bg-[#164e37] border border-[#c59b27]/80 flex items-center justify-center shadow-lg">
-            <GraduationCap className="w-8 h-8 text-[#c59b27]" />
-          </div>
-          <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white">
-            Student Digital Portal
-          </h1>
-          <p className="text-xs text-emerald-200/90 mt-1 font-medium">
-            Sharafiyya English Medium School • Korangath, Tirur
-          </p>
+      <div className="w-full max-w-md relative z-10 space-y-4">
+        {/* Back Link */}
+        <div className="flex items-center justify-between">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#164e37] hover:text-[#0f3b29] transition-colors group"
+          >
+            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
+            <span>Return to Public Website</span>
+          </Link>
+          <span className="text-[11px] font-semibold text-slate-400">Student Area</span>
         </div>
 
-        {/* Form Body */}
-        <div className="p-6 sm:p-8">
-          {error && (
-            <div className="mb-6 p-4 rounded-xl bg-rose-50 border border-rose-200 flex items-start gap-3 text-rose-800 text-xs leading-relaxed animate-in fade-in">
-              <AlertCircle className="w-4 h-4 shrink-0 text-rose-600 mt-0.5" />
-              <div>
-                <strong className="font-bold block text-rose-900">Login Unsuccessful</strong>
-                <span>{error}</span>
-              </div>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                Student ID or Registered Email
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                  <User className="w-4 h-4" />
-                </div>
-                <input
-                  type="text"
-                  required
-                  value={identifier}
-                  onChange={(e) => setIdentifier(e.target.value)}
-                  placeholder="e.g. SK-2025-001 or student email"
-                  className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-emerald-700 focus:bg-white transition-all"
-                />
-              </div>
+        {/* Login Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="bg-white rounded-3xl shadow-sm hover:shadow-md border border-[#e5e0d5] overflow-hidden transition-shadow"
+        >
+          {/* Card Header */}
+          <div className="bg-[#0f231c] text-white p-6 sm:p-7 text-center relative overflow-hidden">
+            {/* Subtle corner watermark */}
+            <div className="w-12 h-12 rounded-2xl bg-[#164e37] border border-[#c59b27]/60 flex items-center justify-center mx-auto mb-3 shadow-sm">
+              <GraduationCap className="w-6 h-6 text-[#c59b27]" />
             </div>
 
-            <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                Portal Password
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                  <Lock className="w-4 h-4" />
-                </div>
-                <input
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••••••"
-                  className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-emerald-700 focus:bg-white transition-all"
-                />
-              </div>
-            </div>
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#164e37] border border-[#c59b27]/30 text-[10px] font-bold text-amber-300 uppercase tracking-widest mb-1.5">
+              <span>Private Access</span>
+            </span>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3 px-4 bg-[#164e37] hover:bg-[#113d2b] text-white font-bold text-sm rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed mt-2"
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>Entering Student Portal...</span>
-                </>
-              ) : (
-                <span>Access Student Portal</span>
-              )}
-            </button>
-          </form>
-
-          {/* Development Quick-Fill Helper */}
-          <div className="mt-6 pt-5 border-t border-slate-100 text-center">
-            <button
-              type="button"
-              onClick={handleFillDemo}
-              className="inline-flex items-center gap-1.5 text-xs text-emerald-800 hover:text-emerald-950 font-semibold bg-emerald-50 hover:bg-emerald-100/70 px-3 py-1.5 rounded-lg transition-colors cursor-pointer border border-emerald-200/50"
-            >
-              <KeyRound className="w-3.5 h-3.5 text-[#c59b27]" />
-              <span>Fill Demo Credentials (SK-2025-001)</span>
-            </button>
-            <p className="text-[11px] text-slate-400 mt-2">
-              For student access credentials or password resets, contact the Madrassa administrative office.
+            <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white">
+              Student Digital Portal
+            </h1>
+            <p className="text-xs text-emerald-100/80 mt-1 font-medium">
+              Sharafiyya English Medium School · Korangath, Tirur
             </p>
           </div>
+
+          {/* Form Content */}
+          <div className="p-6 sm:p-7 space-y-4">
+            {error && (
+              <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-start gap-2.5 leading-relaxed">
+                <AlertCircle className="w-4 h-4 shrink-0 text-rose-600 mt-0.5" />
+                <div className="flex-1">
+                  <strong className="block font-bold">Authentication Failed</strong>
+                  <span>{error}</span>
+                </div>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-3.5">
+              <div>
+                <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">
+                  Student ID or Registered Email
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                    <User className="w-4 h-4" />
+                  </div>
+                  <input
+                    type="text"
+                    required
+                    value={identifier}
+                    onChange={(e) => setIdentifier(e.target.value)}
+                    placeholder="e.g. SK-2025-001 or email"
+                    className="w-full pl-10 pr-3 py-2.5 bg-[#fcfbf9] border border-[#d8d3c5] rounded-xl text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#164e37] focus:bg-white transition-all"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">
+                  Portal Password
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                    <Lock className="w-4 h-4" />
+                  </div>
+                  <input
+                    type="password"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••••••"
+                    className="w-full pl-10 pr-3 py-2.5 bg-[#fcfbf9] border border-[#d8d3c5] rounded-xl text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#164e37] focus:bg-white transition-all"
+                  />
+                </div>
+              </div>
+
+              <div className="pt-1">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full py-3 px-4 bg-[#164e37] hover:bg-[#0f3b29] text-white font-bold text-xs sm:text-sm rounded-xl shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed min-h-[44px]"
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin text-[#c59b27]" />
+                      <span>Verifying Credentials...</span>
+                    </>
+                  ) : (
+                    <>
+                      <ShieldCheck className="w-4 h-4 text-[#c59b27]" />
+                      <span>Log In to Student Portal</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
+
+            {/* Quick Demo Helper */}
+            <div className="pt-3 border-t border-[#ede8de] text-center space-y-2">
+              <button
+                type="button"
+                onClick={handleFillDemo}
+                className="inline-flex items-center gap-1.5 text-xs text-[#164e37] hover:text-[#0f3b29] font-bold bg-[#eef6f2] hover:bg-[#e2f0e8] px-3 py-1.5 rounded-lg border border-[#cbe3d5] transition-colors cursor-pointer"
+              >
+                <KeyRound className="w-3.5 h-3.5 text-[#c59b27]" />
+                <span>Fill Sample Credentials (SK-2025-001)</span>
+              </button>
+              <p className="text-[11px] text-slate-500 leading-relaxed">
+                For student credentials or password resets, contact the school administrative office.
+              </p>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Security & Privacy Assurance Notice */}
+        <div className="p-3.5 rounded-2xl bg-white border border-[#e5e0d5] text-center text-xs text-slate-500 space-y-1 shadow-2xs">
+          <p className="font-semibold text-slate-700 flex items-center justify-center gap-1.5">
+            <CheckCircle2 className="w-3.5 h-3.5 text-[#164e37]" />
+            <span>Secure Student Data Isolation</span>
+          </p>
+          <p className="text-[11px] text-slate-500">
+            Authenticated records are private to each enrolled student account.
+          </p>
         </div>
       </div>
     </div>

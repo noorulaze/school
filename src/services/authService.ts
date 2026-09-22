@@ -4,6 +4,7 @@ import {
   onAuthStateChanged,
   setPersistence,
   browserLocalPersistence,
+  updatePassword,
   type User
 } from 'firebase/auth';
 import { auth, isFirebaseConfigured } from '../lib/firebase';
@@ -115,6 +116,28 @@ export const logoutStudent = async (): Promise<void> => {
   if (isFirebaseConfigured && auth) {
     await signOut(auth);
   }
+};
+
+// Change Password for Logged In Student
+export const changeStudentPassword = async (newPass: string): Promise<void> => {
+  if (!newPass || newPass.trim().length < 6) {
+    throw new Error('New password must be at least 6 characters long.');
+  }
+
+  if (isFirebaseConfigured && auth && auth.currentUser) {
+    try {
+      await updatePassword(auth.currentUser, newPass.trim());
+      return;
+    } catch (err: any) {
+      if (err.code === 'auth/requires-recent-login') {
+        throw new Error('This operation is sensitive. Please log out and sign back in before changing your password.');
+      }
+      throw new Error(err.message || 'Failed to update password. Please try again.');
+    }
+  }
+
+  // Local demo mode confirmation
+  return;
 };
 
 // Subscribe to Admin Auth State

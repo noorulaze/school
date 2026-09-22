@@ -14,7 +14,6 @@ import type {
   NoticeItem,
   EventItem
 } from '../types/firestore';
-import { getNoticesAdmin, getEventsAdmin, getStudentsAdmin } from './adminService';
 
 // Fetch Current Student Profile by UID or Student ID
 export const getStudentProfile = async (
@@ -36,30 +35,22 @@ export const getStudentProfile = async (
         const d = snapUid.docs[0];
         return { id: d.id, ...d.data() } as StudentDocument;
       }
-
-      // 3. Try query by studentId
-      if (studentId) {
-        const qId = query(collection(db, 'students'), where('studentId', '==', studentId.toUpperCase()));
-        const snapId = await getDocs(qId);
-        if (!snapId.empty) {
-          const d = snapId.docs[0];
-          return { id: d.id, ...d.data() } as StudentDocument;
-        }
-      }
     } catch (err) {
       console.warn('[StudentService] Firestore student fetch error:', err);
     }
   }
 
-  // Fallback / Development Mode matching
-  const allStudents = await getStudentsAdmin();
-  const found = allStudents.find(
-    (s) =>
-      s.uid === uid ||
-      (studentId && s.studentId.toUpperCase() === studentId.toUpperCase())
-  );
-
-  if (found) return found;
+  // Fallback in Local Development / Demo Mode (reads local storage without admin privileges)
+  try {
+    const raw = localStorage.getItem('sharafiyya_students');
+    if (raw) {
+      const all: StudentDocument[] = JSON.parse(raw);
+      const found = all.find(
+        (s) => s.uid === uid || (studentId && s.studentId.toUpperCase() === studentId.toUpperCase())
+      );
+      if (found) return found;
+    }
+  } catch {}
 
   // If newly created session in development
   return {
@@ -69,6 +60,7 @@ export const getStudentProfile = async (
     name: 'Enrolled Student',
     email: 'student@sharafiyya.edu',
     className: 'Class 5 - Intermediate',
+    section: 'Section A',
     department: 'Qur’an & Tajweed',
     academicYear: '2025–2026',
     accountStatus: 'Active',
@@ -118,16 +110,66 @@ export const getStudentAcademicRecords = async (uid: string): Promise<AcademicRe
 
 // Fetch Announcements for Student Dashboard (from published notices targeted to students or everyone)
 export const getStudentAnnouncements = async (): Promise<NoticeItem[]> => {
-  const notices = await getNoticesAdmin();
-  return notices.filter(
-    (n) => n.published && (!n.targetAudience || n.targetAudience === 'Everyone' || n.targetAudience === 'Students')
-  );
+  if (isFirebaseConfigured && db) {
+    try {
+      const q = query(
+        collection(db, 'notices'),
+        where('published', '==', true)
+      );
+      const snap = await getDocs(q);
+      if (!snap.empty) {
+        return snap.docs
+          .map((d) => ({ id: d.id, ...d.data() } as NoticeItem))
+          .filter(
+            (n) => !n.targetAudience || n.targetAudience === 'Everyone' || n.targetAudience === 'Students'
+          );
+      }
+    } catch (err) {
+      console.warn('[StudentService] Firestore notices fetch error:', err);
+    }
+  }
+
+  // Fallback
+  try {
+    const raw = localStorage.getItem('sharafiyya_notices');
+    if (raw) {
+      const all: NoticeItem[] = JSON.parse(raw);
+      return all.filter(
+        (n) => n.published && (!n.targetAudience || n.targetAudience === 'Everyone' || n.targetAudience === 'Students')
+      );
+    }
+  } catch {}
+
+  return [];
 };
 
 export const getStudentNotices = getStudentAnnouncements;
 
 // Fetch Upcoming Events for Student Dashboard
 export const getStudentEvents = async (): Promise<EventItem[]> => {
-  const events = await getEventsAdmin();
-  return events.filter((e) => e.published);
+  if (isFirebaseConfigured && db) {
+    try {
+      const q = query(
+        collection(db, 'events'),
+        where('published', '==', true)
+      );
+      const snap = await getDocs(q);
+      if (!snap.empty) {
+        return snap.docs.map((d) => ({ id: d.id, ...d.data() } as EventItem));
+      }
+    } catch (err) {
+      console.warn('[StudentService] Firestore events fetch error:', err);
+    }
+  }
+
+  // Fallback
+  try {
+    const raw = localStorage.getItem('sharafiyya_events');
+    if (raw) {
+      const all: EventItem[] = JSON.parse(raw);
+      return all.filter((e) => e.published);
+    }
+  } catch {}
+
+  return [];
 };
