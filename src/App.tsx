@@ -30,6 +30,7 @@ import { AdminTeachers } from './admin/pages/AdminTeachers';
 import { AdminDepartments } from './admin/pages/AdminDepartments';
 import { AdminGallery } from './admin/pages/AdminGallery';
 import { AdminAdmissions } from './admin/pages/AdminAdmissions';
+import { AdminDataCenter } from './admin/pages/AdminDataCenter';
 import { AdminSettings } from './admin/pages/AdminSettings';
 
 // Student Portal Pages & Components
@@ -110,6 +111,7 @@ function MainLayout({ onOpenAdmissionModal }: { onOpenAdmissionModal: () => void
               <Route path="departments" element={<AdminDepartments />} />
               <Route path="gallery" element={<AdminGallery />} />
               <Route path="admissions" element={<AdminAdmissions />} />
+              <Route path="data-center" element={<AdminDataCenter />} />
               <Route path="settings" element={<AdminSettings />} />
             </Route>
           </Route>

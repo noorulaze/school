@@ -16,7 +16,9 @@ import {
   ChevronRight,
   Shield,
   Activity,
-  MapPin
+  MapPin,
+  FileSpreadsheet,
+  Mail
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import {
@@ -27,7 +29,8 @@ import {
   getEventsAdmin,
   getStudentsAdmin,
   getTeachersAdmin,
-  getGalleryAdmin
+  getGalleryAdmin,
+  getContactMessagesAdmin
 } from '../../services/adminService';
 import { subscribeAdminAuth, type AuthSessionUser } from '../../services/authService';
 import type {
@@ -37,7 +40,8 @@ import type {
   EventItem,
   StudentDocument,
   TeacherItem,
-  GalleryItem
+  GalleryItem,
+  ContactMessage
 } from '../../types/firestore';
 
 interface ActivityItem {
@@ -63,6 +67,7 @@ export const AdminDashboard: React.FC = () => {
   });
 
   const [admissions, setAdmissions] = useState<AdmissionEnquiry[]>([]);
+  const [messages, setMessages] = useState<ContactMessage[]>([]);
   const [notices, setNotices] = useState<NoticeItem[]>([]);
   const [events, setEvents] = useState<EventItem[]>([]);
   const [students, setStudents] = useState<StudentDocument[]>([]);
@@ -92,7 +97,7 @@ export const AdminDashboard: React.FC = () => {
   const loadData = async () => {
     setLoading(true);
     try {
-      const [st, adm, nots, evts, studList, teachList, galList] = await Promise.all([
+      const [st, adm, nots, evts, studList, teachList, galList, msgList] = await Promise.all([
         getDashboardStats(),
         getAdmissionsAdmin(),
         getNoticesAdmin(),
@@ -100,10 +105,12 @@ export const AdminDashboard: React.FC = () => {
         getStudentsAdmin(),
         getTeachersAdmin(),
         getGalleryAdmin(),
+        getContactMessagesAdmin(),
       ]);
 
       setStats(st);
       setAdmissions(adm);
+      setMessages(msgList);
       setNotices(nots);
       setEvents(evts);
       setStudents(studList);
@@ -245,6 +252,11 @@ export const AdminDashboard: React.FC = () => {
       total,
     };
   }, [admissions]);
+
+  // Unread contact messages count
+  const unreadMessagesCount = useMemo(() => {
+    return messages.filter((m) => m.status === 'Unread').length;
+  }, [messages]);
 
   // Top 3 published notices
   const topPublishedNotices = useMemo(() => {
@@ -448,7 +460,96 @@ export const AdminDashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* 4. Main Two-Column Layout */}
+      {/* 4. Data Center Summary Hub */}
+      <div className="bg-gradient-to-r from-emerald-950 via-[#0d281e] to-emerald-900 rounded-2xl border border-emerald-800/60 p-4 sm:p-5 shadow-xs text-white">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-[#c59b27] flex items-center justify-center border border-[#c59b27]/30">
+              <FileSpreadsheet className="w-4 h-4" />
+            </div>
+            <div>
+              <h2 className="text-sm font-bold text-white tracking-tight flex items-center gap-2">
+                <span>Data Center Spreadsheet Hub</span>
+                <span className="text-[10px] uppercase font-bold bg-[#c59b27] text-slate-950 px-2 py-0.2 rounded-full">
+                  Excel Mode
+                </span>
+              </h2>
+              <p className="text-[11px] text-emerald-200/80">
+                Click any summary metric below to open its editable spreadsheet table in the Data Center
+              </p>
+            </div>
+          </div>
+
+          <Link
+            to="/admin/data-center"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/20 transition-all self-start sm:self-center shrink-0"
+          >
+            <span>Open Data Center</span>
+            <ArrowUpRight className="w-3.5 h-3.5 text-[#c59b27]" />
+          </Link>
+        </div>
+
+        {/* 4 Clickable Summary Chips */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <Link
+            to="/admin/data-center?section=admissions"
+            className="group p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all block"
+          >
+            <div className="flex items-center justify-between text-xs text-emerald-200/90 mb-1">
+              <span>New Admissions</span>
+              <Inbox className="w-3.5 h-3.5 text-[#c59b27]" />
+            </div>
+            <div className="text-xl font-black text-white group-hover:text-amber-300 transition-colors">
+              {admissionCounts.new}
+            </div>
+            <span className="text-[10px] text-emerald-300/70 block mt-0.5">Open admissions table →</span>
+          </Link>
+
+          <Link
+            to="/admin/data-center?section=messages"
+            className="group p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all block"
+          >
+            <div className="flex items-center justify-between text-xs text-emerald-200/90 mb-1">
+              <span>Unread Messages</span>
+              <Mail className="w-3.5 h-3.5 text-sky-300" />
+            </div>
+            <div className="text-xl font-black text-white group-hover:text-sky-300 transition-colors">
+              {unreadMessagesCount}
+            </div>
+            <span className="text-[10px] text-emerald-300/70 block mt-0.5">Open messages table →</span>
+          </Link>
+
+          <Link
+            to="/admin/data-center?section=students"
+            className="group p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all block"
+          >
+            <div className="flex items-center justify-between text-xs text-emerald-200/90 mb-1">
+              <span>Total Students</span>
+              <Users className="w-3.5 h-3.5 text-emerald-400" />
+            </div>
+            <div className="text-xl font-black text-white group-hover:text-emerald-300 transition-colors">
+              {stats.totalStudents || students.length}
+            </div>
+            <span className="text-[10px] text-emerald-300/70 block mt-0.5">Open students table →</span>
+          </Link>
+
+          <Link
+            to="/admin/data-center?section=teachers"
+            className="group p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all block"
+          >
+            <div className="flex items-center justify-between text-xs text-emerald-200/90 mb-1">
+              <span>Total Teachers</span>
+              <GraduationCap className="w-3.5 h-3.5 text-indigo-300" />
+            </div>
+            <div className="text-xl font-black text-white group-hover:text-indigo-300 transition-colors">
+              {stats.totalTeachers || teachers.length}
+            </div>
+            <span className="text-[10px] text-emerald-300/70 block mt-0.5">Open teachers table →</span>
+          </Link>
+        </div>
+      </div>
+
+      {/* 5. Main Two-Column Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-7 items-start">
         {/* Left Column (8 of 12 cols): Admissions Overview + Notices & Events */}
         <div className="lg:col-span-8 space-y-6 sm:space-y-7">

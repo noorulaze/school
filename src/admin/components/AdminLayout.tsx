@@ -28,6 +28,10 @@ const ROUTE_META: Record<string, RouteMeta> = {
     title: 'Dashboard Overview',
     subtitle: 'Real-time school administrative statistics & quick actions'
   },
+  '/admin/data-center': {
+    title: 'Data Center',
+    subtitle: 'Spreadsheet-style data management, filtering, and export tools'
+  },
   '/admin/students': {
     title: 'Student Directory',
     subtitle: 'Manage enrolled student accounts, class levels, and portal access'
@@ -164,6 +168,7 @@ export const AdminLayout: React.FC = () => {
 
   // Quick navigation items for search
   const quickJumpList = [
+    { label: 'Data Center', path: '/admin/data-center', section: 'Spreadsheet' },
     { label: 'Students Directory', path: '/admin/students', section: 'Records' },
     { label: 'Teachers Management', path: '/admin/teachers', section: 'Staff' },
     { label: 'Publish Notice', path: '/admin/notices', section: 'Announcements' },

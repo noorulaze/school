@@ -37,12 +37,15 @@ export interface TeacherItem {
   name: string;
   role: string;
   department: string;
+  phone?: string;
+  email?: string;
   photo?: string;
   photoUrl?: string;
   qualification?: string;
   subjects?: string[];
   bio: string;
   published: boolean;
+  status?: 'Active' | 'On Leave' | 'Inactive';
   createdAt?: string;
   updatedAt?: string;
 }
@@ -77,11 +80,44 @@ export interface AdmissionEnquiry {
   studentName?: string;
   phone: string;
   email?: string;
+  className?: string;
   enquiryType: 'Admission' | 'Academic Information' | 'Student Information' | 'General Enquiry';
   message: string;
   createdAt: string;
   updatedAt?: string;
   status: 'New' | 'Contacted' | 'Closed';
+  notes?: string;
+}
+
+export interface ContactMessage {
+  id: string;
+  name: string;
+  phone: string;
+  email?: string;
+  subject?: string;
+  message: string;
+  date?: string;
+  createdAt: string;
+  updatedAt?: string;
+  status: 'Unread' | 'Read' | 'Replied' | 'Closed';
+  notes?: string;
+}
+
+export interface CustomTableRow {
+  id: string;
+  data: Record<string, string>;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface CustomTableRecord {
+  id: string;
+  tableName: string;
+  description?: string;
+  columns: string[];
+  rows: CustomTableRow[];
+  createdAt: string;
+  updatedAt?: string;
 }
 
 export interface SchoolSettings {
@@ -110,6 +146,10 @@ export interface StudentDocument {
   email: string;
   className: string; // e.g. "Class 5 - Intermediate"
   section?: string; // e.g. "Section A"
+  division?: string;
+  parentName?: string;
+  guardianName?: string;
+  phone?: string;
   department: string; // e.g. "Qur’an & Tajweed"
   profileImage?: string;
   academicYear: string; // e.g. "2025–2026"
@@ -172,4 +212,5 @@ export interface DashboardStats {
   totalGallery: number;
   totalStudents: number;
   newAdmissions: number;
+  unreadMessages?: number;
 }

@@ -19,7 +19,10 @@ import type {
   AdmissionEnquiry,
   SchoolSettings,
   StudentDocument,
-  DashboardStats
+  DashboardStats,
+  ContactMessage,
+  CustomTableRecord,
+  CustomTableRow
 } from '../types/firestore';
 import { SCHOOL_INFO } from '../data/schoolInfo';
 import { NOTICES } from '../data/notices';
@@ -354,6 +357,21 @@ export const deleteTeacher = async (id: string): Promise<void> => {
   setLocalCollection('teachers', list);
 };
 
+export const bulkDeleteTeachers = async (ids: string[]): Promise<void> => {
+  const idSet = new Set(ids);
+  if (isFirebaseConfigured && db) {
+    for (const id of ids) {
+      try {
+        await deleteDoc(doc(db, 'teachers', id));
+      } catch (e) {
+        console.error('[AdminService] Error deleting teacher in bulk:', e);
+      }
+    }
+  }
+  const list = getLocalCollection('teachers', initialTeachers).filter((t) => !idSet.has(t.id));
+  setLocalCollection('teachers', list);
+};
+
 export const toggleTeacherPublish = async (id: string, published: boolean): Promise<void> => {
   if (isFirebaseConfigured && db) {
     try {
@@ -543,6 +561,48 @@ export const deleteAdmission = async (id: string): Promise<void> => {
   setLocalCollection('admissions', list);
 };
 
+export const saveAdmissionAdmin = async (
+  enquiry: Omit<AdmissionEnquiry, 'id' | 'createdAt'> & { id?: string; createdAt?: string }
+): Promise<AdmissionEnquiry> => {
+  const id = enquiry.id || `adm-${Date.now()}`;
+  const record: AdmissionEnquiry = {
+    ...enquiry,
+    id,
+    createdAt: enquiry.createdAt || new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+
+  if (isFirebaseConfigured && db) {
+    try {
+      await setDoc(doc(db, 'admissions', id), record, { merge: true });
+    } catch (e) {
+      console.error('[AdminService] Error saving admission enquiry:', e);
+    }
+  }
+
+  const list = getLocalCollection<AdmissionEnquiry>('admissions', []);
+  const idx = list.findIndex((a) => a.id === id);
+  if (idx >= 0) list[idx] = record;
+  else list.unshift(record);
+  setLocalCollection('admissions', list);
+  return record;
+};
+
+export const bulkDeleteAdmissions = async (ids: string[]): Promise<void> => {
+  const idSet = new Set(ids);
+  if (isFirebaseConfigured && db) {
+    for (const id of ids) {
+      try {
+        await deleteDoc(doc(db, 'admissions', id));
+      } catch (e) {
+        console.error('[AdminService] Error bulk deleting admissions:', e);
+      }
+    }
+  }
+  const list = getLocalCollection<AdmissionEnquiry>('admissions', []).filter((a) => !idSet.has(a.id));
+  setLocalCollection('admissions', list);
+};
+
 // ==================== STUDENTS ====================
 export const getStudentsAdmin = async (): Promise<StudentDocument[]> => {
   if (isFirebaseConfigured && db) {
@@ -608,6 +668,21 @@ export const deleteStudent = async (id: string): Promise<void> => {
   setLocalCollection('students', list);
 };
 
+export const bulkDeleteStudents = async (ids: string[]): Promise<void> => {
+  const idSet = new Set(ids);
+  if (isFirebaseConfigured && db) {
+    for (const id of ids) {
+      try {
+        await deleteDoc(doc(db, 'students', id));
+      } catch (e) {
+        console.error('[AdminService] Error deleting student in bulk:', e);
+      }
+    }
+  }
+  const list = getLocalCollection('students', initialStudents).filter((s) => !idSet.has(s.id));
+  setLocalCollection('students', list);
+};
+
 export const toggleStudentStatus = async (id: string, accountStatus: 'Active' | 'Disabled'): Promise<void> => {
   if (isFirebaseConfigured && db) {
     try {
@@ -659,9 +734,274 @@ export const saveSchoolSettings = async (settings: SchoolSettings): Promise<void
   localStorage.setItem(STORAGE_PREFIX + 'settings', JSON.stringify(settings));
 };
 
+// ==================== CONTACT MESSAGES ====================
+const initialContactMessages: ContactMessage[] = [
+  {
+    id: 'msg-001',
+    name: 'Mohammed Ashraf',
+    phone: '+91 98471 23456',
+    email: 'm.ashraf@gmail.com',
+    subject: 'Transportation Route to Korangath',
+    message: 'We are seeking admission for next term and would like to know if school bus service covers the Tanur beach road area.',
+    date: '2026-03-20',
+    createdAt: new Date(Date.now() - 3600 * 1000 * 24 * 2).toISOString(),
+    status: 'Unread',
+    notes: 'Follow up with transport coordinator',
+  },
+  {
+    id: 'msg-002',
+    name: 'Fathima Zehra',
+    phone: '+91 94472 88990',
+    email: 'fathima.z@outlook.com',
+    subject: 'Class 6 Curriculum Details',
+    message: 'Requested syllabus copy and book list for intermediate English medium stream.',
+    date: '2026-03-18',
+    createdAt: new Date(Date.now() - 3600 * 1000 * 24 * 4).toISOString(),
+    status: 'Read',
+    notes: 'Sent PDF prospectus via WhatsApp',
+  },
+];
+
+export const getContactMessagesAdmin = async (): Promise<ContactMessage[]> => {
+  if (isFirebaseConfigured && db) {
+    try {
+      const q = query(collection(db, 'contact_messages'), orderBy('createdAt', 'desc'));
+      const snapshot = await getDocs(q);
+      if (!snapshot.empty) {
+        return snapshot.docs.map((d) => ({ id: d.id, ...d.data() } as ContactMessage));
+      }
+    } catch (e) {
+      console.warn('[AdminService] Firestore contact messages query error, falling back:', e);
+    }
+  }
+  return getLocalCollection<ContactMessage>('contact_messages', initialContactMessages);
+};
+
+export const saveContactMessage = async (
+  message: Omit<ContactMessage, 'id' | 'createdAt'> & { id?: string; createdAt?: string }
+): Promise<ContactMessage> => {
+  const id = message.id || `msg-${Date.now()}`;
+  const record: ContactMessage = {
+    ...message,
+    id,
+    createdAt: message.createdAt || new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+
+  if (isFirebaseConfigured && db) {
+    try {
+      await setDoc(doc(db, 'contact_messages', id), record, { merge: true });
+    } catch (e) {
+      console.error('[AdminService] Error saving contact message:', e);
+    }
+  }
+
+  const list = getLocalCollection<ContactMessage>('contact_messages', initialContactMessages);
+  const idx = list.findIndex((m) => m.id === id);
+  if (idx >= 0) list[idx] = record;
+  else list.unshift(record);
+  setLocalCollection('contact_messages', list);
+  return record;
+};
+
+export const updateContactMessageStatus = async (
+  id: string,
+  status: ContactMessage['status'],
+  notes?: string
+): Promise<void> => {
+  const now = new Date().toISOString();
+  const updateData: Partial<ContactMessage> = { status, updatedAt: now };
+  if (notes !== undefined) updateData.notes = notes;
+
+  if (isFirebaseConfigured && db) {
+    try {
+      await updateDoc(doc(db, 'contact_messages', id), updateData);
+    } catch (e) {
+      console.error('[AdminService] Error updating contact message status:', e);
+    }
+  }
+
+  const list = getLocalCollection<ContactMessage>('contact_messages', initialContactMessages).map((m) =>
+    m.id === id ? { ...m, ...updateData } : m
+  );
+  setLocalCollection('contact_messages', list);
+};
+
+export const deleteContactMessage = async (id: string): Promise<void> => {
+  if (isFirebaseConfigured && db) {
+    try {
+      await deleteDoc(doc(db, 'contact_messages', id));
+    } catch (e) {
+      console.error('[AdminService] Error deleting contact message:', e);
+    }
+  }
+  const list = getLocalCollection<ContactMessage>('contact_messages', initialContactMessages).filter(
+    (m) => m.id !== id
+  );
+  setLocalCollection('contact_messages', list);
+};
+
+export const bulkDeleteContactMessages = async (ids: string[]): Promise<void> => {
+  const idSet = new Set(ids);
+  if (isFirebaseConfigured && db) {
+    for (const id of ids) {
+      try {
+        await deleteDoc(doc(db, 'contact_messages', id));
+      } catch (e) {
+        console.error('[AdminService] Error bulk deleting contact messages:', e);
+      }
+    }
+  }
+  const list = getLocalCollection<ContactMessage>('contact_messages', initialContactMessages).filter(
+    (m) => !idSet.has(m.id)
+  );
+  setLocalCollection('contact_messages', list);
+};
+
+// ==================== CUSTOM TABLES ====================
+const initialCustomTables: CustomTableRecord[] = [
+  {
+    id: 'tbl-assets',
+    tableName: 'Campus Equipment & Assets',
+    description: 'Classroom audio-visual and physical inventory tracking',
+    columns: ['Asset Name', 'Location / Room', 'Quantity', 'Condition', 'Custodian'],
+    rows: [
+      {
+        id: 'row-1',
+        data: {
+          'Asset Name': 'Interactive Smart Screen 75"',
+          'Location / Room': 'Smart Classroom 4A',
+          'Quantity': '1',
+          'Condition': 'Operational',
+          'Custodian': 'IT Department',
+        },
+        createdAt: new Date().toISOString(),
+      },
+      {
+        id: 'row-2',
+        data: {
+          'Asset Name': 'PA Sound Amplifier & Speakers',
+          'Location / Room': 'Main Assembly Quadrangle',
+          'Quantity': '2',
+          'Condition': 'Operational',
+          'Custodian': 'Physical Education Desk',
+        },
+        createdAt: new Date().toISOString(),
+      },
+    ],
+    createdAt: new Date().toISOString(),
+  },
+];
+
+export const getCustomTablesAdmin = async (): Promise<CustomTableRecord[]> => {
+  if (isFirebaseConfigured && db) {
+    try {
+      const q = query(collection(db, 'custom_tables'), orderBy('createdAt', 'desc'));
+      const snapshot = await getDocs(q);
+      if (!snapshot.empty) {
+        return snapshot.docs.map((d) => ({ id: d.id, ...d.data() } as CustomTableRecord));
+      }
+    } catch (e) {
+      console.warn('[AdminService] Firestore custom tables query error:', e);
+    }
+  }
+  return getLocalCollection<CustomTableRecord>('custom_tables', initialCustomTables);
+};
+
+export const saveCustomTable = async (
+  table: Omit<CustomTableRecord, 'id' | 'createdAt'> & { id?: string; createdAt?: string }
+): Promise<CustomTableRecord> => {
+  const id = table.id || `tbl-${Date.now()}`;
+  const record: CustomTableRecord = {
+    ...table,
+    id,
+    createdAt: table.createdAt || new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+
+  if (isFirebaseConfigured && db) {
+    try {
+      await setDoc(doc(db, 'custom_tables', id), record, { merge: true });
+    } catch (e) {
+      console.error('[AdminService] Error saving custom table:', e);
+    }
+  }
+
+  const list = getLocalCollection<CustomTableRecord>('custom_tables', initialCustomTables);
+  const idx = list.findIndex((t) => t.id === id);
+  if (idx >= 0) list[idx] = record;
+  else list.push(record);
+  setLocalCollection('custom_tables', list);
+  return record;
+};
+
+export const deleteCustomTable = async (tableId: string): Promise<void> => {
+  if (isFirebaseConfigured && db) {
+    try {
+      await deleteDoc(doc(db, 'custom_tables', tableId));
+    } catch (e) {
+      console.error('[AdminService] Error deleting custom table:', e);
+    }
+  }
+  const list = getLocalCollection<CustomTableRecord>('custom_tables', initialCustomTables).filter(
+    (t) => t.id !== tableId
+  );
+  setLocalCollection('custom_tables', list);
+};
+
+export const saveCustomTableRow = async (
+  tableId: string,
+  row: { id?: string; data: Record<string, string> }
+): Promise<CustomTableRow> => {
+  const rowId = row.id || `row-${Date.now()}`;
+  const now = new Date().toISOString();
+  const rowRecord: CustomTableRow = {
+    id: rowId,
+    data: row.data,
+    createdAt: now,
+    updatedAt: now,
+  };
+
+  const tables = await getCustomTablesAdmin();
+  const target = tables.find((t) => t.id === tableId);
+  if (target) {
+    const existingIdx = target.rows.findIndex((r) => r.id === rowId);
+    if (existingIdx >= 0) {
+      target.rows[existingIdx] = {
+        ...target.rows[existingIdx],
+        data: row.data,
+        updatedAt: now,
+      };
+    } else {
+      target.rows.push(rowRecord);
+    }
+    await saveCustomTable(target);
+  }
+  return rowRecord;
+};
+
+export const deleteCustomTableRow = async (tableId: string, rowId: string): Promise<void> => {
+  const tables = await getCustomTablesAdmin();
+  const target = tables.find((t) => t.id === tableId);
+  if (target) {
+    target.rows = target.rows.filter((r) => r.id !== rowId);
+    await saveCustomTable(target);
+  }
+};
+
+export const bulkDeleteCustomTableRows = async (tableId: string, rowIds: string[]): Promise<void> => {
+  const tables = await getCustomTablesAdmin();
+  const target = tables.find((t) => t.id === tableId);
+  if (target) {
+    const removeSet = new Set(rowIds);
+    target.rows = target.rows.filter((r) => !removeSet.has(r.id));
+    await saveCustomTable(target);
+  }
+};
+
 // ==================== DASHBOARD STATS ====================
 export const getDashboardStats = async (): Promise<DashboardStats> => {
-  const [notices, events, teachers, departments, gallery, students, admissions] = await Promise.all([
+  const [notices, events, teachers, departments, gallery, students, admissions, messages] = await Promise.all([
     getNoticesAdmin(),
     getEventsAdmin(),
     getTeachersAdmin(),
@@ -669,6 +1009,7 @@ export const getDashboardStats = async (): Promise<DashboardStats> => {
     getGalleryAdmin(),
     getStudentsAdmin(),
     getAdmissionsAdmin(),
+    getContactMessagesAdmin(),
   ]);
 
   return {
@@ -679,5 +1020,6 @@ export const getDashboardStats = async (): Promise<DashboardStats> => {
     totalGallery: gallery.length,
     totalStudents: students.length,
     newAdmissions: admissions.filter((a) => a.status === 'New').length,
+    unreadMessages: messages.filter((m) => m.status === 'Unread').length,
   };
 };
