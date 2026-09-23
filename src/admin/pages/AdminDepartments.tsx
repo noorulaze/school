@@ -138,10 +138,10 @@ export const AdminDepartments: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-            Academic Departments & Streams
+            Academic Programs & Curriculum
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Configure core curriculum faculties, syllabus modules, and target levels.
+            Configure core curriculum streams, syllabus modules, and target levels.
           </p>
         </div>
 
@@ -151,7 +151,7 @@ export const AdminDepartments: React.FC = () => {
           className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#164e37] hover:bg-[#113d2b] text-white font-bold text-xs rounded-xl shadow-xs transition-all cursor-pointer shrink-0"
         >
           <Plus className="w-4 h-4 text-[#c59b27]" />
-          <span>Add Department</span>
+          <span>Add Academic Program</span>
         </button>
       </div>
 

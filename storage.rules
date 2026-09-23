@@ -6,12 +6,21 @@ service firebase.storage {
       return request.auth != null;
     }
     
-    // Public media readable by all; upload requires authentication and image size <= 5MB
+    function isAdmin() {
+      return isAuthenticated() && (
+        request.auth.token.admin == true ||
+        (request.auth.token.email != null && (
+          request.auth.token.email.matches('.*admin.*') ||
+          request.auth.token.email == 'admin@sharafiyya.edu'
+        ))
+      );
+    }
+    
+    // Public media readable by all; upload requires admin authentication and file size <= 10MB
     match /{allPaths=**} {
       allow read: if true;
-      allow write: if isAuthenticated() 
-                   && request.resource.size < 5 * 1024 * 1024
-                   && request.resource.contentType.matches('image/.*');
+      allow write: if isAdmin() 
+                   && request.resource.size < 10 * 1024 * 1024;
     }
   }
 }

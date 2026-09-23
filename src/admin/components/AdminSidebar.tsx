@@ -11,8 +11,7 @@ import {
   Inbox,
   Settings,
   LogOut,
-  ExternalLink,
-  ShieldCheck
+  ExternalLink
 } from 'lucide-react';
 import { logoutAdmin } from '../../services/authService';
 
@@ -31,13 +30,13 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ onCloseMobile }) => 
   const navItems = [
     { label: 'Dashboard', path: '/admin', icon: LayoutDashboard, end: true },
     { label: 'Students', path: '/admin/students', icon: Users },
+    { label: 'Teachers', path: '/admin/teachers', icon: GraduationCap },
     { label: 'Notices', path: '/admin/notices', icon: Bell },
     { label: 'Events', path: '/admin/events', icon: Calendar },
-    { label: 'Teachers', path: '/admin/teachers', icon: GraduationCap },
-    { label: 'Departments', path: '/admin/departments', icon: BookOpen },
+    { label: 'Academics', path: '/admin/academics', icon: BookOpen },
     { label: 'Gallery', path: '/admin/gallery', icon: Image },
     { label: 'Admissions', path: '/admin/admissions', icon: Inbox },
-    { label: 'School Settings', path: '/admin/settings', icon: Settings },
+    { label: 'Settings', path: '/admin/settings', icon: Settings },
   ];
 
   return (
@@ -46,15 +45,22 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ onCloseMobile }) => 
       <div>
         <div className="p-4 sm:p-5 border-b border-[#1a4434] flex items-center justify-between gap-3">
           <div className="flex items-center gap-2.5 min-w-0">
-            <div className="w-9 h-9 rounded-lg bg-[#164e37] text-white flex items-center justify-center shrink-0 border border-[#c59b27]/70 shadow-xs">
-              <ShieldCheck className="w-5 h-5 text-[#c59b27]" />
+            {/* School Crest Emblem */}
+            <div className="w-9 h-9 rounded-xl bg-[#164e37] flex items-center justify-center shrink-0 border border-[#c59b27]/70 shadow-xs overflow-hidden">
+              <svg viewBox="0 0 100 100" className="w-6 h-6" aria-hidden="true">
+                <circle cx="50" cy="50" r="46" fill="none" stroke="#c59b27" strokeWidth="2.5" strokeDasharray="3 2" />
+                <path d="M24 64 C36 58, 45 61, 50 67 C55 61, 64 58, 76 64 L76 38 C64 34, 55 37, 50 43 C45 37, 36 34, 24 38 Z" fill="#ffffff" />
+                <circle cx="50" cy="27" r="5" fill="#c59b27" />
+                <circle cx="52" cy="26" r="4" fill="#164e37" />
+                <line x1="50" y1="43" x2="50" y2="67" stroke="#164e37" strokeWidth="2.5" />
+              </svg>
             </div>
             <div className="min-w-0">
               <h2 className="text-white font-extrabold text-sm tracking-tight truncate leading-tight">
                 Sharafiyya Admin
               </h2>
               <span className="text-[10px] text-emerald-300/80 font-medium block truncate">
-                Admin Control Panel
+                Admin Workspace
               </span>
             </div>
           </div>

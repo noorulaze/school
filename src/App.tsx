@@ -106,6 +106,7 @@ function MainLayout({ onOpenAdmissionModal }: { onOpenAdmissionModal: () => void
               <Route path="notices" element={<AdminNotices />} />
               <Route path="events" element={<AdminEvents />} />
               <Route path="teachers" element={<AdminTeachers />} />
+              <Route path="academics" element={<AdminDepartments />} />
               <Route path="departments" element={<AdminDepartments />} />
               <Route path="gallery" element={<AdminGallery />} />
               <Route path="admissions" element={<AdminAdmissions />} />

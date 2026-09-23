@@ -107,10 +107,10 @@ export const AdminDashboard: React.FC = () => {
       accent: 'text-indigo-300',
     },
     {
-      label: 'Academic Departments',
+      label: 'Academic Programs',
       value: stats.totalDepartments,
       icon: BookOpen,
-      link: '/admin/departments',
+      link: '/admin/academics',
       color: 'from-emerald-900 to-slate-900',
       accent: 'text-emerald-200',
     },
@@ -128,23 +128,37 @@ export const AdminDashboard: React.FC = () => {
             Sharafiyya English Medium School Dashboard
           </h1>
           <p className="text-xs sm:text-sm text-emerald-100/90 mt-2 leading-relaxed">
-            Welcome to the centralized administration management portal. Monitor real-time student records, publish official notices, organize upcoming events, and review admission enquiries.
+            Welcome to the centralized administration management portal. Monitor real-time student records, manage faculty, publish official notices, organize upcoming events, and review admission enquiries.
           </p>
 
-          <div className="mt-6 flex flex-wrap gap-3">
+          <div className="mt-6 flex flex-wrap gap-2.5">
             <Link
               to="/admin/students"
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#c59b27] hover:bg-[#b0881e] text-slate-950 font-bold text-xs rounded-xl shadow-sm transition-all"
+              className="inline-flex items-center gap-2 px-3.5 py-2 bg-[#c59b27] hover:bg-[#b0881e] text-slate-950 font-bold text-xs rounded-xl shadow-xs transition-all"
             >
               <UserPlus className="w-4 h-4" />
               <span>Manage Students</span>
             </Link>
             <Link
+              to="/admin/teachers"
+              className="inline-flex items-center gap-2 px-3.5 py-2 bg-white/10 hover:bg-white/20 text-white font-semibold text-xs rounded-xl backdrop-blur-xs transition-all border border-white/15"
+            >
+              <GraduationCap className="w-4 h-4 text-[#c59b27]" />
+              <span>Faculty Directory</span>
+            </Link>
+            <Link
               to="/admin/notices"
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white font-semibold text-xs rounded-xl backdrop-blur-xs transition-all border border-white/15"
+              className="inline-flex items-center gap-2 px-3.5 py-2 bg-white/10 hover:bg-white/20 text-white font-semibold text-xs rounded-xl backdrop-blur-xs transition-all border border-white/15"
             >
               <PlusCircle className="w-4 h-4 text-[#c59b27]" />
               <span>Publish Notice</span>
+            </Link>
+            <Link
+              to="/admin/admissions"
+              className="inline-flex items-center gap-2 px-3.5 py-2 bg-white/10 hover:bg-white/20 text-white font-semibold text-xs rounded-xl backdrop-blur-xs transition-all border border-white/15"
+            >
+              <Inbox className="w-4 h-4 text-emerald-300" />
+              <span>Review Admissions</span>
             </Link>
           </div>
         </div>
@@ -271,31 +285,52 @@ export const AdminDashboard: React.FC = () => {
             <div className="space-y-2.5">
               <Link
                 to="/admin/students"
-                className="flex items-center gap-3 p-3 rounded-xl bg-emerald-50 text-emerald-950 hover:bg-emerald-100 font-semibold text-xs transition-colors border border-emerald-200/50"
+                className="flex items-center gap-3 p-2.5 rounded-xl bg-emerald-50 text-emerald-950 hover:bg-emerald-100 font-semibold text-xs transition-colors border border-emerald-200/50"
               >
-                <UserPlus className="w-4 h-4 text-emerald-700" />
-                <span>Add / Manage Student Records</span>
+                <UserPlus className="w-4 h-4 text-emerald-700 shrink-0" />
+                <span>Enrolled Students Directory</span>
+              </Link>
+              <Link
+                to="/admin/teachers"
+                className="flex items-center gap-3 p-2.5 rounded-xl bg-slate-50 text-slate-800 hover:bg-slate-100 font-semibold text-xs transition-colors border border-slate-200"
+              >
+                <GraduationCap className="w-4 h-4 text-indigo-600 shrink-0" />
+                <span>Faculty & Teacher Profiles</span>
+              </Link>
+              <Link
+                to="/admin/admissions"
+                className="flex items-center gap-3 p-2.5 rounded-xl bg-slate-50 text-slate-800 hover:bg-slate-100 font-semibold text-xs transition-colors border border-slate-200"
+              >
+                <Inbox className="w-4 h-4 text-amber-600 shrink-0" />
+                <span>Review Admission Enquiries</span>
               </Link>
               <Link
                 to="/admin/notices"
-                className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 text-slate-800 hover:bg-slate-100 font-semibold text-xs transition-colors border border-slate-200"
+                className="flex items-center gap-3 p-2.5 rounded-xl bg-slate-50 text-slate-800 hover:bg-slate-100 font-semibold text-xs transition-colors border border-slate-200"
               >
-                <Bell className="w-4 h-4 text-[#c59b27]" />
-                <span>Post Official Madrassa Notice</span>
+                <Bell className="w-4 h-4 text-[#c59b27] shrink-0" />
+                <span>Publish Official School Circular</span>
               </Link>
               <Link
                 to="/admin/events"
-                className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 text-slate-800 hover:bg-slate-100 font-semibold text-xs transition-colors border border-slate-200"
+                className="flex items-center gap-3 p-2.5 rounded-xl bg-slate-50 text-slate-800 hover:bg-slate-100 font-semibold text-xs transition-colors border border-slate-200"
               >
-                <Calendar className="w-4 h-4 text-[#164e37]" />
-                <span>Schedule Academic or Public Event</span>
+                <Calendar className="w-4 h-4 text-teal-700 shrink-0" />
+                <span>Schedule Academic & School Events</span>
+              </Link>
+              <Link
+                to="/admin/academics"
+                className="flex items-center gap-3 p-2.5 rounded-xl bg-slate-50 text-slate-800 hover:bg-slate-100 font-semibold text-xs transition-colors border border-slate-200"
+              >
+                <BookOpen className="w-4 h-4 text-emerald-700 shrink-0" />
+                <span>Academic Programs & Modules</span>
               </Link>
               <Link
                 to="/admin/settings"
-                className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 text-slate-800 hover:bg-slate-100 font-semibold text-xs transition-colors border border-slate-200"
+                className="flex items-center gap-3 p-2.5 rounded-xl bg-slate-50 text-slate-800 hover:bg-slate-100 font-semibold text-xs transition-colors border border-slate-200"
               >
-                <BookOpen className="w-4 h-4 text-slate-600" />
-                <span>Edit Madrassa Office Details</span>
+                <BookOpen className="w-4 h-4 text-slate-500 shrink-0" />
+                <span>School Profile & Contact Details</span>
               </Link>
             </div>
           </div>
