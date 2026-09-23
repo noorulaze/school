@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { loginStudent } from '../../services/authService';
+import { loginStudent, loginAdmin, getAdminCredentials } from '../../services/authService';
 import {
   Lock,
   User,
@@ -9,14 +9,24 @@ import {
   ArrowLeft,
   KeyRound,
   ShieldCheck,
+  Shield,
   CheckCircle2,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const StudentLogin: React.FC = () => {
   const navigate = useNavigate();
+  // Mode toggle between student and admin login
+  const [isAdminMode, setIsAdminMode] = useState(false);
+
+  // Student login state
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
+
+  // Admin login state (temporary testing credentials)
+  const [adminUsername, setAdminUsername] = useState('admin');
+  const [adminPassword, setAdminPassword] = useState('');
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -35,9 +45,31 @@ export const StudentLogin: React.FC = () => {
     }
   };
 
+  const handleAdminSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+
+    try {
+      await loginAdmin(adminUsername, adminPassword);
+      navigate('/admin');
+    } catch (err: any) {
+      setError(err.message || 'Invalid administrator username or password.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleFillDemo = () => {
     setIdentifier('SK-2025-001');
     setPassword('Student@123');
+    setError(null);
+  };
+
+  const handleFillAdminDemo = () => {
+    const creds = getAdminCredentials();
+    setAdminUsername(creds.username);
+    setAdminPassword(creds.password);
     setError(null);
   };
 
@@ -57,22 +89,39 @@ export const StudentLogin: React.FC = () => {
 
       {/* Top Mobile App Bar / Back Link */}
       <div className="w-full max-w-md relative z-10 flex items-center justify-between pb-2 sm:pb-4">
-        <Link
-          to="/"
-          className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-white border border-[#e5e0d5] text-xs font-bold text-[#164e37] hover:bg-[#f4f9f6] transition-all shadow-2xs group"
-        >
-          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
-          <span>Back to School</span>
-        </Link>
-        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Student Portal</span>
+        {isAdminMode ? (
+          <button
+            type="button"
+            onClick={() => {
+              setIsAdminMode(false);
+              setError(null);
+            }}
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-white border border-[#e5e0d5] text-xs font-bold text-[#164e37] hover:bg-[#f4f9f6] transition-all shadow-2xs group cursor-pointer"
+          >
+            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
+            <span>Back to Student Login</span>
+          </button>
+        ) : (
+          <Link
+            to="/"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-white border border-[#e5e0d5] text-xs font-bold text-[#164e37] hover:bg-[#f4f9f6] transition-all shadow-2xs group"
+          >
+            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
+            <span>Back to School</span>
+          </Link>
+        )}
+        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+          {isAdminMode ? 'Admin Portal' : 'Student Portal'}
+        </span>
       </div>
 
       <div className="w-full max-w-md relative z-10 my-auto space-y-3 sm:space-y-4">
         {/* Login Card */}
         <motion.div
+          key={isAdminMode ? 'admin-card' : 'student-card'}
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.35 }}
+          transition={{ duration: 0.3 }}
           className="bg-white rounded-3xl shadow-xs hover:shadow-md border border-[#e5e0d5] overflow-hidden transition-shadow"
         >
           {/* Card Header with School Crest */}
@@ -89,14 +138,16 @@ export const StudentLogin: React.FC = () => {
             </div>
 
             <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#164e37] border border-[#c59b27]/30 text-[9px] font-bold text-amber-300 uppercase tracking-widest mb-1">
-              <span>Private Access</span>
+              <span>{isAdminMode ? 'Administrator Workspace' : 'Private Access'}</span>
             </span>
 
             <h1 className="text-lg sm:text-2xl font-black tracking-tight text-white">
-              Student Digital Portal
+              {isAdminMode ? 'Admin Portal Login' : 'Student Digital Portal'}
             </h1>
             <p className="text-[11px] sm:text-xs text-emerald-100/80 mt-0.5 font-medium">
-              Sharafiyya English Medium School · Korangath, Tirur
+              {isAdminMode
+                ? 'Temporary Testing Access · Sharafiyya English Medium School'
+                : 'Sharafiyya English Medium School · Korangath, Tirur'}
             </p>
           </div>
 
@@ -112,85 +163,203 @@ export const StudentLogin: React.FC = () => {
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-3">
-              <div>
-                <label className="block text-[10px] sm:text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">
-                  Student ID or Registered Email
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                    <User className="w-4 h-4" />
+            {!isAdminMode ? (
+              /* STUDENT LOGIN FORM */
+              <>
+                <form onSubmit={handleSubmit} className="space-y-3">
+                  <div>
+                    <label className="block text-[10px] sm:text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">
+                      Student ID or Registered Email
+                    </label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                        <User className="w-4 h-4" />
+                      </div>
+                      <input
+                        type="text"
+                        required
+                        value={identifier}
+                        onChange={(e) => setIdentifier(e.target.value)}
+                        placeholder="e.g. SK-2025-001 or email"
+                        className="w-full pl-10 pr-3 py-2.5 bg-[#fcfbf9] border border-[#d8d3c5] rounded-xl text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#164e37] focus:bg-white transition-all"
+                      />
+                    </div>
                   </div>
-                  <input
-                    type="text"
-                    required
-                    value={identifier}
-                    onChange={(e) => setIdentifier(e.target.value)}
-                    placeholder="e.g. SK-2025-001 or email"
-                    className="w-full pl-10 pr-3 py-2.5 bg-[#fcfbf9] border border-[#d8d3c5] rounded-xl text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#164e37] focus:bg-white transition-all"
-                  />
-                </div>
-              </div>
 
-              <div>
-                <div className="flex items-center justify-between mb-1">
-                  <label className="block text-[10px] sm:text-[11px] font-bold text-slate-700 uppercase tracking-wider">
-                    Portal Password
-                  </label>
-                  <span className="text-[10px] text-slate-400">
-                    Contact Admin to Reset
-                  </span>
-                </div>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                    <Lock className="w-4 h-4" />
+                  <div>
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="block text-[10px] sm:text-[11px] font-bold text-slate-700 uppercase tracking-wider">
+                        Portal Password
+                      </label>
+                      <span className="text-[10px] text-slate-400">
+                        Contact Admin to Reset
+                      </span>
+                    </div>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                        <Lock className="w-4 h-4" />
+                      </div>
+                      <input
+                        type="password"
+                        required
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="••••••••••••"
+                        className="w-full pl-10 pr-3 py-2.5 bg-[#fcfbf9] border border-[#d8d3c5] rounded-xl text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#164e37] focus:bg-white transition-all"
+                      />
+                    </div>
                   </div>
-                  <input
-                    type="password"
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••••••"
-                    className="w-full pl-10 pr-3 py-2.5 bg-[#fcfbf9] border border-[#d8d3c5] rounded-xl text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#164e37] focus:bg-white transition-all"
-                  />
+
+                  <div className="pt-1">
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="w-full py-3 px-4 bg-[#164e37] hover:bg-[#0f3b29] active:scale-[0.99] text-white font-bold text-xs sm:text-sm rounded-xl shadow-xs hover:shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed min-h-[44px]"
+                    >
+                      {loading ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin text-[#c59b27]" />
+                          <span>Verifying Credentials...</span>
+                        </>
+                      ) : (
+                        <>
+                          <ShieldCheck className="w-4 h-4 text-[#c59b27]" />
+                          <span>Log In to Student Portal</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </form>
+
+                {/* Quick Demo Helper */}
+                <div className="pt-2.5 border-t border-[#ede8de] text-center space-y-1.5">
+                  <button
+                    type="button"
+                    onClick={handleFillDemo}
+                    className="inline-flex items-center gap-1.5 text-xs text-[#164e37] hover:text-[#0f3b29] font-bold bg-[#eef6f2] hover:bg-[#e2f0e8] px-3 py-1.5 rounded-lg border border-[#cbe3d5] transition-colors cursor-pointer"
+                  >
+                    <KeyRound className="w-3.5 h-3.5 text-[#c59b27]" />
+                    <span>Fill Sample Credentials (SK-2025-001)</span>
+                  </button>
+                  <p className="text-[10px] text-slate-500 leading-relaxed">
+                    Need password help? Visit the school office or email admin@sharafiyya.edu.
+                  </p>
                 </div>
-              </div>
 
-              <div className="pt-1">
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full py-3 px-4 bg-[#164e37] hover:bg-[#0f3b29] active:scale-[0.99] text-white font-bold text-xs sm:text-sm rounded-xl shadow-xs hover:shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed min-h-[44px]"
-                >
-                  {loading ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin text-[#c59b27]" />
-                      <span>Verifying Credentials...</span>
-                    </>
-                  ) : (
-                    <>
-                      <ShieldCheck className="w-4 h-4 text-[#c59b27]" />
-                      <span>Log In to Student Portal</span>
-                    </>
-                  )}
-                </button>
-              </div>
-            </form>
+                {/* Small Option: Admin Login */}
+                <div className="pt-2.5 border-t border-[#ede8de] text-center">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsAdminMode(true);
+                      setError(null);
+                    }}
+                    className="text-xs font-semibold text-slate-500 hover:text-[#164e37] transition-colors inline-flex items-center gap-1.5 cursor-pointer py-1 px-3 rounded-lg hover:bg-slate-100"
+                  >
+                    <Shield className="w-3.5 h-3.5 text-[#c59b27]" />
+                    <span>Admin Login</span>
+                  </button>
+                </div>
+              </>
+            ) : (
+              /* ADMIN LOGIN FORM (TEMPORARY TESTING LOGIN) */
+              <>
+                <form onSubmit={handleAdminSubmit} className="space-y-3">
+                  <div>
+                    <label className="block text-[10px] sm:text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">
+                      Admin Username
+                    </label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                        <User className="w-4 h-4" />
+                      </div>
+                      <input
+                        type="text"
+                        required
+                        value={adminUsername}
+                        onChange={(e) => setAdminUsername(e.target.value)}
+                        placeholder="admin"
+                        className="w-full pl-10 pr-3 py-2.5 bg-[#fcfbf9] border border-[#d8d3c5] rounded-xl text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#164e37] focus:bg-white transition-all"
+                      />
+                    </div>
+                  </div>
 
-            {/* Quick Demo Helper */}
-            <div className="pt-2.5 border-t border-[#ede8de] text-center space-y-1.5">
-              <button
-                type="button"
-                onClick={handleFillDemo}
-                className="inline-flex items-center gap-1.5 text-xs text-[#164e37] hover:text-[#0f3b29] font-bold bg-[#eef6f2] hover:bg-[#e2f0e8] px-3 py-1.5 rounded-lg border border-[#cbe3d5] transition-colors cursor-pointer"
-              >
-                <KeyRound className="w-3.5 h-3.5 text-[#c59b27]" />
-                <span>Fill Sample Credentials (SK-2025-001)</span>
-              </button>
-              <p className="text-[10px] text-slate-500 leading-relaxed">
-                Need password help? Visit the school office or email admin@sharafiyya.edu.
-              </p>
-            </div>
+                  <div>
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="block text-[10px] sm:text-[11px] font-bold text-slate-700 uppercase tracking-wider">
+                        Admin Password
+                      </label>
+                      <span className="text-[10px] font-mono text-[#164e37] font-semibold">
+                        Default: admin @123
+                      </span>
+                    </div>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                        <Lock className="w-4 h-4" />
+                      </div>
+                      <input
+                        type="password"
+                        required
+                        value={adminPassword}
+                        onChange={(e) => setAdminPassword(e.target.value)}
+                        placeholder="••••••••••••"
+                        className="w-full pl-10 pr-3 py-2.5 bg-[#fcfbf9] border border-[#d8d3c5] rounded-xl text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#164e37] focus:bg-white transition-all"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="pt-1">
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="w-full py-3 px-4 bg-[#164e37] hover:bg-[#0f3b29] active:scale-[0.99] text-white font-bold text-xs sm:text-sm rounded-xl shadow-xs hover:shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed min-h-[44px]"
+                    >
+                      {loading ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin text-[#c59b27]" />
+                          <span>Authenticating Admin...</span>
+                        </>
+                      ) : (
+                        <>
+                          <ShieldCheck className="w-4 h-4 text-[#c59b27]" />
+                          <span>Log In to Admin Workspace</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </form>
+
+                {/* Quick Demo Helper for Admin */}
+                <div className="pt-2.5 border-t border-[#ede8de] text-center space-y-1.5">
+                  <button
+                    type="button"
+                    onClick={handleFillAdminDemo}
+                    className="inline-flex items-center gap-1.5 text-xs text-[#164e37] hover:text-[#0f3b29] font-bold bg-[#eef6f2] hover:bg-[#e2f0e8] px-3 py-1.5 rounded-lg border border-[#cbe3d5] transition-colors cursor-pointer"
+                  >
+                    <KeyRound className="w-3.5 h-3.5 text-[#c59b27]" />
+                    <span>Fill Demo Credentials (admin / admin @123)</span>
+                  </button>
+                  <p className="text-[10px] text-slate-500 leading-relaxed">
+                    Temporary testing login. Credentials can be customized inside Admin Settings.
+                  </p>
+                </div>
+
+                {/* Return to Student Login */}
+                <div className="pt-2.5 border-t border-[#ede8de] text-center">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsAdminMode(false);
+                      setError(null);
+                    }}
+                    className="text-xs font-semibold text-slate-500 hover:text-[#164e37] transition-colors inline-flex items-center gap-1.5 cursor-pointer py-1 px-3 rounded-lg hover:bg-slate-100"
+                  >
+                    <User className="w-3.5 h-3.5 text-slate-500" />
+                    <span>Return to Student Login</span>
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </motion.div>
 
@@ -198,10 +367,12 @@ export const StudentLogin: React.FC = () => {
         <div className="p-3 rounded-2xl bg-white border border-[#e5e0d5] text-center text-xs text-slate-500 space-y-0.5 shadow-2xs">
           <p className="font-semibold text-slate-700 flex items-center justify-center gap-1.5 text-[11px]">
             <CheckCircle2 className="w-3.5 h-3.5 text-[#164e37]" />
-            <span>Secure Student Data Isolation</span>
+            <span>{isAdminMode ? 'Restricted Administrator Area' : 'Secure Student Data Isolation'}</span>
           </p>
           <p className="text-[10px] text-slate-500">
-            Authenticated records are private to each enrolled student account.
+            {isAdminMode
+              ? 'Authorized school administrative access only.'
+              : 'Authenticated records are private to each enrolled student account.'}
           </p>
         </div>
       </div>

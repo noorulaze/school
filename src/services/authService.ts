@@ -19,15 +19,82 @@ export interface AuthSessionUser {
 
 const LOCAL_ADMIN_KEY = 'sharafiyya_admin_session';
 const LOCAL_STUDENT_KEY = 'sharafiyya_student_session';
+const LOCAL_CUSTOM_ADMIN_CREDS_KEY = 'sharafiyya_custom_admin_creds';
+
+export interface AdminCredentials {
+  username: string;
+  password: string;
+}
+
+// Retrieve configured temporary admin credentials, defaulting to admin / admin @123
+export const getAdminCredentials = (): AdminCredentials => {
+  try {
+    const raw = localStorage.getItem(LOCAL_CUSTOM_ADMIN_CREDS_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed.username && parsed.password) {
+        return parsed;
+      }
+    }
+  } catch (e) {
+    console.error('Error reading custom admin credentials:', e);
+  }
+  return {
+    username: 'admin',
+    password: 'admin @123'
+  };
+};
+
+// Update temporary admin credentials (used in Admin Settings)
+export const updateAdminCredentials = (username: string, password: string): void => {
+  if (!username.trim() || !password.trim()) {
+    throw new Error('Username and password cannot be empty.');
+  }
+  localStorage.setItem(
+    LOCAL_CUSTOM_ADMIN_CREDS_KEY,
+    JSON.stringify({
+      username: username.trim(),
+      password: password.trim()
+    })
+  );
+};
 
 // Admin Login
-export const loginAdmin = async (email: string, pass: string): Promise<AuthSessionUser> => {
-  const trimmedEmail = email.trim().toLowerCase();
+export const loginAdmin = async (emailOrUsername: string, pass: string): Promise<AuthSessionUser> => {
+  const trimmedInput = emailOrUsername.trim().toLowerCase();
+  const trimmedPass = pass.trim();
 
-  if (isFirebaseConfigured && auth) {
+  // 1. Check temporary/demo credentials (configurable in Admin Settings)
+  const currentCreds = getAdminCredentials();
+  const matchesUsername =
+    trimmedInput === currentCreds.username.trim().toLowerCase() ||
+    (currentCreds.username.trim().toLowerCase() === 'admin' && (trimmedInput === 'admin@sharafiyya.edu' || trimmedInput === 'admin@sharafiyya.com'));
+
+  // Allow both "admin @123" and "admin@123" by comparing normalized non-whitespace
+  const normalizedInputPass = trimmedPass.replace(/\s+/g, '');
+  const normalizedConfiguredPass = currentCreds.password.trim().replace(/\s+/g, '');
+
+  const matchesPass =
+    trimmedPass === currentCreds.password.trim() ||
+    normalizedInputPass === normalizedConfiguredPass ||
+    (currentCreds.username.trim().toLowerCase() === 'admin' && (trimmedPass === 'Admin@123' || trimmedPass === 'admin123'));
+
+  if (matchesUsername && matchesPass) {
+    const session: AuthSessionUser = {
+      uid: 'demo-admin-uid-001',
+      email: trimmedInput.includes('@') ? trimmedInput : `${currentCreds.username}@sharafiyya.edu`,
+      displayName: 'Principal / Administrator',
+      role: 'admin'
+    };
+    localStorage.setItem(LOCAL_ADMIN_KEY, JSON.stringify(session));
+    return session;
+  }
+
+  // 2. If Firebase is configured and user typed an email, try Firebase Authentication
+  if (isFirebaseConfigured && auth && trimmedInput.includes('@')) {
     try {
       await setPersistence(auth, browserLocalPersistence);
-      const cred = await signInWithEmailAndPassword(auth, trimmedEmail, pass);
+      const cred = await signInWithEmailAndPassword(auth, trimmedInput, pass);
       const user = cred.user;
       return {
         uid: user.uid,
@@ -41,22 +108,7 @@ export const loginAdmin = async (email: string, pass: string): Promise<AuthSessi
     }
   }
 
-  // Resilient Development / Demo Mode
-  if (
-    (trimmedEmail === 'admin@sharafiyya.edu' || trimmedEmail === 'admin@sharafiyya.com' || trimmedEmail === 'admin') &&
-    (pass === 'Admin@123' || pass === 'admin123' || pass === 'admin')
-  ) {
-    const session: AuthSessionUser = {
-      uid: 'demo-admin-uid-001',
-      email: trimmedEmail.includes('@') ? trimmedEmail : 'admin@sharafiyya.edu',
-      displayName: 'Principal / Administrator',
-      role: 'admin'
-    };
-    localStorage.setItem(LOCAL_ADMIN_KEY, JSON.stringify(session));
-    return session;
-  }
-
-  throw new Error('Invalid credentials. In development mode, use admin@sharafiyya.edu / Admin@123');
+  throw new Error(`Invalid credentials. For temporary demo access, use Username: "${currentCreds.username}" and Password: "${currentCreds.password}".`);
 };
 
 // Student Login (Student ID or Email)

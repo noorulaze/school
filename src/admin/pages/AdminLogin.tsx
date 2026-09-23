@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { loginAdmin } from '../../services/authService';
+import { loginAdmin, getAdminCredentials } from '../../services/authService';
 import { ShieldCheck, Lock, Mail, AlertCircle, Loader2, ArrowLeft, KeyRound } from 'lucide-react';
 
 export const AdminLogin: React.FC = () => {
@@ -19,15 +19,16 @@ export const AdminLogin: React.FC = () => {
       await loginAdmin(email, password);
       navigate('/admin');
     } catch (err: any) {
-      setError(err.message || 'Invalid administrator email or password.');
+      setError(err.message || 'Invalid administrator credentials.');
     } finally {
       setLoading(false);
     }
   };
 
   const handleFillDemo = () => {
-    setEmail('admin@sharafiyya.edu');
-    setPassword('Admin@123');
+    const creds = getAdminCredentials();
+    setEmail(creds.username);
+    setPassword(creds.password);
     setError(null);
   };
 
@@ -78,18 +79,18 @@ export const AdminLogin: React.FC = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                Admin Email Address
+                Admin Username or Email
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                   <Mail className="w-4 h-4" />
                 </div>
                 <input
-                  type="email"
+                  type="text"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@sharafiyya.edu"
+                  placeholder="admin or admin@sharafiyya.edu"
                   className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-emerald-700 focus:bg-white transition-all"
                 />
               </div>
