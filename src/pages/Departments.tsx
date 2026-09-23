@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   CheckCircle2,
-  GraduationCap
+  GraduationCap,
+  BookOpen,
+  Loader2
 } from 'lucide-react';
-import { DEPARTMENTS, type DepartmentItem } from '../data/departments';
+import { getPublicDepartments } from '../services/publicService';
+import type { DepartmentItem } from '../types/firestore';
 import { SCHOOL_INFO } from '../data/schoolInfo';
 import { PlaceholderBadge } from '../components/PlaceholderBadge';
 import { RealisticImageSlot } from '../components/RealisticImageSlot';
@@ -14,10 +17,24 @@ interface DepartmentsProps {
 }
 
 export const Departments: React.FC<DepartmentsProps> = ({ onOpenAdmissionModal }) => {
-  const [activeTab, setActiveTab] = useState<string>(DEPARTMENTS[0].id);
+  const [departments, setDepartments] = useState<DepartmentItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<string>('');
 
-  const activeDepartment: DepartmentItem =
-    DEPARTMENTS.find((d) => d.id === activeTab) || DEPARTMENTS[0];
+  useEffect(() => {
+    getPublicDepartments()
+      .then((data) => {
+        setDepartments(data);
+        if (data.length > 0) {
+          setActiveTab(data[0].id);
+        }
+      })
+      .catch(() => setDepartments([]))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const activeDepartment: DepartmentItem | undefined =
+    departments.find((d) => d.id === activeTab) || departments[0];
 
   return (
     <div className="w-full flex flex-col bg-[#fbfaf7] text-slate-800">
@@ -41,130 +58,164 @@ export const Departments: React.FC<DepartmentsProps> = ({ onOpenAdmissionModal }
         </div>
       </section>
 
-      {/* 2. Interactive Academic Streams Prospectus (Not repetitive cards) */}
+      {/* 2. Interactive Academic Streams Prospectus */}
       <section className="py-8 sm:py-12 border-b border-[#e5e0d5]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
-          {/* Stream Selector Tabs */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-2.5 mb-6 sm:mb-8">
-            {DEPARTMENTS.map((dept) => {
-              const isSelected = dept.id === activeTab;
-              return (
-                <button
-                  key={dept.id}
-                  onClick={() => setActiveTab(dept.id)}
-                  className={`p-3 sm:p-4 rounded-xl border text-left transition-all flex flex-col justify-between min-h-[76px] ${
-                    isSelected
-                      ? 'bg-[#164e37] text-white border-[#164e37] shadow-sm'
-                      : 'bg-white text-slate-800 border-[#e5e0d5] hover:border-[#164e37]'
-                  }`}
-                >
-                  <span
-                    className={`text-[9px] sm:text-[10px] font-bold uppercase tracking-wider ${
-                      isSelected ? 'text-[#c59b27]' : 'text-slate-400'
-                    }`}
-                  >
-                    Stream {dept.code}
-                  </span>
-                  <span className="text-xs sm:text-sm font-bold mt-1 line-clamp-1">
-                    {dept.name}
-                  </span>
-                  <span
-                    className={`font-amiri text-xs mt-1 block ${
-                      isSelected ? 'text-emerald-200' : 'text-[#c59b27]'
-                    }`}
-                    dir="rtl"
-                  >
-                    {dept.arabicName}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Active Stream Deep-Dive View */}
-          <div className="bg-white rounded-xl sm:rounded-2xl border border-[#e5e0d5] p-4 sm:p-8 lg:p-10 shadow-xs">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
-              {/* Left Column: Stream Details */}
-              <div className="lg:col-span-7 space-y-4 sm:space-y-5">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-xs font-bold text-[#164e37] bg-[#f4f1ea] px-3 py-1 rounded-full border border-[#d2cabb]">
-                    Stream {activeDepartment.code}
-                  </span>
-                  <span className="text-xs font-semibold text-slate-600 bg-slate-100 px-3 py-1 rounded-full">
-                    {activeDepartment.targetLevels}
-                  </span>
-                  <PlaceholderBadge label="Standardized Syllabus" size="sm" />
-                </div>
-
-                <div>
-                  <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0f231c]">
-                    {activeDepartment.name}
-                  </h2>
-                  <p className="font-amiri text-base text-[#c59b27] mt-0.5" dir="rtl">
-                    {activeDepartment.arabicName}
-                  </p>
-                </div>
-
-                <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
-                  {activeDepartment.fullDescription}
-                </p>
-
-                {/* Focus Areas & Topics */}
-                <div className="space-y-2">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900">
-                    Core Learning Modules:
-                  </h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                    {activeDepartment.syllabusOverview.map((topic: string, i: number) => (
-                      <div
-                        key={i}
-                        className="p-3 bg-[#fbfaf7] rounded-lg border border-[#e5e0d5] flex items-center gap-2"
-                      >
-                        <CheckCircle2 className="w-3.5 h-3.5 text-[#164e37] shrink-0" />
-                        <span className="text-slate-800 font-medium">{topic}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Practical Outcomes */}
-                <div className="p-4 rounded-xl bg-[#f4f1ea] border border-[#d2cabb] space-y-1 text-xs">
-                  <strong className="block text-slate-900 font-bold">
-                    Target Pedagogical Outcome:
-                  </strong>
-                  <p className="text-slate-600 leading-relaxed">
-                    By completing this stream, students develop consistent accuracy, memorization stability, and practical appreciation of daily Islamic worship and ethical responsibilities.
-                  </p>
-                </div>
-              </div>
-
-              {/* Right Column: Visual Scene Slot */}
-              <div className="lg:col-span-5 space-y-4">
-                <RealisticImageSlot
-                  scene={activeDepartment.id === 'dept-quran-hadith' ? 'quran_study' : activeDepartment.id === 'dept-arabic' ? 'library' : 'classroom'}
-                  aspectRatio="4/3"
-                  label={`Classroom Session: ${activeDepartment.name}`}
-                  caption={`Study materials for ${activeDepartment.name}`}
-                  className="shadow-sm"
-                />
-
-                <div className="p-4 rounded-xl bg-[#fbfaf7] border border-[#e5e0d5] text-xs space-y-2">
-                  <div className="flex items-center justify-between text-slate-500">
-                    <span>Batch Sessions:</span>
-                    <span className="font-semibold text-slate-800">Morning & Evening</span>
-                  </div>
-                  <div className="flex items-center justify-between text-slate-500">
-                    <span>Evaluation Method:</span>
-                    <span className="font-semibold text-slate-800">Quarterly Oral & Written</span>
-                  </div>
-                  <div className="flex items-center justify-between text-slate-500">
-                    <span>Target Enrolment:</span>
-                    <span className="font-semibold text-slate-800">{activeDepartment.targetLevels}</span>
-                  </div>
-                </div>
-              </div>
+          {loading ? (
+            <div className="py-20 flex flex-col items-center justify-center">
+              <Loader2 className="w-8 h-8 text-[#164e37] animate-spin mb-3" />
+              <p className="text-xs text-slate-500 font-medium">Loading academic departments...</p>
             </div>
-          </div>
+          ) : departments.length === 0 ? (
+            <div className="text-center py-20 px-4 bg-white rounded-2xl border border-[#e5e0d5]">
+              <div className="w-14 h-14 rounded-2xl bg-[#f4f1ea] flex items-center justify-center mx-auto mb-3">
+                <BookOpen className="w-7 h-7 text-[#164e37]/40" />
+              </div>
+              <h3 className="text-base font-bold text-[#0f231c]">Academic Wings Coming Soon</h3>
+              <p className="text-xs sm:text-sm text-slate-500 max-w-md mx-auto mt-1 leading-relaxed">
+                Curriculum streams and department details will be published here by the school administration once approved.
+              </p>
+            </div>
+          ) : (
+            <>
+              {/* Stream Selector Tabs */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-2.5 mb-6 sm:mb-8">
+                {departments.map((dept, idx) => {
+                  const isSelected = dept.id === activeTab;
+                  const streamCode = (dept as any).code || `0${idx + 1}`;
+                  const deptTitle = dept.title || (dept as any).name || 'Department';
+                  const arabic = dept.arabicTitle || (dept as any).arabicName || '';
+                  return (
+                    <button
+                      key={dept.id}
+                      onClick={() => setActiveTab(dept.id)}
+                      className={`p-3 sm:p-4 rounded-xl border text-left transition-all flex flex-col justify-between min-h-[76px] cursor-pointer ${
+                        isSelected
+                          ? 'bg-[#164e37] text-white border-[#164e37] shadow-sm'
+                          : 'bg-white text-slate-800 border-[#e5e0d5] hover:border-[#164e37]'
+                      }`}
+                    >
+                      <span
+                        className={`text-[9px] sm:text-[10px] font-bold uppercase tracking-wider ${
+                          isSelected ? 'text-[#c59b27]' : 'text-slate-400'
+                        }`}
+                      >
+                        Stream {streamCode}
+                      </span>
+                      <span className="text-xs sm:text-sm font-bold mt-1 line-clamp-1">
+                        {deptTitle}
+                      </span>
+                      {arabic && (
+                        <span
+                          className={`font-amiri text-xs mt-1 block ${
+                            isSelected ? 'text-emerald-200' : 'text-[#c59b27]'
+                          }`}
+                          dir="rtl"
+                        >
+                          {arabic}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Active Stream Deep-Dive View */}
+              {activeDepartment && (
+                <div className="bg-white rounded-xl sm:rounded-2xl border border-[#e5e0d5] p-4 sm:p-8 lg:p-10 shadow-xs">
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
+                    {/* Left Column: Stream Details */}
+                    <div className="lg:col-span-7 space-y-4 sm:space-y-5">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-xs font-bold text-[#164e37] bg-[#f4f1ea] px-3 py-1 rounded-full border border-[#d2cabb]">
+                          Department Wing
+                        </span>
+                        {activeDepartment.targetLevels && (
+                          <span className="text-xs font-semibold text-slate-600 bg-slate-100 px-3 py-1 rounded-full">
+                            {activeDepartment.targetLevels}
+                          </span>
+                        )}
+                        <PlaceholderBadge label="Standardized Syllabus" size="sm" />
+                      </div>
+
+                      <div>
+                        <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0f231c]">
+                          {activeDepartment.title || (activeDepartment as any).name}
+                        </h2>
+                        {(activeDepartment.arabicTitle || (activeDepartment as any).arabicName) && (
+                          <p className="font-amiri text-base text-[#c59b27] mt-0.5" dir="rtl">
+                            {activeDepartment.arabicTitle || (activeDepartment as any).arabicName}
+                          </p>
+                        )}
+                      </div>
+
+                      <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                        {activeDepartment.description || (activeDepartment as any).fullDescription}
+                      </p>
+
+                      {/* Focus Areas & Topics */}
+                      {(activeDepartment.modules || (activeDepartment as any).syllabusOverview) && (
+                        <div className="space-y-2">
+                          <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900">
+                            Core Learning Modules:
+                          </h4>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                            {(activeDepartment.modules || (activeDepartment as any).syllabusOverview || []).map((topic: string, i: number) => (
+                              <div
+                                key={i}
+                                className="p-3 bg-[#fbfaf7] rounded-lg border border-[#e5e0d5] flex items-center gap-2"
+                              >
+                                <CheckCircle2 className="w-3.5 h-3.5 text-[#164e37] shrink-0" />
+                                <span className="text-slate-800 font-medium">{topic}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Practical Outcomes */}
+                      <div className="p-4 rounded-xl bg-[#f4f1ea] border border-[#d2cabb] space-y-1 text-xs">
+                        <strong className="block text-slate-900 font-bold">
+                          Target Pedagogical Outcome:
+                        </strong>
+                        <p className="text-slate-600 leading-relaxed">
+                          Students develop consistent accuracy, memorization stability, and practical appreciation of daily Islamic worship and ethical responsibilities.
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Right Column: Visual Scene Slot */}
+                    <div className="lg:col-span-5 space-y-4">
+                      <RealisticImageSlot
+                        scene={activeDepartment.id.includes('quran') ? 'quran_study' : activeDepartment.id.includes('arabic') ? 'library' : 'classroom'}
+                        aspectRatio="4/3"
+                        label={`Classroom Session: ${activeDepartment.title || (activeDepartment as any).name}`}
+                        caption={`Study materials for ${activeDepartment.title || (activeDepartment as any).name}`}
+                        className="shadow-sm"
+                      />
+
+                      <div className="p-4 rounded-xl bg-[#fbfaf7] border border-[#e5e0d5] text-xs space-y-2">
+                        <div className="flex items-center justify-between text-slate-500">
+                          <span>Batch Sessions:</span>
+                          <span className="font-semibold text-slate-800">Morning & Evening</span>
+                        </div>
+                        <div className="flex items-center justify-between text-slate-500">
+                          <span>Evaluation Method:</span>
+                          <span className="font-semibold text-slate-800">Quarterly Oral & Written</span>
+                        </div>
+                        {activeDepartment.targetLevels && (
+                          <div className="flex items-center justify-between text-slate-500">
+                            <span>Target Enrolment:</span>
+                            <span className="font-semibold text-slate-800">{activeDepartment.targetLevels}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
         </div>
       </section>
 

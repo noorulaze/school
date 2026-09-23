@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import {
-  CheckCircle2,
-  Search,
   GraduationCap,
   Clock,
   BookOpen,
@@ -21,18 +19,6 @@ interface StudentsProps {
 }
 
 export const Students: React.FC<StudentsProps> = ({ onOpenAdmissionModal }) => {
-  const [searchRoll, setSearchRoll] = useState('');
-  const [searchResult, setSearchResult] = useState<string | null>(null);
-
-  const handleLookup = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchRoll.trim()) {
-      setSearchResult(
-        `Simulation for Admission ID "${searchRoll}": [Status: Active Enrolment, Attendance: 96%, Quarterly Evaluation: In Progress, Standing: Good]`
-      );
-    }
-  };
-
   return (
     <div className="w-full flex flex-col bg-[#fbfaf7] text-slate-800">
       {/* 1. Page Header */}
@@ -55,7 +41,7 @@ export const Students: React.FC<StudentsProps> = ({ onOpenAdmissionModal }) => {
         </div>
       </section>
 
-      {/* 2. SECTION 1: Student Portal (Marked 'Coming Soon') */}
+      {/* 2. SECTION 1: Authenticated Student Portal */}
       <section className="py-6 sm:py-10 border-b border-[#e5e0d5]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
           <div className="bg-[#123628] text-white rounded-xl sm:rounded-2xl p-4 sm:p-8 lg:p-10 border border-[#1b5038] shadow-sm relative overflow-hidden">
@@ -65,62 +51,39 @@ export const Students: React.FC<StudentsProps> = ({ onOpenAdmissionModal }) => {
                   <Sparkles className="w-3.5 h-3.5 text-[#c59b27] shrink-0" />
                   <span>Student Portal System</span>
                   <span className="text-[10px] font-bold bg-[#c59b27] text-slate-950 px-2 py-0.5 rounded-full">
-                    Coming Soon
+                    Active
                   </span>
                 </div>
 
                 <h2 className="text-xl sm:text-3xl font-extrabold tracking-tight">
-                  Official Digital Parent & Student Portal
+                  Official Digital Student Portal
                 </h2>
 
                 <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed">
-                  A centralized management portal is currently under active development. Once launched, parents will be able to access attendance records, quarterly grades, circulars, and fee acknowledgments online.
+                  A centralized, secure portal for enrolled students and parents. Access personal profile details, academic records, subject syllabus, notices, and uploaded certificates online.
                 </p>
 
-                {/* Roll Number Lookup Simulation */}
-                <div className="p-3.5 sm:p-4 bg-[#0e2c20] rounded-xl border border-[#1b5038] max-w-md space-y-2 text-xs">
-                  <label className="block text-emerald-200 font-semibold">
-                    Test Admission ID Verification (Preview Tool):
-                  </label>
-                  <form onSubmit={handleLookup} className="flex flex-col sm:flex-row gap-2">
-                    <div className="relative flex-grow">
-                      <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3 sm:top-2.5" />
-                      <input
-                        type="text"
-                        placeholder="e.g. SK-2025-042"
-                        value={searchRoll}
-                        onChange={(e) => setSearchRoll(e.target.value)}
-                        className="w-full min-h-[42px] sm:min-h-0 pl-9 pr-3 py-2 text-xs text-white bg-[#081a13] border border-[#225740] rounded-lg focus:outline-none focus:ring-1 focus:ring-[#c59b27]"
-                      />
-                    </div>
-                    <button
-                      type="submit"
-                      className="min-h-[42px] sm:min-h-0 px-4 py-2 bg-[#c59b27] hover:bg-[#b48318] active:bg-[#a37514] text-slate-950 text-xs font-bold rounded-lg transition-colors flex items-center justify-center shrink-0"
-                    >
-                      Verify
-                    </button>
-                  </form>
-
-                  {searchResult && (
-                    <div className="p-3 bg-[#164e37] border border-[#276e4e] rounded-lg text-emerald-100 text-[11px] space-y-1">
-                      <p className="font-bold flex items-center gap-1 text-[#c59b27]">
-                        <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
-                        <span>Simulated Response:</span>
-                      </p>
-                      <p className="break-words">{searchResult}</p>
-                    </div>
-                  )}
-                  <div className="pt-2">
-                    <Link
-                      to="/student/login"
-                      className="w-full min-h-[40px] px-4 py-2 bg-[#164e37] hover:bg-[#113d2b] text-white text-xs font-bold rounded-lg transition-colors flex items-center justify-center gap-2 border border-[#276e4e]"
-                    >
-                      <GraduationCap className="w-4 h-4 text-[#c59b27]" />
-                      <span>Log In to Student Portal</span>
-                    </Link>
+                {/* Direct Portal Access Card */}
+                <div className="p-4 sm:p-5 bg-[#0e2c20] rounded-xl border border-[#1b5038] max-w-md space-y-3 text-xs">
+                  <div className="space-y-1">
+                    <strong className="block text-emerald-200 font-bold text-xs">
+                      Enrolled Student Access:
+                    </strong>
+                    <p className="text-[11px] text-slate-300 leading-relaxed">
+                      Log in using your assigned Student ID and secure password to view your private academic dashboard.
+                    </p>
                   </div>
-                  <p className="text-[10px] text-emerald-300/70 italic">
-                    * Authenticated student portal is active. Students can log in using their Student ID.
+
+                  <Link
+                    to="/student/login"
+                    className="w-full min-h-[44px] px-4 py-2.5 bg-[#c59b27] hover:bg-[#b48318] active:bg-[#a37514] text-slate-950 text-xs font-extrabold rounded-xl transition-all flex items-center justify-center gap-2 shadow-xs cursor-pointer"
+                  >
+                    <GraduationCap className="w-4 h-4 text-slate-950" />
+                    <span>Log In to Student Portal</span>
+                  </Link>
+
+                  <p className="text-[10px] text-emerald-300/70 text-center">
+                    Credentials are provided directly by the school office upon admission.
                   </p>
                 </div>
               </div>

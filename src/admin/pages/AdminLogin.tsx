@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { loginAdmin, getAdminCredentials } from '../../services/authService';
-import { ShieldCheck, Lock, Mail, AlertCircle, Loader2, ArrowLeft, KeyRound } from 'lucide-react';
+import { loginAdmin } from '../../services/authService';
+import { ShieldCheck, Lock, Mail, AlertCircle, Loader2, ArrowLeft } from 'lucide-react';
 
 export const AdminLogin: React.FC = () => {
   const navigate = useNavigate();
@@ -23,13 +23,6 @@ export const AdminLogin: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleFillDemo = () => {
-    const creds = getAdminCredentials();
-    setEmail(creds.username);
-    setPassword(creds.password);
-    setError(null);
   };
 
   return (
@@ -90,7 +83,7 @@ export const AdminLogin: React.FC = () => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin or admin@sharafiyya.edu"
+                  placeholder="Enter admin username or email"
                   className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-emerald-700 focus:bg-white transition-all"
                 />
               </div>
@@ -131,19 +124,19 @@ export const AdminLogin: React.FC = () => {
             </button>
           </form>
 
-          {/* Development Quick-Fill Helper */}
+          {/* Footer Area */}
           <div className="mt-6 pt-5 border-t border-slate-100 text-center">
-            <button
-              type="button"
-              onClick={handleFillDemo}
-              className="inline-flex items-center gap-1.5 text-xs text-emerald-800 hover:text-emerald-950 font-semibold bg-emerald-50 hover:bg-emerald-100/70 px-3 py-1.5 rounded-lg transition-colors cursor-pointer border border-emerald-200/50"
-            >
-              <KeyRound className="w-3.5 h-3.5 text-[#c59b27]" />
-              <span>Fill Development Credentials</span>
-            </button>
-            <p className="text-[11px] text-slate-400 mt-2">
-              Protected administrator access for authorized school officials only.
+            <p className="text-xs text-slate-500 font-medium">
+              Protected administrator workspace for authorized school officials only.
             </p>
+            <div className="mt-3">
+              <Link
+                to="/student/login"
+                className="inline-flex items-center text-xs font-semibold text-emerald-700 hover:text-emerald-900 hover:underline"
+              >
+                Go to Student Portal Login →
+              </Link>
+            </div>
           </div>
         </div>
       </div>

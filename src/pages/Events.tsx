@@ -3,13 +3,11 @@ import { Link } from 'react-router-dom';
 import {
   Calendar,
   MapPin,
-  ShieldAlert,
   ArrowRight,
   Clock,
   Sparkles,
   Loader2
 } from 'lucide-react';
-import { EVENTS_EDITORIAL_NOTICE } from '../data/events';
 import { SCHOOL_INFO } from '../data/schoolInfo';
 import { getPublicEvents } from '../services/publicService';
 import type { EventItem } from '../types/firestore';
@@ -64,19 +62,6 @@ export const Events: React.FC = () => {
           </div>
         </div>
       </section>
-
-      {/* 2. Transparency & Non-fabrication Notice */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 pt-5 sm:pt-8">
-        <div className="p-3.5 sm:p-4 bg-amber-50/80 border border-amber-200 rounded-xl flex items-start gap-3 text-xs text-amber-950">
-          <ShieldAlert className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
-          <div className="space-y-0.5">
-            <strong className="block font-bold">Calendar Notice:</strong>
-            <p className="text-slate-700 leading-relaxed text-xs">
-              {EVENTS_EDITORIAL_NOTICE} Specific calendar dates and programs are officially logged by the administrative office for the current academic session.
-            </p>
-          </div>
-        </div>
-      </div>
 
       {/* 3. Featured Event Spotlight (if available) */}
       {featuredEvent && (
@@ -149,12 +134,22 @@ export const Events: React.FC = () => {
               <Loader2 className="w-8 h-8 text-emerald-800 animate-spin mx-auto mb-2" />
               <p className="text-xs text-slate-500">Loading scheduled programs...</p>
             </div>
+          ) : events.length === 0 ? (
+            <div className="bg-white rounded-2xl border border-[#e5e0d5] p-12 text-center">
+              <div className="w-14 h-14 rounded-2xl bg-[#f4f1ea] flex items-center justify-center mx-auto mb-3">
+                <Calendar className="w-7 h-7 text-[#164e37]/40" />
+              </div>
+              <p className="text-sm font-bold text-slate-800">No upcoming events yet</p>
+              <p className="text-xs text-slate-500 mt-1">
+                Official events and calendar schedules will appear here once published by the school administration.
+              </p>
+            </div>
           ) : filteredEvents.length === 0 ? (
-            <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center">
+            <div className="bg-white rounded-2xl border border-[#e5e0d5] p-12 text-center">
               <Calendar className="w-10 h-10 text-slate-300 mx-auto mb-2" />
               <p className="text-sm font-bold text-slate-700">No events found in this category</p>
               <p className="text-xs text-slate-400 mt-1">
-                Select "All" to view the complete madrassa calendar.
+                Select "All" to view all published school events.
               </p>
             </div>
           ) : (

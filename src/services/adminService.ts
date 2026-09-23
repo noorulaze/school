@@ -25,14 +25,28 @@ import type {
   CustomTableRow
 } from '../types/firestore';
 import { SCHOOL_INFO } from '../data/schoolInfo';
-import { NOTICES } from '../data/notices';
-import { EVENTS } from '../data/events';
-import { TEACHERS } from '../data/teachers';
-import { DEPARTMENTS } from '../data/departments';
-import { GALLERY_ITEMS } from '../data/gallery';
 
 // Helper storage keys for fallback cache
 const STORAGE_PREFIX = 'sharafiyya_admin_';
+
+// Purge any legacy sample/demo mock items from local storage to enforce strict real-data-only
+try {
+  if (typeof window !== 'undefined' && !localStorage.getItem('sharafiyya_real_data_v1')) {
+    [
+      'notices',
+      'events',
+      'teachers',
+      'departments',
+      'gallery',
+      'students',
+      'contact_messages',
+      'custom_tables',
+    ].forEach((k) => localStorage.removeItem(STORAGE_PREFIX + k));
+    localStorage.setItem('sharafiyya_real_data_v1', 'true');
+  }
+} catch {
+  // Ignore local storage quota/security restrictions
+}
 
 const getLocalCollection = <T>(key: string, initial: T[]): T[] => {
   const saved = localStorage.getItem(STORAGE_PREFIX + key);
@@ -50,65 +64,12 @@ const setLocalCollection = <T>(key: string, items: T[]): void => {
   localStorage.setItem(STORAGE_PREFIX + key, JSON.stringify(items));
 };
 
-// Initial Seed Data for fallback
-const initialNotices: NoticeItem[] = NOTICES.map((n: any) => ({
-  id: n.id,
-  title: n.title,
-  description: n.description,
-  fullContent: `${n.description}\n\nAll concerned students, parents, and community members are requested to take note of this institutional announcement. For further clarifications or assistance, please contact the madrassa administrative office during regular working hours (08:30 AM – 04:30 PM).`,
-  date: n.date,
-  category: (n.category || 'General') as any,
-  priority: 'Normal',
-  targetAudience: 'Everyone',
-  published: n.published,
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
-}));
-
-const initialEvents: EventItem[] = EVENTS.map((e, idx) => ({
-  id: e.id,
-  title: e.title,
-  description: e.summary,
-  fullDescription: `${e.summary}\n\nThe program features traditional recitation sessions, guidance addresses by esteemed scholars, and dedicated recognitions for student achievements. All parents, guardians, and well-wishers from the Korangath community are welcome to attend.`,
-  date: e.datePlaceholder,
-  startTime: '09:30 AM',
-  endTime: '12:30 PM',
-  location: e.venuePlaceholder,
-  category: e.category,
-  featured: idx === 0,
-  published: true,
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
-}));
-
-const initialTeachers: TeacherItem[] = TEACHERS.map((t) => ({
-  id: t.id,
-  name: t.profileStatus,
-  role: `Staff Slot #${t.slotNumber}`,
-  department: t.departmentNotice,
-  bio: t.departmentNotice,
-  published: true,
-}));
-
-const initialDepartments: DepartmentItem[] = DEPARTMENTS.map((d) => ({
-  id: d.id,
-  title: d.name,
-  arabicTitle: d.arabicName,
-  description: d.fullDescription,
-  published: true,
-  modules: d.syllabusOverview,
-  targetLevels: d.targetLevels,
-}));
-
-const initialGallery: GalleryItem[] = GALLERY_ITEMS.map((g) => ({
-  id: g.id,
-  title: g.title,
-  image: '',
-  category: g.category as any,
-  description: g.caption,
-  createdAt: new Date().toISOString(),
-  published: true,
-}));
+// Initial Collections for fallback (Empty by default: strict real data only)
+const initialNotices: NoticeItem[] = [];
+const initialEvents: EventItem[] = [];
+const initialTeachers: TeacherItem[] = [];
+const initialDepartments: DepartmentItem[] = [];
+const initialGallery: GalleryItem[] = [];
 
 const initialSettings: SchoolSettings = {
   id: 'main',
@@ -127,21 +88,7 @@ const initialSettings: SchoolSettings = {
   },
 };
 
-const initialStudents: StudentDocument[] = [
-  {
-    id: 'std-001',
-    uid: 'demo-student-uid-001',
-    studentId: 'SK-2025-001',
-    name: 'Sample Enrolled Student',
-    email: 'student@sharafiyya.edu',
-    className: 'Class 5 - Intermediate',
-    department: 'Qur’an & Tajweed',
-    academicYear: '2025–2026',
-    accountStatus: 'Active',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-];
+const initialStudents: StudentDocument[] = [];
 
 // ==================== NOTICES ====================
 export const getNoticesAdmin = async (): Promise<NoticeItem[]> => {
@@ -735,32 +682,7 @@ export const saveSchoolSettings = async (settings: SchoolSettings): Promise<void
 };
 
 // ==================== CONTACT MESSAGES ====================
-const initialContactMessages: ContactMessage[] = [
-  {
-    id: 'msg-001',
-    name: 'Mohammed Ashraf',
-    phone: '+91 98471 23456',
-    email: 'm.ashraf@gmail.com',
-    subject: 'Transportation Route to Korangath',
-    message: 'We are seeking admission for next term and would like to know if school bus service covers the Tanur beach road area.',
-    date: '2026-03-20',
-    createdAt: new Date(Date.now() - 3600 * 1000 * 24 * 2).toISOString(),
-    status: 'Unread',
-    notes: 'Follow up with transport coordinator',
-  },
-  {
-    id: 'msg-002',
-    name: 'Fathima Zehra',
-    phone: '+91 94472 88990',
-    email: 'fathima.z@outlook.com',
-    subject: 'Class 6 Curriculum Details',
-    message: 'Requested syllabus copy and book list for intermediate English medium stream.',
-    date: '2026-03-18',
-    createdAt: new Date(Date.now() - 3600 * 1000 * 24 * 4).toISOString(),
-    status: 'Read',
-    notes: 'Sent PDF prospectus via WhatsApp',
-  },
-];
+const initialContactMessages: ContactMessage[] = [];
 
 export const getContactMessagesAdmin = async (): Promise<ContactMessage[]> => {
   if (isFirebaseConfigured && db) {
@@ -859,39 +781,7 @@ export const bulkDeleteContactMessages = async (ids: string[]): Promise<void> =>
 };
 
 // ==================== CUSTOM TABLES ====================
-const initialCustomTables: CustomTableRecord[] = [
-  {
-    id: 'tbl-assets',
-    tableName: 'Campus Equipment & Assets',
-    description: 'Classroom audio-visual and physical inventory tracking',
-    columns: ['Asset Name', 'Location / Room', 'Quantity', 'Condition', 'Custodian'],
-    rows: [
-      {
-        id: 'row-1',
-        data: {
-          'Asset Name': 'Interactive Smart Screen 75"',
-          'Location / Room': 'Smart Classroom 4A',
-          'Quantity': '1',
-          'Condition': 'Operational',
-          'Custodian': 'IT Department',
-        },
-        createdAt: new Date().toISOString(),
-      },
-      {
-        id: 'row-2',
-        data: {
-          'Asset Name': 'PA Sound Amplifier & Speakers',
-          'Location / Room': 'Main Assembly Quadrangle',
-          'Quantity': '2',
-          'Condition': 'Operational',
-          'Custodian': 'Physical Education Desk',
-        },
-        createdAt: new Date().toISOString(),
-      },
-    ],
-    createdAt: new Date().toISOString(),
-  },
-];
+const initialCustomTables: CustomTableRecord[] = [];
 
 export const getCustomTablesAdmin = async (): Promise<CustomTableRecord[]> => {
   if (isFirebaseConfigured && db) {

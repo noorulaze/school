@@ -1,14 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { X, ZoomIn, ShieldAlert } from 'lucide-react';
-import { GALLERY_ITEMS, GALLERY_EDITORIAL_NOTICE, type GalleryItem } from '../data/gallery';
+import { X, ZoomIn, Image as ImageIcon, Loader2 } from 'lucide-react';
+import { getPublicGallery } from '../services/publicService';
+import type { GalleryItem } from '../types/firestore';
 import { SCHOOL_INFO } from '../data/schoolInfo';
 import { RealisticImageSlot, type SceneType } from '../components/RealisticImageSlot';
-import { PlaceholderBadge } from '../components/PlaceholderBadge';
 
 export const Gallery: React.FC = () => {
+  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [activeModalItem, setActiveModalItem] = useState<GalleryItem | null>(null);
+
+  useEffect(() => {
+    getPublicGallery()
+      .then(setGalleryItems)
+      .catch(() => setGalleryItems([]))
+      .finally(() => setLoading(false));
+  }, []);
 
   useEffect(() => {
     if (activeModalItem) {
@@ -21,12 +30,12 @@ export const Gallery: React.FC = () => {
     };
   }, [activeModalItem]);
 
-  const categories = ['All', 'Campus', 'Classrooms', 'Student Activities', 'Programs', 'Events'];
+  const categories = ['All', ...Array.from(new Set(galleryItems.map((g) => g.category).filter(Boolean)))];
 
   const filteredItems =
     selectedCategory === 'All'
-      ? GALLERY_ITEMS
-      : GALLERY_ITEMS.filter((item) => item.category === selectedCategory);
+      ? galleryItems
+      : galleryItems.filter((item) => item.category === selectedCategory);
 
   const mapCategoryToScene = (cat: string, id: string): SceneType => {
     if (cat === 'Campus') return 'campus';
@@ -59,78 +68,96 @@ export const Gallery: React.FC = () => {
         </div>
       </section>
 
-      {/* 2. Transparency Notice */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 pt-5 sm:pt-8">
-        <div className="p-3.5 sm:p-4 bg-amber-50/80 border border-amber-200 rounded-xl flex items-start gap-3 text-xs text-amber-950">
-          <ShieldAlert className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
-          <div className="space-y-0.5">
-            <strong className="block font-bold">Gallery Archive Note:</strong>
-            <p className="text-slate-700 leading-relaxed text-xs">{GALLERY_EDITORIAL_NOTICE}</p>
-          </div>
-        </div>
-      </div>
-
-      {/* 3. Category Filter Tabs & Asymmetric Masonry-Inspired Grid */}
-      <section className="py-6 sm:py-8">
+      {/* 2. Photo Gallery Grid */}
+      <section className="py-6 sm:py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
-          {/* Category Tabs */}
-          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-2 mb-6 sm:mb-8 -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs font-semibold transition-all border whitespace-nowrap shrink-0 min-h-[38px] ${
-                  selectedCategory === cat
-                    ? 'bg-[#164e37] text-white border-[#164e37] shadow-2xs font-bold'
-                    : 'bg-white text-slate-700 hover:bg-slate-50 border-[#d2cabb]'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-
-          {/* Asymmetric Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 sm:gap-5 items-stretch">
-            {filteredItems.map((item, idx) => {
-              // Asymmetric spanning logic: every 3rd or 4th item has different prominence
-              const isFeature = idx === 0 || idx === 5;
-              const colSpan = isFeature ? 'lg:col-span-7' : 'lg:col-span-5';
-              const scene = mapCategoryToScene(item.category, item.id);
-
-              return (
-                <div
-                  key={item.id}
-                  onClick={() => setActiveModalItem(item)}
-                  className={`${colSpan} group cursor-pointer relative rounded-xl sm:rounded-2xl overflow-hidden border border-[#d2cabb] bg-white shadow-xs hover:shadow-md transition-all flex flex-col justify-between h-full`}
-                >
-                  <RealisticImageSlot
-                    scene={scene}
-                    aspectRatio={isFeature ? '16/10' : '4/3'}
-                    label={`Category: ${item.category}`}
-                    caption={item.title}
-                    className="h-full min-h-[200px] sm:min-h-[220px]"
-                  />
-
-                  {/* Hover Overlay with Zoom Button */}
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-4 z-20 pointer-events-none">
-                    <div className="p-3 rounded-full bg-white/90 text-[#164e37] shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
-                      <ZoomIn className="w-5 h-5" />
-                    </div>
-                  </div>
-
-                  {/* Clean Bottom Metadata Bar */}
-                  <div className="p-3 sm:p-3.5 bg-white border-t border-[#e5e0d5] flex items-center justify-between text-xs">
-                    <div className="min-w-0 mr-2">
-                      <strong className="block text-slate-900 text-xs truncate">{item.title}</strong>
-                      <span className="text-[11px] text-slate-500 truncate block">{item.category}</span>
-                    </div>
-                    <PlaceholderBadge label={item.placeholderLabel} size="sm" />
-                  </div>
+          {loading ? (
+            <div className="py-20 flex flex-col items-center justify-center">
+              <Loader2 className="w-8 h-8 text-[#164e37] animate-spin mb-3" />
+              <p className="text-xs text-slate-500 font-medium">Loading gallery archive...</p>
+            </div>
+          ) : galleryItems.length === 0 ? (
+            <div className="text-center py-20 px-4 bg-white rounded-2xl border border-[#e5e0d5]">
+              <div className="w-14 h-14 rounded-2xl bg-[#f4f1ea] flex items-center justify-center mx-auto mb-3">
+                <ImageIcon className="w-7 h-7 text-[#164e37]/40" />
+              </div>
+              <h3 className="text-base font-bold text-[#0f231c]">No Gallery Items Available Yet</h3>
+              <p className="text-xs sm:text-sm text-slate-500 max-w-md mx-auto mt-1 leading-relaxed">
+                Campus photography and event galleries will be published here by the school administration once approved.
+              </p>
+            </div>
+          ) : (
+            <>
+              {/* Category Tabs */}
+              {categories.length > 2 && (
+                <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-2 mb-6 sm:mb-8 -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap">
+                  {categories.map((cat) => (
+                    <button
+                      key={cat}
+                      onClick={() => setSelectedCategory(cat)}
+                      className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs font-semibold transition-all border whitespace-nowrap shrink-0 min-h-[38px] cursor-pointer ${
+                        selectedCategory === cat
+                          ? 'bg-[#164e37] text-white border-[#164e37] shadow-2xs font-bold'
+                          : 'bg-white text-slate-700 hover:bg-slate-50 border-[#d2cabb]'
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  ))}
                 </div>
-              );
-            })}
-          </div>
+              )}
+
+              {/* Asymmetric Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 sm:gap-5 items-stretch">
+                {filteredItems.map((item, idx) => {
+                  const isFeature = idx === 0 || idx === 5;
+                  const colSpan = isFeature ? 'lg:col-span-7' : 'lg:col-span-5';
+                  const scene = mapCategoryToScene(item.category, item.id);
+
+                  return (
+                    <div
+                      key={item.id}
+                      onClick={() => setActiveModalItem(item)}
+                      className={`${colSpan} group cursor-pointer relative rounded-xl sm:rounded-2xl overflow-hidden border border-[#d2cabb] bg-white shadow-xs hover:shadow-md transition-all flex flex-col justify-between h-full`}
+                    >
+                      {item.image ? (
+                        <div className="relative w-full h-full min-h-[200px] sm:min-h-[220px] overflow-hidden bg-slate-100">
+                          <img
+                            src={item.image}
+                            alt={item.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+                        </div>
+                      ) : (
+                        <RealisticImageSlot
+                          scene={scene}
+                          aspectRatio={isFeature ? '16/10' : '4/3'}
+                          label={`Category: ${item.category}`}
+                          caption={item.title}
+                          className="h-full min-h-[200px] sm:min-h-[220px]"
+                        />
+                      )}
+
+                      {/* Hover Overlay with Zoom Button */}
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-4 z-20 pointer-events-none">
+                        <div className="p-3 rounded-full bg-white/90 text-[#164e37] shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                          <ZoomIn className="w-5 h-5" />
+                        </div>
+                      </div>
+
+                      {/* Clean Bottom Metadata Bar */}
+                      <div className="p-3 sm:p-3.5 bg-white border-t border-[#e5e0d5] flex items-center justify-between text-xs">
+                        <div className="min-w-0 mr-2">
+                          <strong className="block text-slate-900 text-xs truncate">{item.title}</strong>
+                          <span className="text-[11px] text-slate-500 truncate block">{item.category}</span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </>
+          )}
         </div>
       </section>
 
@@ -167,20 +194,30 @@ export const Gallery: React.FC = () => {
 
             {/* Modal Body */}
             <div className="p-3 sm:p-4 overflow-y-auto">
-              <RealisticImageSlot
-                scene={mapCategoryToScene(activeModalItem.category, activeModalItem.id)}
-                aspectRatio="16/10"
-                label={activeModalItem.category}
-                caption={activeModalItem.title}
-                className="shadow-sm"
-              />
+              {activeModalItem.image ? (
+                <div className="relative w-full max-h-[60vh] overflow-hidden rounded-xl bg-slate-950 flex items-center justify-center">
+                  <img
+                    src={activeModalItem.image}
+                    alt={activeModalItem.title}
+                    className="max-h-[60vh] w-auto object-contain"
+                  />
+                </div>
+              ) : (
+                <RealisticImageSlot
+                  scene={mapCategoryToScene(activeModalItem.category, activeModalItem.id)}
+                  aspectRatio="16/10"
+                  label={activeModalItem.category}
+                  caption={activeModalItem.title}
+                  className="shadow-sm"
+                />
+              )}
 
               <div className="mt-3 sm:mt-4 p-3.5 sm:p-4 bg-[#fbfaf7] rounded-xl border border-[#e5e0d5] text-xs space-y-2">
                 <p className="text-slate-700 leading-relaxed text-xs">
-                  {activeModalItem.caption}
+                  {activeModalItem.description || (activeModalItem as any).caption || 'Campus photograph from Sharafiyya English Medium School, Korangath.'}
                 </p>
                 <div className="pt-2 border-t border-[#e5e0d5] flex flex-col sm:flex-row sm:items-center justify-between text-slate-500 text-[11px] gap-1">
-                  <span>Slot ID: {activeModalItem.id}</span>
+                  <span>Category: {activeModalItem.category}</span>
                   <span className="font-semibold text-[#164e37]">
                     Korangath, Tirur, Malappuram
                   </span>
