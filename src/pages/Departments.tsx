@@ -49,10 +49,10 @@ export const Departments: React.FC<DepartmentsProps> = ({ onOpenAdmissionModal }
 
           <div className="max-w-3xl">
             <h1 className="text-2xl sm:text-4xl font-extrabold text-[#0f231c] tracking-tight">
-              Curriculum & Academic Wings
+              Academic Curriculum & Programs
             </h1>
             <p className="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">
-              Structured religious disciplines and moral education syllabus taught at {SCHOOL_INFO.officialName} ({SCHOOL_INFO.localName}) under recognized board standards.
+              Islamic education and English medium academic curriculum at {SCHOOL_INFO.officialName} in Korangath, Niramaruthur.
             </p>
           </div>
         </div>

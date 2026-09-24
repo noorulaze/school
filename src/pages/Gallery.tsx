@@ -62,7 +62,7 @@ export const Gallery: React.FC = () => {
               Campus Photo Gallery
             </h1>
             <p className="text-xs sm:text-sm text-slate-600 mt-1.5 sm:mt-2 leading-relaxed">
-              Photographic highlights of campus facilities, classroom environments, student programs, and commemorative events at {SCHOOL_INFO.officialName} ({SCHOOL_INFO.localName}).
+              Photographic highlights of campus facilities, classroom environments, student programs, and commemorative events at {SCHOOL_INFO.officialName} in Korangath, Niramaruthur.
             </p>
           </div>
         </div>
@@ -124,7 +124,9 @@ export const Gallery: React.FC = () => {
                         <div className="relative w-full h-full min-h-[200px] sm:min-h-[220px] overflow-hidden bg-slate-100">
                           <img
                             src={item.image}
-                            alt={item.title}
+                            alt={item.title || 'Sharafiyya English Medium School Campus Photograph'}
+                            loading="lazy"
+                            decoding="async"
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           />
                         </div>

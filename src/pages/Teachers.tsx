@@ -33,10 +33,10 @@ export const Teachers: React.FC = () => {
                 <span className="text-[11px] uppercase tracking-widest font-extrabold text-[#164e37]">Our Team</span>
               </div>
               <h1 className="text-2xl sm:text-4xl font-extrabold text-[#0f231c] tracking-tight">
-                Faculty & Staff Directory
+                Teaching Faculty & Staff
               </h1>
               <p className="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">
-                Meet the dedicated teachers and staff at Sharafiyya English Medium School, Korangath, Tirur.
+                Meet the dedicated teachers and mentors at Sharafiyya English Medium School in Korangath, Niramaruthur.
               </p>
             </div>
           </div>
@@ -91,6 +91,8 @@ export const Teachers: React.FC = () => {
                       <img
                         src={teacher.photoUrl}
                         alt={teacher.name}
+                        loading="lazy"
+                        decoding="async"
                         className="w-14 h-14 rounded-xl object-cover border border-[#e5e0d5] shrink-0"
                       />
                     ) : (

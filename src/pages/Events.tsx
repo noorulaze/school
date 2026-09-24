@@ -57,7 +57,7 @@ export const Events: React.FC = () => {
               Events & Academic Calendar
             </h1>
             <p className="text-xs sm:text-sm text-slate-600 mt-1.5 sm:mt-2 leading-relaxed">
-              Official schedule for school assemblies, quarterly assessments, Islamic celebrations, and administrative programs at {SCHOOL_INFO.officialName} ({SCHOOL_INFO.localName}).
+              Official schedule for school assemblies, quarterly assessments, Islamic celebrations, and community programs at {SCHOOL_INFO.officialName} in Korangath, Niramaruthur.
             </p>
           </div>
         </div>

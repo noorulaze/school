@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 
 const DEFAULT_TITLE = 'Sharafiyya English Medium School | Korangath, Niramaruthur';
 const DEFAULT_DESC =
-  'Official website of Sharafiyya English Medium School, an Islamic English Medium School in Korangath, Niramaruthur. Explore academics, school activities, admissions, notices and student services.';
+  'Sharafiyya English Medium School is an Islamic English Medium School in Korangath, Niramaruthur, combining modern education, Islamic values, academic learning and student development.';
 const BASE_URL = 'https://sharafiyya.edu';
 
 export const SEORouteManager: React.FC = () => {
@@ -13,7 +13,13 @@ export const SEORouteManager: React.FC = () => {
     // 1. Identify Private/Admin/Student Routes for Strict Noindex Protection
     const isPrivate =
       pathname.startsWith('/admin') ||
-      pathname.startsWith('/student') ||
+      pathname.startsWith('/student/dashboard') ||
+      pathname.startsWith('/student/profile') ||
+      pathname.startsWith('/student/attendance') ||
+      pathname.startsWith('/student/academics') ||
+      pathname.startsWith('/student/notices') ||
+      pathname.startsWith('/student/events') ||
+      pathname.startsWith('/student/login') ||
       pathname.startsWith('/login');
 
     let robotsMeta = document.querySelector('meta[name="robots"]');
@@ -46,39 +52,53 @@ export const SEORouteManager: React.FC = () => {
           pageDesc = DEFAULT_DESC;
           break;
         case '/about':
-          pageTitle = 'About Our School | Sharafiyya English Medium School';
-          pageDesc = 'Learn about Sharafiyya English Medium School in Korangath, Niramaruthur — our institutional vision, values, and committed educators.';
+          pageTitle = 'About Sharafiyya English Medium School | Korangath, Niramaruthur';
+          pageDesc =
+            'Learn about Sharafiyya English Medium School in Korangath, Niramaruthur — our institutional vision, Islamic values, academic learning and committed educators.';
           break;
         case '/academics':
         case '/departments':
-          pageTitle = 'Academics & Wings | Sharafiyya English Medium School';
-          pageDesc = 'Explore our academic structure: Quranic recitation, Islamic studies, English language curriculum, science, and moral development.';
+          pageTitle = 'Academic Programs & Curriculum | Sharafiyya English Medium School';
+          pageDesc =
+            'Explore academic curriculum and programs at Sharafiyya English Medium School: Quranic recitation with Tajweed, Islamic studies, English language, science, and character formation.';
           break;
         case '/teachers':
-          pageTitle = 'Our Faculty & Teachers | Sharafiyya English Medium School';
-          pageDesc = 'Meet the dedicated teaching faculty and mentors guiding students at Sharafiyya English Medium School, Korangath.';
+          pageTitle = 'Teaching Faculty & Educators | Sharafiyya English Medium School';
+          pageDesc =
+            'Meet the dedicated teaching faculty and qualified educators guiding students at Sharafiyya English Medium School in Korangath, Niramaruthur.';
+          break;
+        case '/students':
+          pageTitle = 'Student Portal & Academic Access | Sharafiyya English Medium School';
+          pageDesc =
+            'Access the Sharafiyya English Medium School Student Portal to view academic progress, attendance records, school announcements, and student resources in Korangath, Niramaruthur.';
           break;
         case '/events':
-          pageTitle = 'School Events & Calendar | Sharafiyya English Medium School';
-          pageDesc = 'Stay informed on institutional events, competitions, celebrations, and academic schedules at Sharafiyya English Medium School.';
+          pageTitle = 'School Events, Programs & Calendar | Sharafiyya English Medium School';
+          pageDesc =
+            'Stay updated with school assemblies, academic assessments, Islamic celebrations, and annual programs at Sharafiyya English Medium School in Korangath, Niramaruthur.';
           break;
         case '/gallery':
-          pageTitle = 'Campus Life & Gallery | Sharafiyya English Medium School';
-          pageDesc = 'Visual gallery showcasing classroom learning, student programs, and campus facilities in Korangath, Niramaruthur.';
+          pageTitle = 'Campus Life & Photo Gallery | Sharafiyya English Medium School';
+          pageDesc =
+            'Explore photographs and moments of campus life, student activities, learning spaces, and cultural occasions at Sharafiyya English Medium School.';
           break;
         case '/admissions':
-          pageTitle = 'Admissions & Enrolment | Sharafiyya English Medium School';
-          pageDesc = 'Admission information and enquiries for Sharafiyya English Medium School, Korangath, Niramaruthur.';
+          pageTitle = 'Admissions & Enrolment | Sharafiyya English Medium School, Niramaruthur';
+          pageDesc =
+            'Admission enquiries and enrolment details for Sharafiyya English Medium School in Korangath, Niramaruthur. Discover our application process and criteria.';
           break;
         case '/contact':
-          pageTitle = 'Contact & Location | Sharafiyya English Medium School';
-          pageDesc = 'Get in touch with Sharafiyya English Medium School at Korangath, Niramaruthur, Tirur, Malappuram.';
+          pageTitle = 'Contact & Location | Sharafiyya English Medium School, Korangath';
+          pageDesc =
+            'Get in touch with Sharafiyya English Medium School at Korangath, Niramaruthur, Tirur. Find campus address, office consultation hours, and enquiry details.';
           break;
         default:
           if (pathname.startsWith('/notice/')) {
             pageTitle = 'School Notice | Sharafiyya English Medium School';
+            pageDesc = 'Official notice and announcement from Sharafiyya English Medium School, Korangath, Niramaruthur.';
           } else if (pathname.startsWith('/events/')) {
             pageTitle = 'Event Details | Sharafiyya English Medium School';
+            pageDesc = 'Event details, dates, and schedules from Sharafiyya English Medium School, Korangath, Niramaruthur.';
           }
           break;
       }

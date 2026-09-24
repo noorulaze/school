@@ -32,7 +32,7 @@ export const Footer: React.FC = () => {
           بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
         </p>
         <p className="text-[11px] text-emerald-200/70 mt-1 uppercase tracking-widest font-medium">
-          Sharafiyya English Medium School · Islamic Education · Korangath, Tirur
+          Sharafiyya English Medium School · Islamic Education · Korangath, Niramaruthur
         </p>
       </div>
 
@@ -51,18 +51,18 @@ export const Footer: React.FC = () => {
                   Sharafiyya English Medium School
                 </h3>
                 <p className="text-[11px] text-emerald-300/80 font-medium mt-0.5">
-                  Islamic English Medium School · Korangath, Tirur
+                  Islamic English Medium School · Korangath, Niramaruthur
                 </p>
               </div>
             </div>
 
             <p className="text-xs text-slate-400 leading-relaxed">
               Nurturing young minds through authentic Quranic education, Islamic values, and modern learning
-              at Korangath, Tirur, Malappuram, Kerala.
+              at Korangath, Niramaruthur, Tirur, Malappuram, Kerala.
             </p>
 
             <div className="p-3.5 rounded-xl bg-[#112a1e] border border-[#1e4d3b] text-[11px] text-emerald-200/80 space-y-1">
-              <p><span className="text-slate-400">Location:</span> Korangath, Tirur, Malappuram, Kerala</p>
+              <p><span className="text-slate-400">Location:</span> Korangath, Niramaruthur, Tirur, Malappuram, Kerala</p>
               <p><span className="text-slate-400">Type:</span> Islamic English Medium School</p>
             </div>
           </div>

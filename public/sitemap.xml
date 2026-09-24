@@ -31,6 +31,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://sharafiyya.edu/students</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://sharafiyya.edu/events</loc>
     <lastmod>2026-09-24</lastmod>
     <changefreq>daily</changefreq>

@@ -2,22 +2,30 @@
 # Official Website: https://sharafiyya.edu
 
 User-agent: *
+
+# Allow Public Website Pages
 Allow: /
 Allow: /about
 Allow: /academics
 Allow: /departments
 Allow: /teachers
+Allow: /students
 Allow: /events
 Allow: /gallery
 Allow: /admissions
 Allow: /contact
 Allow: /notice/
 
-# Disallow Private Administrative Workspace & Student Portal Records
+# Disallow Private Administrative & Authenticated Areas
 Disallow: /admin
 Disallow: /admin/
-Disallow: /student
-Disallow: /student/
+Disallow: /student/dashboard
+Disallow: /student/dashboard/
+Disallow: /student/profile
+Disallow: /student/attendance
+Disallow: /student/academics
+Disallow: /student/notices
+Disallow: /student/events
 Disallow: /login
 
 # XML Sitemap

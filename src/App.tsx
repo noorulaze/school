@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, useLocation, Link, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation, Link } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { MobileBottomNav } from './components/MobileBottomNav';
@@ -92,7 +92,7 @@ function MainLayout({ onOpenAdmissionModal }: { onOpenAdmissionModal: () => void
           <Route path="/departments" element={<Departments onOpenAdmissionModal={onOpenAdmissionModal} />} />
           <Route path="/academics" element={<Departments onOpenAdmissionModal={onOpenAdmissionModal} />} />
           <Route path="/teachers" element={<Teachers />} />
-          <Route path="/students" element={<Navigate to="/student/login" replace />} />
+          <Route path="/students" element={<StudentLogin />} />
           <Route path="/events" element={<Events />} />
           <Route path="/events/:id" element={<EventDetail />} />
           <Route path="/notice/:id" element={<NoticeDetail />} />

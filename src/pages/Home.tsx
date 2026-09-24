@@ -227,6 +227,9 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
                     <img
                       src="/images/campus-hero.png"
                       alt="Sharafiyya English Medium School Campus"
+                      loading="eager"
+                      fetchPriority="high"
+                      decoding="async"
                       className="w-full h-full object-cover object-center transform hover:scale-[1.01] transition-transform duration-500"
                       onError={() => setImgError(true)}
                     />

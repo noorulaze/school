@@ -143,7 +143,7 @@ export const StudentLogin: React.FC = () => {
             </span>
 
             <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white">
-              Welcome Back
+              {isAdminMode ? 'Administrator Sign In' : 'Student Portal Sign In'}
             </h1>
             <p className="text-[11px] sm:text-xs text-emerald-100/80 mt-0.5 font-medium">
               {isAdminMode
