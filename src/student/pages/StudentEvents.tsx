@@ -35,10 +35,10 @@ export const StudentEvents: React.FC = () => {
     <div className="space-y-6 max-w-4xl">
       <div>
         <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-          Upcoming Madrassa Events
+          Upcoming School Events
         </h1>
         <p className="text-xs sm:text-sm text-slate-500 mt-1">
-          Islamic gatherings, student competitions, parent-teacher interactions, and celebrations.
+          Academic programs, student competitions, parent-teacher interactions, and celebrations.
         </p>
       </div>
 
@@ -75,7 +75,7 @@ export const StudentEvents: React.FC = () => {
               <div>
                 <div className="flex items-center justify-between text-[10px] text-slate-500 mb-2">
                   <span className="font-bold px-2.5 py-0.5 rounded-full bg-teal-50 text-teal-800 border border-teal-200">
-                    {ev.category || 'Madrassa Event'}
+                    {ev.category || 'School Event'}
                   </span>
                   <span className="font-semibold text-slate-600">{ev.date}</span>
                 </div>

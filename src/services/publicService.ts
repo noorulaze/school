@@ -67,7 +67,7 @@ export const submitAdmissionEnquiry = async (
       return {
         success: true,
         id: docRef.id,
-        message: 'Your admission enquiry has been successfully logged with the madrassa office desk.',
+        message: 'Your admission enquiry has been successfully logged with the school office desk.',
       };
     } catch (err: any) {
       console.warn('[PublicService] Firestore admission write error, falling back to local logging:', err);

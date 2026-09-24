@@ -141,7 +141,8 @@ export interface SchoolSettings {
 export interface StudentDocument {
   id: string;
   uid: string;
-  studentId: string; // e.g. SK-2025-001
+  studentId: string; // Permanent Unique ID e.g. SK-2025-001
+  username?: string; // Custom login identifier chosen by student
   name: string;
   email: string;
   className: string; // e.g. "Class 5 - Intermediate"
@@ -150,10 +151,16 @@ export interface StudentDocument {
   parentName?: string;
   guardianName?: string;
   phone?: string;
+  address?: string;
+  emergencyContact?: string;
+  bloodGroup?: string;
+  bio?: string;
   department: string; // e.g. "Qur’an & Tajweed"
   profileImage?: string;
   academicYear: string; // e.g. "2025–2026"
   accountStatus: 'Active' | 'Disabled';
+  firstLogin?: boolean; // True on initial creation until student changes password
+  mustChangePassword?: boolean; // Set when admin resets password
   documents?: Array<{
     id: string;
     title: string;

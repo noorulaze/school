@@ -115,11 +115,11 @@ export const AdmissionModal: React.FC<AdmissionModalProps> = ({ isOpen, onClose 
                 Enquiry Logged Successfully
               </h4>
               <p className="text-xs text-slate-600 max-w-sm mx-auto leading-relaxed">
-                Thank you, <strong>{formData.parentName || 'Parent/Guardian'}</strong>. Your admission enquiry for <strong>{formData.studentName || 'your ward'}</strong> has been registered with the madrassa office desk. Our team will review your details and contact you promptly.
+                Thank you, <strong>{formData.parentName || 'Parent/Guardian'}</strong>. Your admission enquiry for <strong>{formData.studentName || 'your ward'}</strong> has been registered with the school admissions desk. Our team will review your details and contact you promptly.
               </p>
               <div className="p-3 bg-[#f4f1ea] rounded-lg border border-[#d2cabb] text-[11px] text-slate-700 text-left">
                 <p className="font-semibold text-[#164e37] mb-0.5">Office Instructions:</p>
-                <p>Please visit the school administrative office in Korangath with your child's birth certificate and previous madrasa record to complete formal registration.</p>
+                <p>Please visit the school administrative office in Korangath with your child's birth certificate and previous school record to complete formal registration.</p>
               </div>
               <button
                 onClick={handleReset}
@@ -232,7 +232,7 @@ export const AdmissionModal: React.FC<AdmissionModalProps> = ({ isOpen, onClose 
                 </label>
                 <textarea
                   rows={2}
-                  placeholder="Previous madrasa attended or specific transport query..."
+                  placeholder="Previous school attended or specific transport query..."
                   value={formData.notes}
                   onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                   className="w-full px-3 py-2 text-xs border border-[#d2cabb] rounded-md focus:outline-none focus:ring-1 focus:ring-[#164e37] bg-white resize-none"

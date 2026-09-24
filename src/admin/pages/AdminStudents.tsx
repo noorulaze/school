@@ -12,14 +12,21 @@ import {
   AlertCircle,
   CheckCircle2,
   Loader2,
-  Lock
+  Lock,
+  Key,
+  Copy,
+  Check,
+  ShieldCheck,
+  RefreshCw
 } from 'lucide-react';
 import {
   getStudentsAdmin,
   saveStudent,
   deleteStudent,
-  toggleStudentStatus
+  toggleStudentStatus,
+  resetStudentPasswordAdmin
 } from '../../services/adminService';
+import { createStudentAuthAccount, setStudentFallbackPassword } from '../../services/authService';
 import type { StudentDocument } from '../../types/firestore';
 import { ConfirmModal } from '../components/ConfirmModal';
 
@@ -33,7 +40,7 @@ interface StudentFormData {
   department: string;
   academicYear: string;
   accountStatus: 'Active' | 'Disabled';
-  tempPassword?: string;
+  initialPassword?: string;
 }
 
 const INITIAL_FORM: StudentFormData = {
@@ -42,10 +49,10 @@ const INITIAL_FORM: StudentFormData = {
   email: '',
   className: 'Class 5 - Intermediate',
   section: 'A',
-  department: 'Qur’an & Tajweed',
+  department: 'Islamic Studies & Moral Science',
   academicYear: '2025–2026',
   accountStatus: 'Active',
-  tempPassword: '',
+  initialPassword: '',
 };
 
 export const AdminStudents: React.FC = () => {
@@ -65,6 +72,15 @@ export const AdminStudents: React.FC = () => {
   const [viewingStudent, setViewingStudent] = useState<StudentDocument | null>(null);
   const [studentToDelete, setStudentToDelete] = useState<StudentDocument | null>(null);
   const [studentToToggle, setStudentToToggle] = useState<StudentDocument | null>(null);
+  const [studentToReset, setStudentToReset] = useState<StudentDocument | null>(null);
+  const [resetTempPassword, setResetTempPassword] = useState<string>('');
+  const [resetSubmitting, setResetSubmitting] = useState(false);
+  const [createdCredentialsModal, setCreatedCredentialsModal] = useState<{
+    studentId: string;
+    name: string;
+    password: string;
+  } | null>(null);
+  const [copiedPass, setCopiedPass] = useState(false);
 
   // Form handling
   const [formData, setFormData] = useState<StudentFormData>(INITIAL_FORM);
@@ -117,6 +133,7 @@ export const AdminStudents: React.FC = () => {
     setFormData({
       ...INITIAL_FORM,
       studentId: `SK-${new Date().getFullYear()}-${String(students.length + 1).padStart(3, '0')}`,
+      initialPassword: `Sharaf@${Math.floor(1000 + Math.random() * 9000)}`,
     });
     setFormError(null);
     setIsFormOpen(true);
@@ -173,32 +190,96 @@ export const AdminStudents: React.FC = () => {
 
     setFormSubmitting(true);
     try {
-      await saveStudent({
-        id: formData.id,
-        uid: formData.id || `uid-${Date.now()}`,
-        name: formData.name.trim(),
-        studentId: formData.studentId.trim().toUpperCase(),
-        email: formData.email.trim().toLowerCase(),
-        className: formData.className,
-        section: formData.section?.trim() || 'A',
-        department: formData.department,
-        academicYear: formData.academicYear,
-        accountStatus: formData.accountStatus,
-      });
+      if (!editingStudent) {
+        // Initial password provisioning
+        const initPass = formData.initialPassword?.trim() || `Sharaf@${new Date().getFullYear()}`;
+        if (initPass.length < 6) {
+          setFormError('Initial password must be at least 6 characters long.');
+          setFormSubmitting(false);
+          return;
+        }
 
-      setNotification({
-        type: 'success',
-        message: editingStudent
-          ? `Student record for ${formData.name} updated successfully.`
-          : `Student ${formData.name} (${formData.studentId}) registered successfully.`,
-      });
+        let authUid = `uid-${Date.now()}`;
+        try {
+          authUid = await createStudentAuthAccount(formData.studentId, initPass);
+        } catch (authErr: any) {
+          console.warn('[AdminStudents] Secondary auth user note:', authErr.message);
+        }
+        setStudentFallbackPassword(formData.studentId, initPass);
 
-      setIsFormOpen(false);
+        await saveStudent({
+          id: formData.id,
+          uid: authUid,
+          name: formData.name.trim(),
+          studentId: formData.studentId.trim().toUpperCase(),
+          email: formData.email.trim().toLowerCase(),
+          className: formData.className,
+          section: formData.section?.trim() || 'A',
+          department: formData.department,
+          academicYear: formData.academicYear,
+          accountStatus: formData.accountStatus,
+          firstLogin: true,
+          mustChangePassword: true,
+        });
+
+        setIsFormOpen(false);
+        setCreatedCredentialsModal({
+          studentId: formData.studentId.trim().toUpperCase(),
+          name: formData.name.trim(),
+          password: initPass,
+        });
+      } else {
+        await saveStudent({
+          id: formData.id,
+          uid: formData.id || `uid-${Date.now()}`,
+          name: formData.name.trim(),
+          studentId: formData.studentId.trim().toUpperCase(),
+          email: formData.email.trim().toLowerCase(),
+          className: formData.className,
+          section: formData.section?.trim() || 'A',
+          department: formData.department,
+          academicYear: formData.academicYear,
+          accountStatus: formData.accountStatus,
+        });
+
+        setNotification({
+          type: 'success',
+          message: `Student record for ${formData.name} updated successfully.`,
+        });
+        setIsFormOpen(false);
+      }
+
       fetchStudents();
     } catch (err: any) {
       setFormError(err.message || 'Failed to save student record.');
     } finally {
       setFormSubmitting(false);
+    }
+  };
+
+  // Handle open reset password modal
+  const handleOpenResetPassword = (student: StudentDocument) => {
+    setStudentToReset(student);
+    setResetTempPassword(`Sharaf@${Math.floor(1000 + Math.random() * 9000)}`);
+    setResetSubmitting(false);
+  };
+
+  // Handle confirm reset password
+  const handleConfirmResetPassword = async () => {
+    if (!studentToReset || !resetTempPassword || resetTempPassword.trim().length < 6) return;
+    setResetSubmitting(true);
+    try {
+      await resetStudentPasswordAdmin(studentToReset.id, resetTempPassword.trim());
+      setNotification({
+        type: 'success',
+        message: `Password reset successfully for ${studentToReset.name} (${studentToReset.studentId}). Temporary Password: ${resetTempPassword.trim()}`,
+      });
+      setStudentToReset(null);
+      fetchStudents();
+    } catch (err: any) {
+      setNotification({ type: 'error', message: err.message || 'Failed to reset student password.' });
+    } finally {
+      setResetSubmitting(false);
     }
   };
 
@@ -483,6 +564,14 @@ export const AdminStudents: React.FC = () => {
                         </button>
                         <button
                           type="button"
+                          onClick={() => handleOpenResetPassword(st)}
+                          className="p-1.5 text-slate-500 hover:text-amber-700 hover:bg-amber-50 rounded-lg transition-colors cursor-pointer"
+                          title="Reset Student Password"
+                        >
+                          <Key className="w-4 h-4 text-amber-600" />
+                        </button>
+                        <button
+                          type="button"
                           onClick={() => setStudentToToggle(st)}
                           className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
                             st.accountStatus === 'Active'
@@ -557,7 +646,7 @@ export const AdminStudents: React.FC = () => {
                 </div>
 
                 {/* Mobile Actions */}
-                <div className="flex items-center justify-between gap-2 pt-1">
+                <div className="flex items-center justify-between gap-2 pt-1 flex-wrap">
                   <button
                     type="button"
                     onClick={() => setViewingStudent(st)}
@@ -573,6 +662,14 @@ export const AdminStudents: React.FC = () => {
                   >
                     <Edit2 className="w-3.5 h-3.5" />
                     <span>Edit</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleOpenResetPassword(st)}
+                    className="py-1.5 px-2.5 bg-amber-50 hover:bg-amber-100 text-amber-900 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5"
+                  >
+                    <Key className="w-3.5 h-3.5 text-amber-600" />
+                    <span>Reset</span>
                   </button>
                   <button
                     type="button"
@@ -725,20 +822,20 @@ export const AdminStudents: React.FC = () => {
               {/* Department */}
               <div>
                 <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                  Department *
+                  Department / Academic Wing *
                 </label>
                 <select
                   value={formData.department}
                   onChange={(e) => setFormData({ ...formData, department: e.target.value })}
                   className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-emerald-700"
                 >
-                  <option value="Qur’an & Tajweed">Qur’an & Tajweed</option>
-                  <option value="Fiqh & Islamic Jurisprudence">Fiqh & Islamic Jurisprudence</option>
-                  <option value="Aqeedah & Fundamentals">Aqeedah & Fundamentals</option>
-                  <option value="Hadith & Sunnah Studies">Hadith & Sunnah Studies</option>
-                  <option value="Tarikh & Islamic History">Tarikh & Islamic History</option>
-                  <option value="Arabic Language & Grammar">Arabic Language & Grammar</option>
-                  <option value="Akhlaq & Moral Education">Akhlaq & Moral Education</option>
+                  <option value="Islamic Studies & Moral Science">Islamic Studies & Moral Science</option>
+                  <option value="Science & Mathematics">Science & Mathematics</option>
+                  <option value="Languages & Literature">Languages & Literature</option>
+                  <option value="Social Studies & Humanities">Social Studies & Humanities</option>
+                  <option value="Information & Digital Technology">Information & Digital Technology</option>
+                  <option value="Primary & Foundation Wing">Primary & Foundation Wing</option>
+                  <option value="Creative Arts & Physical Education">Creative Arts & Physical Education</option>
                 </select>
               </div>
 
@@ -774,14 +871,37 @@ export const AdminStudents: React.FC = () => {
               </div>
 
               {!editingStudent && (
-                <div className="p-3.5 rounded-xl bg-amber-50/80 border border-amber-200 text-xs text-amber-900 leading-relaxed">
-                  <div className="flex items-center gap-1.5 font-bold mb-1">
-                    <Lock className="w-3.5 h-3.5 text-amber-700" />
-                    <span>Student Portal Password Configuration</span>
+                <div className="space-y-2 p-3.5 rounded-xl bg-emerald-50/80 border border-emerald-200">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-bold text-emerald-950 uppercase tracking-wider flex items-center gap-1.5">
+                      <Lock className="w-3.5 h-3.5 text-emerald-700" />
+                      Initial Password *
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setFormData({
+                          ...formData,
+                          initialPassword: `Sharaf@${Math.floor(1000 + Math.random() * 9000)}`,
+                        })
+                      }
+                      className="text-[11px] font-bold text-emerald-800 hover:text-emerald-950 flex items-center gap-1 cursor-pointer"
+                    >
+                      <RefreshCw className="w-3 h-3" />
+                      Generate
+                    </button>
                   </div>
-                  <span>
-                    In development mode, students log in with their Student ID and password <strong className="font-mono">Student@123</strong>. In production, password reset instructions are linked to the student's email address.
-                  </span>
+                  <input
+                    type="text"
+                    required
+                    value={formData.initialPassword || ''}
+                    onChange={(e) => setFormData({ ...formData, initialPassword: e.target.value })}
+                    placeholder="Initial login password (min 6 characters)"
+                    className="w-full px-3.5 py-2.5 bg-white border border-emerald-300 rounded-xl text-xs font-mono font-bold text-emerald-900 focus:outline-hidden focus:ring-2 focus:ring-emerald-700"
+                  />
+                  <p className="text-[11px] text-emerald-800 leading-normal">
+                    The student will use their <strong>Student ID</strong> and this <strong>Initial Password</strong> on first sign-in, and will be prompted to set a private password before accessing their dashboard.
+                  </p>
                 </div>
               )}
 
@@ -920,6 +1040,171 @@ export const AdminStudents: React.FC = () => {
         onConfirm={handleConfirmDelete}
         onCancel={() => setStudentToDelete(null)}
       />
+
+      {/* Reset Student Password Modal */}
+      {studentToReset && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-200">
+            <div className="p-6 bg-[#0d281e] text-white flex items-center justify-between border-b border-[#1a4434]">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-400/30 flex items-center justify-center text-amber-400">
+                  <Key className="w-5 h-5" />
+                </div>
+                <div>
+                  <h2 className="text-base font-bold text-white">Reset Student Password</h2>
+                  <p className="text-xs text-emerald-200/80">
+                    Assign a new temporary login password
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setStudentToReset(null)}
+                className="text-slate-300 hover:text-white p-1 rounded-lg hover:bg-white/10"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-4">
+              <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs space-y-1">
+                <div className="font-bold text-slate-800">{studentToReset.name}</div>
+                <div className="text-slate-500 font-mono">
+                  Permanent Student ID: <strong className="text-emerald-800">{studentToReset.studentId}</strong>
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                    New Temporary Password *
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setResetTempPassword(`Sharaf@${Math.floor(1000 + Math.random() * 9000)}`)}
+                    className="text-[11px] font-bold text-emerald-800 hover:text-emerald-950 flex items-center gap-1 cursor-pointer"
+                  >
+                    <RefreshCw className="w-3 h-3" />
+                    Generate
+                  </button>
+                </div>
+                <input
+                  type="text"
+                  value={resetTempPassword}
+                  onChange={(e) => setResetTempPassword(e.target.value)}
+                  placeholder="Enter temporary password"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-mono font-bold text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-emerald-700 focus:bg-white"
+                />
+                <p className="text-[11px] text-slate-500 leading-relaxed pt-1">
+                  Upon logging in with this temporary password, the student will be required to choose their own private password before accessing their dashboard.
+                </p>
+              </div>
+
+              <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-2.5">
+                <button
+                  type="button"
+                  onClick={() => setStudentToReset(null)}
+                  className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition-colors cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  disabled={resetSubmitting || resetTempPassword.trim().length < 6}
+                  onClick={handleConfirmResetPassword}
+                  className="px-5 py-2.5 bg-[#0e3827] hover:bg-[#164e37] text-white font-bold text-xs rounded-xl shadow-xs transition-all cursor-pointer disabled:opacity-50 flex items-center gap-2"
+                >
+                  {resetSubmitting ? (
+                    <>
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      <span>Updating...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Key className="w-3.5 h-3.5 text-[#c59b27]" />
+                      <span>Confirm Password Reset</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Created Student Credentials Modal */}
+      {createdCredentialsModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-200">
+            <div className="p-6 bg-[#0d281e] text-white text-center relative border-b border-[#1a4434]">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-400/40 text-emerald-400 flex items-center justify-center mx-auto mb-3">
+                <ShieldCheck className="w-6 h-6" />
+              </div>
+              <h2 className="text-lg font-black text-white">Student Account Created!</h2>
+              <p className="text-xs text-emerald-200/80 mt-1">
+                Account registered for {createdCredentialsModal.name}
+              </p>
+            </div>
+
+            <div className="p-6 space-y-4">
+              <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-3">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-slate-500 font-semibold uppercase tracking-wider text-[10px]">
+                    Permanent Student ID
+                  </span>
+                  <span className="font-mono font-black text-emerald-900 bg-emerald-100/80 border border-emerald-200 px-2 py-0.5 rounded-md">
+                    {createdCredentialsModal.studentId}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-slate-500 font-semibold uppercase tracking-wider text-[10px]">
+                    Initial Password
+                  </span>
+                  <span className="font-mono font-black text-slate-900 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-md">
+                    {createdCredentialsModal.password}
+                  </span>
+                </div>
+              </div>
+
+              <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-[11px] text-amber-900 leading-relaxed">
+                <strong>Important:</strong> Please hand these credentials to the student. They will sign in with their Student ID and this password, and will immediately be prompted to create their own private password.
+              </div>
+
+              <div className="flex items-center gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const text = `Sharafiyya English Medium School\nStudent Portal Credentials\nStudent Name: ${createdCredentialsModal.name}\nStudent ID: ${createdCredentialsModal.studentId}\nInitial Password: ${createdCredentialsModal.password}\nLogin URL: ${window.location.origin}/student/login`;
+                    navigator.clipboard.writeText(text);
+                    setCopiedPass(true);
+                    setTimeout(() => setCopiedPass(false), 2500);
+                  }}
+                  className="flex-1 py-2.5 px-3 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                >
+                  {copiedPass ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Copied to Clipboard!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3.5 h-3.5 text-slate-600" />
+                      <span>Copy Credentials</span>
+                    </>
+                  )}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCreatedCredentialsModal(null)}
+                  className="flex-1 py-2.5 px-4 bg-[#0e3827] hover:bg-[#164e37] text-white rounded-xl text-xs font-bold transition-colors cursor-pointer"
+                >
+                  Done
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

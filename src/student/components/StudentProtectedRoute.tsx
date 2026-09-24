@@ -51,7 +51,7 @@ export const StudentProtectedRoute: React.FC = () => {
           </div>
           <h2 className="text-xl font-bold text-slate-900">Student Portal Access Disabled</h2>
           <p className="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">
-            Your student account (<strong className="font-mono text-slate-800">{profile.studentId}</strong>) has been deactivated by the Madrassa administration.
+            Your student account (<strong className="font-mono text-slate-800">{profile.studentId}</strong>) has been deactivated by the school administration.
           </p>
           <div className="my-5 p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 text-left">
             <strong className="block text-slate-800 font-bold mb-1">Administrative Office Help Desk:</strong>

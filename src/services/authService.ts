@@ -1,13 +1,18 @@
 import {
   signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
   setPersistence,
   browserLocalPersistence,
   updatePassword,
+  getAuth,
   type User
 } from 'firebase/auth';
-import { auth, isFirebaseConfigured } from '../lib/firebase';
+import { initializeApp } from 'firebase/app';
+import { auth, app, isFirebaseConfigured } from '../lib/firebase';
+import { getStudentsAdmin } from './adminService';
+import type { StudentDocument } from '../types/firestore';
 
 export interface AuthSessionUser {
   uid: string;
@@ -15,11 +20,61 @@ export interface AuthSessionUser {
   displayName: string | null;
   role: 'admin' | 'student';
   studentId?: string;
+  mustChangePassword?: boolean;
 }
 
 const LOCAL_ADMIN_KEY = 'sharafiyya_admin_session';
 const LOCAL_STUDENT_KEY = 'sharafiyya_student_session';
 const LOCAL_CUSTOM_ADMIN_CREDS_KEY = 'sharafiyya_custom_admin_creds';
+const LOCAL_STUDENT_PASSWORDS_KEY = 'sharafiyya_student_passwords_store';
+
+// Helper to safely store fallback student passwords without saving plaintext into Firestore
+export const getFallbackPasswordMap = (): Record<string, string> => {
+  try {
+    const raw = localStorage.getItem(LOCAL_STUDENT_PASSWORDS_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch {}
+  return {};
+};
+
+export const setStudentFallbackPassword = (studentIdOrDocId: string, pass: string): void => {
+  try {
+    const map = getFallbackPasswordMap();
+    map[studentIdOrDocId.trim().toUpperCase()] = pass.trim();
+    localStorage.setItem(LOCAL_STUDENT_PASSWORDS_KEY, JSON.stringify(map));
+  } catch {}
+};
+
+// Map Student ID or username to deterministic Firebase Auth email
+export const toStudentAuthEmail = (identifier: string): string => {
+  const clean = identifier.trim().toLowerCase();
+  if (clean.includes('@')) return clean;
+  const safeId = clean.replace(/[^a-z0-9_.-]/g, '');
+  return `${safeId}@student.sharafiyya.edu`;
+};
+
+// Provision a Firebase Authentication user for a student without disrupting the current admin session
+export const createStudentAuthAccount = async (emailOrStudentId: string, pass: string): Promise<string> => {
+  const email = toStudentAuthEmail(emailOrStudentId);
+  if (isFirebaseConfigured && auth && app) {
+    const secondaryAppName = `student_provisioner_${Date.now()}`;
+    const secondaryApp = initializeApp((app as any).options, secondaryAppName);
+    const secondaryAuth = getAuth(secondaryApp);
+    try {
+      const cred = await createUserWithEmailAndPassword(secondaryAuth, email, pass);
+      const uid = cred.user.uid;
+      await signOut(secondaryAuth);
+      return uid;
+    } catch (err: any) {
+      await signOut(secondaryAuth).catch(() => {});
+      if (err.code === 'auth/email-already-in-use') {
+        return `uid-${email.replace(/[^a-z0-9]/g, '')}`;
+      }
+      throw err;
+    }
+  }
+  return `uid-${Date.now()}`;
+};
 
 export interface AdminCredentials {
   username: string;
@@ -70,7 +125,6 @@ export const loginAdmin = async (emailOrUsername: string, pass: string): Promise
     trimmedInput === currentCreds.username.trim().toLowerCase() ||
     (currentCreds.username.trim().toLowerCase() === 'admin' && (trimmedInput === 'admin@sharafiyya.edu' || trimmedInput === 'admin@sharafiyya.com'));
 
-  // Allow both "admin @123" and "admin@123" by comparing normalized non-whitespace
   const normalizedInputPass = trimmedPass.replace(/\s+/g, '');
   const normalizedConfiguredPass = currentCreds.password.trim().replace(/\s+/g, '');
 
@@ -111,47 +165,91 @@ export const loginAdmin = async (emailOrUsername: string, pass: string): Promise
   throw new Error(`Invalid credentials. For temporary demo access, use Username: "${currentCreds.username}" and Password: "${currentCreds.password}".`);
 };
 
-// Student Login (Student ID or Email)
+// Student Login (Student ID, Custom Username, or Email)
 export const loginStudent = async (identifier: string, pass: string): Promise<AuthSessionUser> => {
   const trimmed = identifier.trim();
+  if (!trimmed || !pass) {
+    throw new Error('Please enter both your Student ID or username and password.');
+  }
 
+  // 1. Resolve student document in Firestore or fallback collection to check status
+  let studentDoc: StudentDocument | null = null;
+  try {
+    const allStudents = await getStudentsAdmin();
+    studentDoc = allStudents.find(
+      (s) =>
+        s.studentId.trim().toUpperCase() === trimmed.toUpperCase() ||
+        (s.username && s.username.trim().toLowerCase() === trimmed.toLowerCase()) ||
+        s.email.trim().toLowerCase() === trimmed.toLowerCase()
+    ) || null;
+  } catch (e) {
+    console.warn('[AuthService] Error fetching student record for login validation:', e);
+  }
+
+  // Reject disabled accounts
+  if (studentDoc && studentDoc.accountStatus === 'Disabled') {
+    throw new Error('Your student portal access has been disabled by the school administration. Please contact the administrative desk.');
+  }
+
+  const effectiveStudentId = studentDoc ? studentDoc.studentId : (trimmed.toUpperCase().startsWith('SK-') ? trimmed.toUpperCase() : trimmed);
+  const authEmail = toStudentAuthEmail(effectiveStudentId);
+
+  // 2. Authenticate via Firebase Authentication if connected
   if (isFirebaseConfigured && auth) {
     try {
-      const email = trimmed.includes('@') ? trimmed : `${trimmed.toLowerCase().replace(/[^a-z0-9]/g, '')}@student.sharafiyya.edu`;
       await setPersistence(auth, browserLocalPersistence);
-      const cred = await signInWithEmailAndPassword(auth, email, pass);
+      const cred = await signInWithEmailAndPassword(auth, authEmail, pass);
       const user = cred.user;
-      return {
+      const session: AuthSessionUser = {
         uid: user.uid,
         email: user.email,
-        displayName: user.displayName || trimmed,
+        displayName: studentDoc ? studentDoc.name : (user.displayName || effectiveStudentId),
         role: 'student',
-        studentId: trimmed
+        studentId: effectiveStudentId,
+        mustChangePassword: studentDoc?.mustChangePassword || studentDoc?.firstLogin
       };
+      localStorage.setItem(LOCAL_STUDENT_KEY, JSON.stringify(session));
+      return session;
     } catch (error: any) {
-      console.error('[AuthService] Firebase student sign-in failed:', error);
-      throw new Error(error.message || 'Invalid Student ID or password.');
+      console.warn('[AuthService] Firebase student auth failed, attempting fallback store:', error.message);
     }
   }
 
-  // Resilient Development / Demo Mode
-  // Accepts e.g. "SK-2025-001" or "student@sharafiyya.edu" with "Student@123"
-  if (
-    (trimmed.toUpperCase() === 'SK-2025-001' || trimmed.toUpperCase() === 'SK-2025-042' || trimmed.toLowerCase() === 'student@sharafiyya.edu') &&
-    (pass === 'Student@123' || pass === 'student123' || pass === 'student')
-  ) {
+  // 3. Fallback credential store check
+  const pwdMap = getFallbackPasswordMap();
+  const studentKey = effectiveStudentId.toUpperCase();
+  const expectedPass = pwdMap[studentKey] || pwdMap[trimmed.toUpperCase()] || (studentDoc ? pwdMap[studentDoc.id] : null);
+
+  if (expectedPass && expectedPass === pass.trim()) {
     const session: AuthSessionUser = {
-      uid: 'demo-student-uid-001',
-      email: 'student@sharafiyya.edu',
-      displayName: 'Enrolled Student',
+      uid: studentDoc ? studentDoc.uid : `std-${effectiveStudentId.toLowerCase()}`,
+      email: studentDoc ? studentDoc.email : `${effectiveStudentId.toLowerCase()}@student.sharafiyya.edu`,
+      displayName: studentDoc ? studentDoc.name : 'Enrolled Student',
       role: 'student',
-      studentId: trimmed.toUpperCase().startsWith('SK-') ? trimmed.toUpperCase() : 'SK-2025-001'
+      studentId: effectiveStudentId,
+      mustChangePassword: studentDoc?.mustChangePassword || studentDoc?.firstLogin
     };
     localStorage.setItem(LOCAL_STUDENT_KEY, JSON.stringify(session));
     return session;
   }
 
-  throw new Error('Invalid credentials. In development mode, use Student ID SK-2025-001 / Student@123');
+  // If a student record exists and has mustChangePassword or firstLogin, accept initial setup
+  if (studentDoc && (studentDoc.firstLogin || studentDoc.mustChangePassword)) {
+    if (pwdMap[studentDoc.id] === pass.trim() || pwdMap[studentDoc.studentId.toUpperCase()] === pass.trim()) {
+      const session: AuthSessionUser = {
+        uid: studentDoc.uid,
+        email: studentDoc.email,
+        displayName: studentDoc.name,
+        role: 'student',
+        studentId: studentDoc.studentId,
+        mustChangePassword: true
+      };
+      localStorage.setItem(LOCAL_STUDENT_KEY, JSON.stringify(session));
+      return session;
+    }
+  }
+
+  throw new Error('Invalid Student ID / username or password. Please verify your credentials or contact the school office.');
 };
 
 // Logout Admin

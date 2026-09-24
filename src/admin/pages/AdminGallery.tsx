@@ -284,7 +284,7 @@ export const AdminGallery: React.FC = () => {
                   required
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  placeholder="e.g. Madrasah Main Prayer & Study Hall"
+                  placeholder="e.g. School Main Campus & Library Wing"
                   className="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900"
                 />
               </div>

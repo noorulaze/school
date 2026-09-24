@@ -120,7 +120,7 @@ export const EventDetail: React.FC = () => {
               <div className="absolute -right-8 -bottom-8 w-48 h-48 rounded-full bg-white/5 pointer-events-none" />
               <div className="text-white">
                 <span className="text-xs font-semibold uppercase tracking-widest text-[#c59b27] block mb-1">
-                  Madrassa Program & Gathering
+                  School Program & Event
                 </span>
                 <span className="text-lg sm:text-xl font-bold opacity-90">
                   {SCHOOL_INFO.officialName}
@@ -133,7 +133,7 @@ export const EventDetail: React.FC = () => {
           <div className="p-6 sm:p-8 md:p-10 border-b border-[#eee9df]">
             <div className="flex flex-wrap items-center gap-2.5 mb-4">
               <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-[#164e37] text-white tracking-wide">
-                {event.category || 'Madrassa Program'}
+                {event.category || 'School Event'}
               </span>
 
               {event.featured && (

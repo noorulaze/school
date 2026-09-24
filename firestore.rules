@@ -69,10 +69,15 @@ service cloud.firestore {
       allow read, update, delete: if isAdmin();
     }
 
-    // 8. Students (Strict UID isolation: student can only read their own record; admin can manage)
+    // 8. Students (Strict UID isolation: student can read & self-update allowed fields; admin has full access)
     match /students/{studentId} {
       allow read: if isOwner(studentId) || isOwner(resource.data.uid) || isAdmin();
-      allow write: if isAdmin();
+      allow create, delete: if isAdmin();
+      allow update: if isAdmin() || (
+        (isOwner(studentId) || isOwner(resource.data.uid)) &&
+        request.resource.data.studentId == resource.data.studentId &&
+        request.resource.data.accountStatus == resource.data.accountStatus
+      );
     }
 
     // 9. Attendance

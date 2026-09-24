@@ -55,7 +55,7 @@ export const About: React.FC<AboutProps> = ({ onOpenAdmissionModal }) => {
 
               <div className="text-xs sm:text-sm text-slate-700 leading-relaxed space-y-3">
                 <p>
-                  <strong>{SCHOOL_INFO.officialName}</strong> is an Islamic educational institution situated in Korangath, within Tirur, Malappuram District, Kerala. Locally cherished and widely known as <strong>{SCHOOL_INFO.localName}</strong> (ഷറഫിയ്യ കോരങ്ങത്ത്), the madrassa has been a pillar of authentic religious instruction for the neighborhood.
+                  <strong>{SCHOOL_INFO.officialName}</strong> is a premier Islamic English Medium educational institution situated in Korangath, within Tirur, Malappuram District, Kerala. Locally cherished and widely known as <strong>{SCHOOL_INFO.localName}</strong> (ഷറഫിയ്യ കോരങ്ങത്ത്), the school has been a pillar of authentic moral instruction and academic excellence for the neighborhood.
                 </p>
                 <p>
                   Our goal is to instill strong spiritual foundations, deep love for the Holy Qur’an and the Prophet ﷺ, and upright social conduct in every child. We coordinate morning and evening batches so children can pursue both their spiritual learning and standard academic schooling seamlessly.
@@ -82,7 +82,7 @@ export const About: React.FC<AboutProps> = ({ onOpenAdmissionModal }) => {
               <RealisticImageSlot
                 scene="campus"
                 aspectRatio="4/3"
-                label="Madrassa Campus Grounds"
+                label="School Campus Grounds"
                 caption="Main academic building at Korangath, Tirur"
                 className="shadow-sm"
               />

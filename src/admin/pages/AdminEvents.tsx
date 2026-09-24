@@ -385,7 +385,7 @@ export const AdminEvents: React.FC = () => {
           <p className="text-xs text-slate-400 mt-1">
             {search || filterCategory !== 'ALL' || filterStatus !== 'ALL'
               ? 'Try relaxing your search terms or filter settings.'
-              : 'Click "Schedule New Event" to log an upcoming madrassa program.'}
+              : 'Click "Schedule New Event" to log an upcoming school event.'}
           </p>
         </div>
       ) : activeView === 'calendar' ? (
@@ -479,7 +479,7 @@ export const AdminEvents: React.FC = () => {
                   <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
                     <div className="flex items-center gap-1.5 flex-wrap">
                       <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
-                        {ev.category || 'Madrassa Program'}
+                        {ev.category || 'School Event'}
                       </span>
                       {ev.featured && (
                         <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300">
@@ -676,7 +676,7 @@ export const AdminEvents: React.FC = () => {
                   required
                   value={formData.location}
                   onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                  placeholder="e.g. Madrassa Main Auditorium, Korangath"
+                  placeholder="e.g. School Main Auditorium, Korangath"
                   className="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-xl"
                 />
               </div>
@@ -908,7 +908,7 @@ export const AdminEvents: React.FC = () => {
       {/* Delete confirmation */}
       <ConfirmModal
         isOpen={Boolean(eventToDelete)}
-        title="Delete Madrassa Event?"
+        title="Delete School Event?"
         message={`Are you sure you want to permanently delete "${eventToDelete?.title}"?`}
         confirmLabel="Permanently Delete"
         onConfirm={handleDelete}

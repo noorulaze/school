@@ -128,7 +128,7 @@ export const StudentProfile: React.FC = () => {
               <span>Official Institutional Notice</span>
             </div>
             <p className="text-[11px] text-amber-900">
-              Student details are officially synchronized with the Sharafiyya Korangath office register. For updates to student names, guardian contact details, or department transfers, please contact the Madrassa administrative desk.
+              Student details are officially synchronized with the Sharafiyya Korangath office register. For updates to student names, guardian contact details, or department transfers, please contact the school administrative desk.
             </p>
           </div>
         </div>

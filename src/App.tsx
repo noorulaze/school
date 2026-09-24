@@ -31,6 +31,8 @@ import { AdminDepartments } from './admin/pages/AdminDepartments';
 import { AdminGallery } from './admin/pages/AdminGallery';
 import { AdminAdmissions } from './admin/pages/AdminAdmissions';
 import { AdminDataCenter } from './admin/pages/AdminDataCenter';
+import { AdminAttendance } from './admin/pages/AdminAttendance';
+import { AdminReports } from './admin/pages/AdminReports';
 import { AdminSettings } from './admin/pages/AdminSettings';
 
 // Student Portal Pages & Components
@@ -104,14 +106,17 @@ function MainLayout({ onOpenAdmissionModal }: { onOpenAdmissionModal: () => void
             <Route element={<AdminLayout />}>
               <Route index element={<AdminDashboard />} />
               <Route path="students" element={<AdminStudents />} />
-              <Route path="notices" element={<AdminNotices />} />
-              <Route path="events" element={<AdminEvents />} />
               <Route path="teachers" element={<AdminTeachers />} />
               <Route path="academics" element={<AdminDepartments />} />
               <Route path="departments" element={<AdminDepartments />} />
-              <Route path="gallery" element={<AdminGallery />} />
+              <Route path="attendance" element={<AdminAttendance />} />
+              <Route path="notices" element={<AdminNotices />} />
+              <Route path="events" element={<AdminEvents />} />
               <Route path="admissions" element={<AdminAdmissions />} />
+              <Route path="gallery" element={<AdminGallery />} />
+              <Route path="reports" element={<AdminReports />} />
               <Route path="data-center" element={<AdminDataCenter />} />
+              <Route path="datacenter" element={<AdminDataCenter />} />
               <Route path="settings" element={<AdminSettings />} />
             </Route>
           </Route>

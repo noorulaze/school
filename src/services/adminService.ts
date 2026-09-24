@@ -647,6 +647,51 @@ export const toggleStudentStatus = async (id: string, accountStatus: 'Active' | 
   setLocalCollection('students', list);
 };
 
+export const resetStudentPasswordAdmin = async (
+  studentIdOrDocId: string,
+  newInitialPassword: string
+): Promise<void> => {
+  if (!newInitialPassword || newInitialPassword.trim().length < 6) {
+    throw new Error('Temporary password must be at least 6 characters.');
+  }
+  const cleanPass = newInitialPassword.trim();
+  const all = await getStudentsAdmin();
+  const target = all.find(
+    (s) => s.id === studentIdOrDocId || s.studentId.toUpperCase() === studentIdOrDocId.toUpperCase()
+  );
+  if (!target) {
+    throw new Error('Student record not found.');
+  }
+
+  // Update fallback password map safely without exposing plaintext in Firestore
+  try {
+    const raw = localStorage.getItem('sharafiyya_student_passwords_store');
+    const map = raw ? JSON.parse(raw) : {};
+    map[target.studentId.toUpperCase()] = cleanPass;
+    map[target.id] = cleanPass;
+    localStorage.setItem('sharafiyya_student_passwords_store', JSON.stringify(map));
+  } catch {}
+
+  const now = new Date().toISOString();
+  if (isFirebaseConfigured && db) {
+    try {
+      await updateDoc(doc(db, 'students', target.id), {
+        mustChangePassword: true,
+        updatedAt: now,
+      });
+    } catch (e) {
+      console.warn('[AdminService] Firestore student password reset flag error:', e);
+    }
+  }
+
+  const list = getLocalCollection<StudentDocument>('students', initialStudents).map((s) =>
+    s.id === target.id || s.studentId.toUpperCase() === target.studentId.toUpperCase()
+      ? { ...s, mustChangePassword: true, updatedAt: now }
+      : s
+  );
+  setLocalCollection('students', list);
+};
+
 // ==================== SETTINGS ====================
 export const getSchoolSettings = async (): Promise<SchoolSettings> => {
   if (isFirebaseConfigured && db) {

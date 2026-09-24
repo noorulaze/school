@@ -155,7 +155,7 @@ export const StudentLogin: React.FC = () => {
                 <form onSubmit={handleSubmit} className="space-y-3">
                   <div>
                     <label className="block text-[10px] sm:text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">
-                      Student ID or Registered Email
+                      Student ID or Custom Username *
                     </label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -166,8 +166,8 @@ export const StudentLogin: React.FC = () => {
                         required
                         value={identifier}
                         onChange={(e) => setIdentifier(e.target.value)}
-                        placeholder="Enter Student ID or registered email"
-                        className="w-full pl-10 pr-3 py-2.5 bg-[#fcfbf9] border border-[#d8d3c5] rounded-xl text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#164e37] focus:bg-white transition-all"
+                        placeholder="Enter Student ID (e.g. SK-2025-001) or username"
+                        className="w-full pl-10 pr-3 py-2.5 bg-[#fcfbf9] border border-[#d8d3c5] rounded-xl text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#164e37] focus:bg-white transition-all font-medium"
                       />
                     </div>
                   </div>

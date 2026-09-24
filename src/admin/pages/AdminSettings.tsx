@@ -105,7 +105,7 @@ export const AdminSettings: React.FC = () => {
     <div className="space-y-6 max-w-4xl">
       <div>
         <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-          Madrassa Profile & Contact Settings
+          School Profile & Institutional Settings
         </h1>
         <p className="text-xs sm:text-sm text-slate-500 mt-1">
           Update official institutional names, contact numbers, office hours, and transit information.

@@ -35,7 +35,7 @@ export const StudentNotices: React.FC = () => {
     <div className="space-y-6 max-w-4xl">
       <div>
         <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-          Madrassa Notices & Circulars
+          School Notices & Circulars
         </h1>
         <p className="text-xs sm:text-sm text-slate-500 mt-1">
           Official administrative announcements, examination dates, and academic circulars.

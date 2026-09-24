@@ -31,7 +31,7 @@ export const StudentSidebar: React.FC<StudentSidebarProps> = ({ onCloseMobile })
     { label: 'Attendance Records', path: '/student/attendance', icon: CheckSquare },
     { label: 'Academic Evaluations', path: '/student/academics', icon: Award },
     { label: 'Announcements', path: '/student/notices', icon: Bell },
-    { label: 'Madrassa Events', path: '/student/events', icon: Calendar },
+    { label: 'Campus Events', path: '/student/events', icon: Calendar },
   ];
 
   return (

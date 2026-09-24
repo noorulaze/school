@@ -91,7 +91,7 @@ export const StudentAttendance: React.FC = () => {
                 <span>Session Cycle</span>
               </div>
               <p className="text-[11px] text-slate-500">
-                Regular academic classes held according to the Madrasah morning schedule.
+                Regular academic classes held according to the school session schedule.
               </p>
             </div>
 

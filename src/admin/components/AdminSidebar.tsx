@@ -3,16 +3,18 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard,
   Users,
-  Bell,
-  Calendar,
   GraduationCap,
   BookOpen,
-  Image,
+  ClipboardCheck,
+  Bell,
+  Calendar,
   Inbox,
+  Image,
+  BarChart3,
+  FileSpreadsheet,
   Settings,
   LogOut,
-  ExternalLink,
-  FileSpreadsheet
+  ExternalLink
 } from 'lucide-react';
 import { logoutAdmin } from '../../services/authService';
 
@@ -30,14 +32,16 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ onCloseMobile }) => 
 
   const navItems = [
     { label: 'Dashboard', path: '/admin', icon: LayoutDashboard, end: true },
-    { label: 'Data Center', path: '/admin/data-center', icon: FileSpreadsheet },
     { label: 'Students', path: '/admin/students', icon: Users },
     { label: 'Teachers', path: '/admin/teachers', icon: GraduationCap },
+    { label: 'Classes & Academics', path: '/admin/academics', icon: BookOpen },
+    { label: 'Attendance', path: '/admin/attendance', icon: ClipboardCheck },
     { label: 'Notices', path: '/admin/notices', icon: Bell },
     { label: 'Events', path: '/admin/events', icon: Calendar },
-    { label: 'Academics', path: '/admin/academics', icon: BookOpen },
-    { label: 'Gallery', path: '/admin/gallery', icon: Image },
     { label: 'Admissions', path: '/admin/admissions', icon: Inbox },
+    { label: 'Gallery', path: '/admin/gallery', icon: Image },
+    { label: 'Reports', path: '/admin/reports', icon: BarChart3 },
+    { label: 'Data Center', path: '/admin/data-center', icon: FileSpreadsheet },
     { label: 'Settings', path: '/admin/settings', icon: Settings },
   ];
 

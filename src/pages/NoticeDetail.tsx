@@ -52,7 +52,7 @@ export const NoticeDetail: React.FC = () => {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center py-20 px-4 bg-[#fbfaf7]">
         <Loader2 className="w-9 h-9 text-[#164e37] animate-spin mb-3" />
-        <p className="text-sm font-semibold text-slate-600">Retrieving official madrassa circular...</p>
+        <p className="text-sm font-semibold text-slate-600">Retrieving official school circular...</p>
       </div>
     );
   }
