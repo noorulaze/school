@@ -147,18 +147,23 @@ export interface StudentDocument {
   email: string;
   className: string; // e.g. "Class 5 - Intermediate"
   section?: string; // e.g. "Section A"
-  division?: string;
+  division?: string; // e.g. "A", "B"
+  dob?: string; // Date of Birth e.g. "2012-05-15"
   parentName?: string;
   guardianName?: string;
+  parentPhone?: string;
+  studentPhone?: string;
   phone?: string;
   address?: string;
   emergencyContact?: string;
   bloodGroup?: string;
   bio?: string;
-  department: string; // e.g. "Qur’an & Tajweed"
+  department: string; // e.g. "Islamic Studies & Moral Science"
   profileImage?: string;
+  photoUrl?: string;
   academicYear: string; // e.g. "2025–2026"
   accountStatus: 'Active' | 'Disabled';
+  lastLogin?: string; // ISO timestamp of most recent portal login
   firstLogin?: boolean; // True on initial creation until student changes password
   mustChangePassword?: boolean; // Set when admin resets password
   documents?: Array<{

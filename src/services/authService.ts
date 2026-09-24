@@ -11,7 +11,7 @@ import {
 } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import { auth, app, isFirebaseConfigured } from '../lib/firebase';
-import { getStudentsAdmin } from './adminService';
+import { getStudentsAdmin, recordStudentLogin } from './adminService';
 import type { StudentDocument } from '../types/firestore';
 
 export interface AuthSessionUser {
@@ -168,8 +168,14 @@ export const loginAdmin = async (emailOrUsername: string, pass: string): Promise
 // Student Login (Student ID, Custom Username, or Email)
 export const loginStudent = async (identifier: string, pass: string): Promise<AuthSessionUser> => {
   const trimmed = identifier.trim();
-  if (!trimmed || !pass) {
+  if (!trimmed && !pass) {
     throw new Error('Please enter both your Student ID or username and password.');
+  }
+  if (!trimmed) {
+    throw new Error('Please enter your Student ID or username.');
+  }
+  if (!pass) {
+    throw new Error('Please enter your password.');
   }
 
   // 1. Resolve student document in Firestore or fallback collection to check status
@@ -209,6 +215,7 @@ export const loginStudent = async (identifier: string, pass: string): Promise<Au
         mustChangePassword: studentDoc?.mustChangePassword || studentDoc?.firstLogin
       };
       localStorage.setItem(LOCAL_STUDENT_KEY, JSON.stringify(session));
+      recordStudentLogin(effectiveStudentId).catch(() => {});
       return session;
     } catch (error: any) {
       console.warn('[AuthService] Firebase student auth failed, attempting fallback store:', error.message);
@@ -230,6 +237,7 @@ export const loginStudent = async (identifier: string, pass: string): Promise<Au
       mustChangePassword: studentDoc?.mustChangePassword || studentDoc?.firstLogin
     };
     localStorage.setItem(LOCAL_STUDENT_KEY, JSON.stringify(session));
+    recordStudentLogin(effectiveStudentId).catch(() => {});
     return session;
   }
 
@@ -245,6 +253,7 @@ export const loginStudent = async (identifier: string, pass: string): Promise<Au
         mustChangePassword: true
       };
       localStorage.setItem(LOCAL_STUDENT_KEY, JSON.stringify(session));
+      recordStudentLogin(effectiveStudentId).catch(() => {});
       return session;
     }
   }

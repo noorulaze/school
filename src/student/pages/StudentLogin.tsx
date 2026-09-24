@@ -36,10 +36,21 @@ export const StudentLogin: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+
+    const trimmedId = identifier.trim();
+    if (!trimmedId) {
+      setError('Please enter your Student ID or username.');
+      return;
+    }
+    if (!password) {
+      setError('Please enter your password.');
+      return;
+    }
+
     setLoading(true);
 
     try {
-      await loginStudent(identifier, password);
+      await loginStudent(trimmedId, password);
       navigate('/student/dashboard');
     } catch (err: any) {
       setError(err.message || 'Invalid Student ID or password.');
@@ -192,7 +203,7 @@ export const StudentLogin: React.FC = () => {
               <>
                 <form onSubmit={handleSubmit} className="space-y-3.5">
                   <div>
-                    <label className="block text-[10px] sm:text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">
+                    <label htmlFor="student-identifier" className="block text-[10px] sm:text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">
                       Student ID or Custom Username *
                     </label>
                     <div className="relative">
@@ -200,8 +211,11 @@ export const StudentLogin: React.FC = () => {
                         <User className="w-4 h-4" />
                       </div>
                       <input
+                        id="student-identifier"
+                        name="username"
                         type="text"
                         required
+                        autoComplete="username"
                         value={identifier}
                         onChange={(e) => setIdentifier(e.target.value)}
                         placeholder="Enter Student ID (e.g. SK-2025-001) or username"
@@ -212,8 +226,8 @@ export const StudentLogin: React.FC = () => {
 
                   <div>
                     <div className="flex items-center justify-between mb-1">
-                      <label className="block text-[10px] sm:text-[11px] font-bold text-slate-700 uppercase tracking-wider">
-                        Portal Password
+                      <label htmlFor="student-password" className="block text-[10px] sm:text-[11px] font-bold text-slate-700 uppercase tracking-wider">
+                        Portal Password *
                       </label>
                       <span className="text-[10px] text-slate-400">
                         Contact Admin to Reset
@@ -224,17 +238,20 @@ export const StudentLogin: React.FC = () => {
                         <Lock className="w-4 h-4" />
                       </div>
                       <input
+                        id="student-password"
+                        name="password"
                         type={showPassword ? 'text' : 'password'}
                         required
+                        autoComplete="current-password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="••••••••••••"
-                        className="w-full pl-10 pr-10 py-2.5 bg-[#fcfbf9] border border-[#d8d3c5] rounded-xl text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#164e37] focus:bg-white transition-all min-h-[44px]"
+                        className="w-full pl-10 pr-11 py-2.5 bg-[#fcfbf9] border border-[#d8d3c5] rounded-xl text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#164e37] focus:bg-white transition-all min-h-[44px]"
                       />
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-700 cursor-pointer"
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center justify-center min-w-[44px] min-h-[44px] text-slate-400 hover:text-slate-700 cursor-pointer"
                         aria-label={showPassword ? 'Hide password' : 'Show password'}
                       >
                         {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -268,19 +285,22 @@ export const StudentLogin: React.FC = () => {
               <>
                 <form onSubmit={handleAdminSubmit} className="space-y-3.5">
                   <div>
-                    <label className="block text-[10px] sm:text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">
-                      Admin Username
+                    <label htmlFor="admin-username" className="block text-[10px] sm:text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">
+                      Admin Username *
                     </label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                         <User className="w-4 h-4" />
                       </div>
                       <input
+                        id="admin-username"
+                        name="username"
                         type="text"
                         required
+                        autoComplete="username"
                         value={adminUsername}
                         onChange={(e) => setAdminUsername(e.target.value)}
-                        placeholder="Enter username"
+                        placeholder="Enter admin username"
                         className="w-full pl-10 pr-3 py-2.5 bg-[#fcfbf9] border border-[#d8d3c5] rounded-xl text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#164e37] focus:bg-white transition-all min-h-[44px]"
                       />
                     </div>
@@ -288,8 +308,8 @@ export const StudentLogin: React.FC = () => {
 
                   <div>
                     <div className="flex items-center justify-between mb-1">
-                      <label className="block text-[10px] sm:text-[11px] font-bold text-slate-700 uppercase tracking-wider">
-                        Admin Password
+                      <label htmlFor="admin-password" className="block text-[10px] sm:text-[11px] font-bold text-slate-700 uppercase tracking-wider">
+                        Admin Password *
                       </label>
                     </div>
                     <div className="relative">
@@ -297,17 +317,20 @@ export const StudentLogin: React.FC = () => {
                         <Lock className="w-4 h-4" />
                       </div>
                       <input
+                        id="admin-password"
+                        name="password"
                         type={showAdminPassword ? 'text' : 'password'}
                         required
+                        autoComplete="current-password"
                         value={adminPassword}
                         onChange={(e) => setAdminPassword(e.target.value)}
                         placeholder="••••••••••••"
-                        className="w-full pl-10 pr-10 py-2.5 bg-[#fcfbf9] border border-[#d8d3c5] rounded-xl text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#164e37] focus:bg-white transition-all min-h-[44px]"
+                        className="w-full pl-10 pr-11 py-2.5 bg-[#fcfbf9] border border-[#d8d3c5] rounded-xl text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#164e37] focus:bg-white transition-all min-h-[44px]"
                       />
                       <button
                         type="button"
                         onClick={() => setShowAdminPassword(!showAdminPassword)}
-                        className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-700 cursor-pointer"
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center justify-center min-w-[44px] min-h-[44px] text-slate-400 hover:text-slate-700 cursor-pointer"
                         aria-label={showAdminPassword ? 'Hide password' : 'Show password'}
                       >
                         {showAdminPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}

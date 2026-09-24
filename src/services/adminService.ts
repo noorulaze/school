@@ -692,6 +692,31 @@ export const resetStudentPasswordAdmin = async (
   setLocalCollection('students', list);
 };
 
+export const recordStudentLogin = async (studentIdOrId: string): Promise<void> => {
+  const now = new Date().toISOString();
+  const all = await getStudentsAdmin();
+  const target = all.find(
+    (s) => s.id === studentIdOrId || s.studentId.toUpperCase() === studentIdOrId.toUpperCase()
+  );
+  if (!target) return;
+
+  if (isFirebaseConfigured && db) {
+    try {
+      await updateDoc(doc(db, 'students', target.id), {
+        lastLogin: now,
+        updatedAt: now,
+      });
+    } catch (e) {
+      console.warn('[AdminService] Firestore recordStudentLogin error:', e);
+    }
+  }
+
+  const list = getLocalCollection<StudentDocument>('students', initialStudents).map((s) =>
+    s.id === target.id ? { ...s, lastLogin: now, updatedAt: now } : s
+  );
+  setLocalCollection('students', list);
+};
+
 // ==================== SETTINGS ====================
 export const getSchoolSettings = async (): Promise<SchoolSettings> => {
   if (isFirebaseConfigured && db) {
