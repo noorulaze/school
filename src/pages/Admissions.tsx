@@ -141,7 +141,7 @@ export const Admissions: React.FC<AdmissionsProps> = ({ onOpenAdmissionModal }) 
               Admissions at Sharafiyya English Medium School
             </h1>
             <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl">
-              Nurturing knowledge, faith, and character. We welcome applications for students seeking authentic Islamic education combined with modern English-medium instruction.
+              Nurturing knowledge, faith, and character. We welcome applications for students seeking authentic Islamic education combined with modern English-medium instruction at our campus in Korangath, Niramaruthur.
             </p>
             <div className="pt-2 flex flex-wrap gap-3">
               <button

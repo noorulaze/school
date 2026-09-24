@@ -158,7 +158,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
 
               {/* Short Supporting Paragraph */}
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-md">
-                A premier Islamic English Medium School at Korangath, Tirur — blending Quranic education, strong values, and modern learning.
+                Sharafiyya English Medium School (Sharafiyya Korangath) is an Islamic English Medium School in Korangath, Niramaruthur — blending Quranic education, strong values, and modern learning.
               </p>
 
               {/* Action Buttons */}
@@ -250,10 +250,10 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
                   </div>
                   <div className="min-w-0 pr-1">
                     <p className="text-[10px] sm:text-xs font-black text-[#0f231c] leading-tight truncate">
-                      Campus at Korangath, Tirur
+                      Campus at Korangath
                     </p>
                     <p className="text-[8px] sm:text-[10px] text-slate-500 leading-tight truncate">
-                      Korangath, Tirur, Malappuram
+                      Korangath, Niramaruthur, Tirur
                     </p>
                   </div>
                   <Link

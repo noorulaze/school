@@ -4,6 +4,7 @@ import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { MobileBottomNav } from './components/MobileBottomNav';
 import { AdmissionModal } from './components/AdmissionModal';
+import { SEORouteManager } from './components/SEORouteManager';
 
 // Public Pages
 import { Home } from './pages/Home';
@@ -153,6 +154,7 @@ export function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
+      <SEORouteManager />
       <MainLayout onOpenAdmissionModal={handleOpenAdmissionModal} />
       <AdmissionModal
         isOpen={isAdmissionModalOpen}

@@ -1,0 +1,24 @@
+# robots.txt for Sharafiyya English Medium School
+# Official Website: https://sharafiyya.edu
+
+User-agent: *
+Allow: /
+Allow: /about
+Allow: /academics
+Allow: /departments
+Allow: /teachers
+Allow: /events
+Allow: /gallery
+Allow: /admissions
+Allow: /contact
+Allow: /notice/
+
+# Disallow Private Administrative Workspace & Student Portal Records
+Disallow: /admin
+Disallow: /admin/
+Disallow: /student
+Disallow: /student/
+Disallow: /login
+
+# XML Sitemap
+Sitemap: https://sharafiyya.edu/sitemap.xml

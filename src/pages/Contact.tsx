@@ -70,7 +70,7 @@ export const Contact: React.FC<ContactProps> = ({ onOpenAdmissionModal }) => {
               Contact Administrative Office
             </h1>
             <p className="text-xs sm:text-sm text-slate-600 mt-1.5 sm:mt-2 leading-relaxed">
-              Official address, office consultation hours, and direct inquiry communication for {SCHOOL_INFO.officialName} ({SCHOOL_INFO.localName}), Korangath, Tirur.
+              Official address, office consultation hours, and direct inquiry communication for {SCHOOL_INFO.officialName} ({SCHOOL_INFO.localName}), Korangath, Niramaruthur, Tirur.
             </p>
           </div>
         </div>
@@ -109,7 +109,7 @@ export const Contact: React.FC<ContactProps> = ({ onOpenAdmissionModal }) => {
                     <PlaceholderBadge label="Verified Locality" size="sm" />
                   </div>
                   <p className="text-slate-600 leading-relaxed">
-                    Korangath, Tirur, Malappuram District, Kerala, India – 676101
+                    Korangath, Niramaruthur, Tirur, Malappuram District, Kerala, India – 676101
                   </p>
                 </div>
 
