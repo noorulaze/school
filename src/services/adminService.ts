@@ -7,6 +7,7 @@ import {
   updateDoc,
   query,
   orderBy,
+  where,
   getDoc
 } from 'firebase/firestore';
 import { db, isFirebaseConfigured } from '../lib/firebase';
@@ -22,8 +23,13 @@ import type {
   DashboardStats,
   ContactMessage,
   CustomTableRecord,
-  CustomTableRow
+  CustomTableRow,
+  ExaminationItem,
+  ExamResultItem,
+  SubjectItem,
+  GradingScale
 } from '../types/firestore';
+import { calculateGrade, calculatePercentage, DEFAULT_GRADING_SCALE } from '../utils/gradingUtils';
 import { SCHOOL_INFO } from '../data/schoolInfo';
 
 // Helper storage keys for fallback cache
@@ -983,3 +989,377 @@ export const getDashboardStats = async (): Promise<DashboardStats> => {
     unreadMessages: messages.filter((m) => m.status === 'Unread').length,
   };
 };
+
+// ==================== EXAMINATIONS ====================
+const initialExaminations: ExaminationItem[] = [];
+
+export const getExaminationsAdmin = async (): Promise<ExaminationItem[]> => {
+  if (isFirebaseConfigured && db) {
+    try {
+      const q = query(collection(db, 'examinations'), orderBy('createdAt', 'desc'));
+      const snapshot = await getDocs(q);
+      if (!snapshot.empty) {
+        return snapshot.docs.map((d) => ({ id: d.id, ...d.data() } as ExaminationItem));
+      }
+    } catch (e) {
+      console.warn('[AdminService] Firestore examinations query error:', e);
+    }
+  }
+  return getLocalCollection('examinations', initialExaminations);
+};
+
+export const saveExaminationAdmin = async (
+  exam: Omit<ExaminationItem, 'id' | 'createdAt' | 'updatedAt'> & { id?: string }
+): Promise<ExaminationItem> => {
+  const id = exam.id || `exam-${Date.now()}`;
+  const now = new Date().toISOString();
+  
+  const existingList = getLocalCollection<ExaminationItem>('examinations', initialExaminations);
+  const existing = existingList.find((e) => e.id === id);
+
+  const record: ExaminationItem = {
+    ...exam,
+    id,
+    createdAt: existing ? existing.createdAt : now,
+    updatedAt: now,
+  };
+
+  if (isFirebaseConfigured && db) {
+    try {
+      await setDoc(doc(db, 'examinations', id), record, { merge: true });
+    } catch (e) {
+      console.error('[AdminService] Error saving examination to Firestore:', e);
+    }
+  }
+
+  const list = getLocalCollection('examinations', initialExaminations);
+  const idx = list.findIndex((e) => e.id === id);
+  if (idx >= 0) list[idx] = record;
+  else list.unshift(record);
+  setLocalCollection('examinations', list);
+  return record;
+};
+
+export const deleteExaminationAdmin = async (id: string): Promise<void> => {
+  if (isFirebaseConfigured && db) {
+    const firestore = db;
+    try {
+      await deleteDoc(doc(firestore, 'examinations', id));
+      const resultsQ = query(collection(firestore, 'examResults'), where('examId', '==', id));
+      const resSnap = await getDocs(resultsQ);
+      const deletePromises = resSnap.docs.map((d) => deleteDoc(doc(firestore, 'examResults', d.id)));
+      await Promise.all(deletePromises);
+    } catch (e) {
+      console.error('[AdminService] Error deleting examination from Firestore:', e);
+    }
+  }
+
+  let list = getLocalCollection<ExaminationItem>('examinations', initialExaminations);
+  list = list.filter((e) => e.id !== id);
+  setLocalCollection('examinations', list);
+
+  let results = getLocalCollection<ExamResultItem>('exam_results', []);
+  results = results.filter((r) => r.examId !== id);
+  setLocalCollection('exam_results', results);
+};
+
+export const publishExaminationAdmin = async (
+  id: string,
+  published: boolean
+): Promise<void> => {
+  const status: 'Draft' | 'Published' = published ? 'Published' : 'Draft';
+  const now = new Date().toISOString();
+
+  if (isFirebaseConfigured && db) {
+    const firestore = db;
+    try {
+      await updateDoc(doc(firestore, 'examinations', id), {
+        status,
+        updatedAt: now,
+      });
+
+      const resultsQ = query(collection(firestore, 'examResults'), where('examId', '==', id));
+      const resSnap = await getDocs(resultsQ);
+      const updatePromises = resSnap.docs.map((d) =>
+        updateDoc(doc(firestore, 'examResults', d.id), {
+          published,
+          updatedAt: now,
+        })
+      );
+      await Promise.all(updatePromises);
+    } catch (e) {
+      console.error('[AdminService] Error updating examination published state:', e);
+    }
+  }
+
+  const list = getLocalCollection<ExaminationItem>('examinations', initialExaminations);
+  const idx = list.findIndex((e) => e.id === id);
+  if (idx >= 0) {
+    list[idx] = { ...list[idx], status, updatedAt: now };
+    setLocalCollection('examinations', list);
+  }
+
+  const results = getLocalCollection<ExamResultItem>('exam_results', []);
+  results.forEach((r) => {
+    if (r.examId === id) {
+      r.published = published;
+      r.updatedAt = now;
+    }
+  });
+  setLocalCollection('exam_results', results);
+};
+
+// ==================== EXAM RESULTS ====================
+const initialExamResults: ExamResultItem[] = [];
+
+export const getExamResultsAdmin = async (examId?: string): Promise<ExamResultItem[]> => {
+  if (isFirebaseConfigured && db) {
+    try {
+      const q = examId
+        ? query(collection(db, 'examResults'), where('examId', '==', examId))
+        : query(collection(db, 'examResults'), orderBy('createdAt', 'desc'));
+      const snapshot = await getDocs(q);
+      if (!snapshot.empty) {
+        return snapshot.docs.map((d) => ({ id: d.id, ...d.data() } as ExamResultItem));
+      }
+    } catch (e) {
+      console.warn('[AdminService] Firestore examResults query error:', e);
+    }
+  }
+  const all = getLocalCollection('exam_results', initialExamResults);
+  return examId ? all.filter((r) => r.examId === examId) : all;
+};
+
+export const saveExamResultAdmin = async (
+  result: Omit<ExamResultItem, 'id' | 'createdAt' | 'updatedAt' | 'percentage' | 'grade'> & {
+    id?: string;
+    percentage?: number;
+    grade?: string;
+  }
+): Promise<ExamResultItem> => {
+  if (result.marksObtained < 0) {
+    throw new Error('Marks obtained cannot be negative.');
+  }
+  if (result.maximumMarks <= 0) {
+    throw new Error('Maximum marks must be greater than zero.');
+  }
+  if (result.marksObtained > result.maximumMarks) {
+    throw new Error(`Marks obtained (${result.marksObtained}) cannot exceed maximum marks (${result.maximumMarks}).`);
+  }
+
+  const allResults = await getExamResultsAdmin(result.examId);
+  const duplicate = allResults.find(
+    (r) =>
+      r.studentUid === result.studentUid &&
+      r.subjectName.trim().toLowerCase() === result.subjectName.trim().toLowerCase() &&
+      r.id !== result.id
+  );
+  if (duplicate) {
+    throw new Error(
+      `A score for subject "${result.subjectName}" is already entered for this student in this examination.`
+    );
+  }
+
+  const id = result.id || `res-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
+  const now = new Date().toISOString();
+  const percentage = calculatePercentage(result.marksObtained, result.maximumMarks);
+  const grade = calculateGrade(percentage);
+
+  const existingList = getLocalCollection<ExamResultItem>('exam_results', initialExamResults);
+  const existing = existingList.find((r) => r.id === id);
+
+  const record: ExamResultItem = {
+    ...result,
+    id,
+    percentage,
+    grade,
+    published: result.published ?? false,
+    createdAt: existing ? existing.createdAt : now,
+    updatedAt: now,
+  };
+
+  if (isFirebaseConfigured && db) {
+    try {
+      await setDoc(doc(db, 'examResults', id), record, { merge: true });
+    } catch (e) {
+      console.error('[AdminService] Error saving exam result to Firestore:', e);
+    }
+  }
+
+  const list = getLocalCollection('exam_results', initialExamResults);
+  const idx = list.findIndex((r) => r.id === id);
+  if (idx >= 0) list[idx] = record;
+  else list.unshift(record);
+  setLocalCollection('exam_results', list);
+  return record;
+};
+
+export const deleteExamResultAdmin = async (id: string): Promise<void> => {
+  if (isFirebaseConfigured && db) {
+    try {
+      await deleteDoc(doc(db, 'examResults', id));
+    } catch (e) {
+      console.error('[AdminService] Error deleting exam result from Firestore:', e);
+    }
+  }
+
+  let list = getLocalCollection<ExamResultItem>('exam_results', initialExamResults);
+  list = list.filter((r) => r.id !== id);
+  setLocalCollection('exam_results', list);
+};
+
+export const bulkDeleteExamResultsAdmin = async (ids: string[]): Promise<void> => {
+  const set = new Set(ids);
+  if (isFirebaseConfigured && db) {
+    const firestore = db;
+    try {
+      const promises = ids.map((id) => deleteDoc(doc(firestore, 'examResults', id)));
+      await Promise.all(promises);
+    } catch (e) {
+      console.error('[AdminService] Error bulk deleting exam results from Firestore:', e);
+    }
+  }
+
+  let list = getLocalCollection<ExamResultItem>('exam_results', initialExamResults);
+  list = list.filter((r) => !set.has(r.id));
+  setLocalCollection('exam_results', list);
+};
+
+export const bulkPublishExamResultsAdmin = async (
+  ids: string[],
+  published: boolean
+): Promise<void> => {
+  const set = new Set(ids);
+  const now = new Date().toISOString();
+
+  if (isFirebaseConfigured && db) {
+    const firestore = db;
+    try {
+      const promises = ids.map((id) =>
+        updateDoc(doc(firestore, 'examResults', id), {
+          published,
+          updatedAt: now,
+        })
+      );
+      await Promise.all(promises);
+    } catch (e) {
+      console.error('[AdminService] Error bulk updating exam results published state:', e);
+    }
+  }
+
+  const list = getLocalCollection<ExamResultItem>('exam_results', initialExamResults);
+  list.forEach((r) => {
+    if (set.has(r.id)) {
+      r.published = published;
+      r.updatedAt = now;
+    }
+  });
+  setLocalCollection('exam_results', list);
+};
+
+// ==================== SUBJECTS ====================
+const initialSubjects: SubjectItem[] = [];
+
+export const getSubjectsAdmin = async (): Promise<SubjectItem[]> => {
+  if (isFirebaseConfigured && db) {
+    try {
+      const q = query(collection(db, 'subjects'), orderBy('name', 'asc'));
+      const snapshot = await getDocs(q);
+      if (!snapshot.empty) {
+        return snapshot.docs.map((d) => ({ id: d.id, ...d.data() } as SubjectItem));
+      }
+    } catch (e) {
+      console.warn('[AdminService] Firestore subjects query error:', e);
+    }
+  }
+  return getLocalCollection('subjects', initialSubjects);
+};
+
+export const saveSubjectAdmin = async (
+  subject: Omit<SubjectItem, 'id' | 'createdAt'> & { id?: string }
+): Promise<SubjectItem> => {
+  const id = subject.id || `subj-${Date.now()}`;
+  const now = new Date().toISOString();
+
+  const existingList = getLocalCollection<SubjectItem>('subjects', initialSubjects);
+  const existing = existingList.find((s) => s.id === id);
+
+  const record: SubjectItem = {
+    ...subject,
+    id,
+    createdAt: existing ? existing.createdAt : now,
+    updatedAt: now,
+  };
+
+  if (isFirebaseConfigured && db) {
+    try {
+      await setDoc(doc(db, 'subjects', id), record, { merge: true });
+    } catch (e) {
+      console.error('[AdminService] Error saving subject to Firestore:', e);
+    }
+  }
+
+  const list = getLocalCollection('subjects', initialSubjects);
+  const idx = list.findIndex((s) => s.id === id);
+  if (idx >= 0) list[idx] = record;
+  else list.push(record);
+  setLocalCollection('subjects', list);
+  return record;
+};
+
+export const deleteSubjectAdmin = async (id: string): Promise<void> => {
+  if (isFirebaseConfigured && db) {
+    try {
+      await deleteDoc(doc(db, 'subjects', id));
+    } catch (e) {
+      console.error('[AdminService] Error deleting subject from Firestore:', e);
+    }
+  }
+
+  let list = getLocalCollection<SubjectItem>('subjects', initialSubjects);
+  list = list.filter((s) => s.id !== id);
+  setLocalCollection('subjects', list);
+};
+
+// ==================== GRADING SCALES ====================
+const initialGradingScales: GradingScale[] = [
+  {
+    id: 'scale-default',
+    name: 'Standard School Grading Scale',
+    tiers: DEFAULT_GRADING_SCALE,
+    isDefault: true,
+  },
+];
+
+export const getGradingScalesAdmin = async (): Promise<GradingScale[]> => {
+  if (isFirebaseConfigured && db) {
+    try {
+      const q = query(collection(db, 'gradingScales'));
+      const snapshot = await getDocs(q);
+      if (!snapshot.empty) {
+        return snapshot.docs.map((d) => ({ id: d.id, ...d.data() } as GradingScale));
+      }
+    } catch (e) {
+      console.warn('[AdminService] Firestore gradingScales query error:', e);
+    }
+  }
+  return getLocalCollection('grading_scales', initialGradingScales);
+};
+
+export const saveGradingScaleAdmin = async (scale: GradingScale): Promise<GradingScale> => {
+  if (isFirebaseConfigured && db) {
+    try {
+      await setDoc(doc(db, 'gradingScales', scale.id), scale, { merge: true });
+    } catch (e) {
+      console.error('[AdminService] Error saving grading scale to Firestore:', e);
+    }
+  }
+
+  const list = getLocalCollection('grading_scales', initialGradingScales);
+  const idx = list.findIndex((s) => s.id === scale.id);
+  if (idx >= 0) list[idx] = scale;
+  else list.push(scale);
+  setLocalCollection('grading_scales', list);
+  return scale;
+};
+

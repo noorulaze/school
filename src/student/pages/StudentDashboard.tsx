@@ -17,7 +17,8 @@ import {
   Lock,
   Copy,
   Check,
-  Clock
+  Clock,
+  Award
 } from 'lucide-react';
 import {
   subscribeStudentAuth,
@@ -249,10 +250,11 @@ export const StudentDashboard: React.FC = () => {
     );
   }
 
-  // 8 Modern Academic Tabs
+  // 9 Modern Academic Tabs
   const tabs = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'profile', label: 'My Profile', icon: User },
+    { id: 'results', label: 'My Results', icon: Award, path: '/student/results' },
     { id: 'academics', label: 'Academic Information', icon: GraduationCap },
     { id: 'subjects', label: 'Subjects', icon: BookOpen },
     { id: 'notices', label: 'Notices', icon: Bell },
@@ -412,7 +414,13 @@ export const StudentDashboard: React.FC = () => {
               <button
                 key={tab.id}
                 type="button"
-                onClick={() => setActiveTab(tab.id)}
+                onClick={() => {
+                  if ('path' in tab && (tab as any).path) {
+                    navigate((tab as any).path);
+                  } else {
+                    setActiveTab(tab.id as any);
+                  }
+                }}
                 className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
                   active
                     ? 'bg-[#0e3827] text-white shadow-xs'
@@ -540,6 +548,30 @@ export const StudentDashboard: React.FC = () => {
                 </div>
               )}
             </div>
+          </div>
+
+          {/* Quick Access to Exam Results */}
+          <div className="bg-gradient-to-r from-[#091f17] via-[#0e3827] to-[#164e37] rounded-2xl p-5 text-white shadow-xs border border-[#1b5038] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <Award className="w-5 h-5 text-[#c59b27]" />
+                <h3 className="text-sm font-bold text-white">Official Examination Marksheets</h3>
+                <span className="text-[9px] font-bold uppercase tracking-wider bg-[#c59b27]/20 text-amber-300 border border-[#c59b27]/40 px-2 py-0.5 rounded-full">
+                  Published
+                </span>
+              </div>
+              <p className="text-xs text-emerald-100/90 max-w-xl">
+                Review your published exam performance, subject grades, total scores, percentages, and generate official printable marksheets.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => navigate('/student/results')}
+              className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-[#c59b27] hover:bg-[#b0891e] text-slate-950 font-bold text-xs rounded-xl shadow-xs transition-colors shrink-0 cursor-pointer"
+            >
+              <Award className="w-4 h-4 text-slate-950" />
+              <span>View My Results & Marksheet</span>
+            </button>
           </div>
         </div>
       )}

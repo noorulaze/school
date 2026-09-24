@@ -226,3 +226,64 @@ export interface DashboardStats {
   newAdmissions: number;
   unreadMessages?: number;
 }
+
+// ==================== EXAM RESULTS MANAGEMENT ====================
+
+export interface ExaminationItem {
+  id: string;
+  examName: string;
+  academicYear: string;
+  className: string;
+  division?: string;
+  examDate: string;
+  description?: string;
+  status: 'Draft' | 'Published';
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ExamResultItem {
+  id: string;
+  examId: string;
+  examName: string;
+  academicYear: string;
+  class: string;
+  division?: string;
+  studentUid: string;
+  studentId: string;
+  studentName: string;
+  subjectId: string;
+  subjectName: string;
+  marksObtained: number;
+  maximumMarks: number;
+  percentage: number;
+  grade: string;
+  published: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SubjectItem {
+  id: string;
+  name: string;
+  code?: string;
+  department?: string;
+  status: 'Active' | 'Inactive';
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface GradeTier {
+  grade: string;
+  minPercentage: number;
+  maxPercentage: number;
+  description?: string;
+}
+
+export interface GradingScale {
+  id: string;
+  name: string;
+  tiers: GradeTier[];
+  isDefault: boolean;
+}
+

@@ -97,5 +97,29 @@ service cloud.firestore {
       allow read: if isOwner(resource.data.uid) || isAdmin();
       allow write: if isAdmin();
     }
+
+    // 12. Examinations (Published examinations readable by authenticated students & admins; write by admin only)
+    match /examinations/{examId} {
+      allow read: if (resource.data.status == 'Published' && isAuthenticated()) || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // 13. Exam Results (Strict privacy: students read ONLY their own published results; write by admin only)
+    match /examResults/{resultId} {
+      allow read: if (isOwner(resource.data.studentUid) && resource.data.published == true) || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // 14. Subjects
+    match /subjects/{subjectId} {
+      allow read: if isAuthenticated() || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // 15. Grading Scales
+    match /gradingScales/{scaleId} {
+      allow read: if isAuthenticated() || isAdmin();
+      allow write: if isAdmin();
+    }
   }
 }

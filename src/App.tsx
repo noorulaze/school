@@ -33,6 +33,7 @@ import { AdminAdmissions } from './admin/pages/AdminAdmissions';
 import { AdminDataCenter } from './admin/pages/AdminDataCenter';
 import { AdminAttendance } from './admin/pages/AdminAttendance';
 import { AdminReports } from './admin/pages/AdminReports';
+import { AdminExamResults } from './admin/pages/AdminExamResults';
 import { AdminSettings } from './admin/pages/AdminSettings';
 
 // Student Portal Pages & Components
@@ -43,6 +44,7 @@ import { StudentDashboard } from './student/pages/StudentDashboard';
 import { StudentProfile } from './student/pages/StudentProfile';
 import { StudentAttendance } from './student/pages/StudentAttendance';
 import { StudentAcademics } from './student/pages/StudentAcademics';
+import { StudentResults } from './student/pages/StudentResults';
 import { StudentNotices } from './student/pages/StudentNotices';
 import { StudentEvents } from './student/pages/StudentEvents';
 
@@ -115,6 +117,7 @@ function MainLayout({ onOpenAdmissionModal }: { onOpenAdmissionModal: () => void
               <Route path="admissions" element={<AdminAdmissions />} />
               <Route path="gallery" element={<AdminGallery />} />
               <Route path="reports" element={<AdminReports />} />
+              <Route path="exam-results" element={<AdminExamResults />} />
               <Route path="data-center" element={<AdminDataCenter />} />
               <Route path="datacenter" element={<AdminDataCenter />} />
               <Route path="settings" element={<AdminSettings />} />
@@ -130,6 +133,7 @@ function MainLayout({ onOpenAdmissionModal }: { onOpenAdmissionModal: () => void
               <Route path="profile" element={<StudentProfile />} />
               <Route path="attendance" element={<StudentAttendance />} />
               <Route path="academics" element={<StudentAcademics />} />
+              <Route path="results" element={<StudentResults />} />
               <Route path="notices" element={<StudentNotices />} />
               <Route path="events" element={<StudentEvents />} />
             </Route>

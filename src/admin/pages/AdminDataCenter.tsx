@@ -27,7 +27,8 @@ import {
   Mail,
   Inbox,
   FolderPlus,
-  SlidersHorizontal
+  SlidersHorizontal,
+  Award
 } from 'lucide-react';
 import {
   getAdmissionsAdmin,
@@ -51,7 +52,12 @@ import {
   deleteCustomTable,
   saveCustomTableRow,
   deleteCustomTableRow,
-  bulkDeleteCustomTableRows
+  bulkDeleteCustomTableRows,
+  getExamResultsAdmin,
+  saveExamResultAdmin,
+  deleteExamResultAdmin,
+  bulkDeleteExamResultsAdmin,
+  getExaminationsAdmin
 } from '../../services/adminService';
 import { exportToExcel, exportToCSV, type ExportColumn } from '../../utils/exportUtils';
 import type {
@@ -59,16 +65,18 @@ import type {
   ContactMessage,
   StudentDocument,
   TeacherItem,
-  CustomTableRecord
+  CustomTableRecord,
+  ExaminationItem,
+  ExamResultItem
 } from '../../types/firestore';
 
-type SectionKey = 'admissions' | 'messages' | 'students' | 'teachers' | 'custom';
+type SectionKey = 'admissions' | 'messages' | 'students' | 'teachers' | 'exam-results' | 'custom';
 
 export const AdminDataCenter: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const initialSection = (searchParams.get('section') as SectionKey) || 'admissions';
   const [activeSection, setActiveSection] = useState<SectionKey>(
-    ['admissions', 'messages', 'students', 'teachers', 'custom'].includes(initialSection)
+    ['admissions', 'messages', 'students', 'teachers', 'exam-results', 'custom'].includes(initialSection)
       ? initialSection
       : 'admissions'
   );
@@ -76,7 +84,7 @@ export const AdminDataCenter: React.FC = () => {
   // Sync state when URL param changes
   useEffect(() => {
     const s = searchParams.get('section') as SectionKey;
-    if (s && ['admissions', 'messages', 'students', 'teachers', 'custom'].includes(s)) {
+    if (s && ['admissions', 'messages', 'students', 'teachers', 'exam-results', 'custom'].includes(s)) {
       setActiveSection(s);
     }
   }, [searchParams]);
@@ -96,6 +104,8 @@ export const AdminDataCenter: React.FC = () => {
   const [messages, setMessages] = useState<ContactMessage[]>([]);
   const [students, setStudents] = useState<StudentDocument[]>([]);
   const [teachers, setTeachers] = useState<TeacherItem[]>([]);
+  const [results, setResults] = useState<ExamResultItem[]>([]);
+  const [examinations, setExaminations] = useState<ExaminationItem[]>([]);
   const [customTables, setCustomTables] = useState<CustomTableRecord[]>([]);
   const [selectedCustomTableId, setSelectedCustomTableId] = useState<string>('');
 
@@ -141,17 +151,21 @@ export const AdminDataCenter: React.FC = () => {
   const loadAllData = async () => {
     setLoading(true);
     try {
-      const [adm, msg, std, tch, tbls] = await Promise.all([
+      const [adm, msg, std, tch, res, exm, tbls] = await Promise.all([
         getAdmissionsAdmin(),
         getContactMessagesAdmin(),
         getStudentsAdmin(),
         getTeachersAdmin(),
+        getExamResultsAdmin(),
+        getExaminationsAdmin(),
         getCustomTablesAdmin()
       ]);
       setAdmissions(adm);
       setMessages(msg);
       setStudents(std);
       setTeachers(tch);
+      setResults(res);
+      setExaminations(exm);
       setCustomTables(tbls);
       if (tbls.length > 0 && !selectedCustomTableId) {
         setSelectedCustomTableId(tbls[0].id);
@@ -254,6 +268,27 @@ export const AdminDataCenter: React.FC = () => {
             item.email?.toLowerCase().includes(q)
         );
       }
+    } else if (activeSection === 'exam-results') {
+      list = results.map((r) => ({
+        ...r,
+        publishedStatus: r.published ? 'Published' : 'Draft',
+      }));
+      if (statusFilter !== 'ALL') {
+        list = list.filter((item) => item.publishedStatus === statusFilter);
+      }
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        list = list.filter(
+          (item) =>
+            item.studentName?.toLowerCase().includes(q) ||
+            item.studentId?.toLowerCase().includes(q) ||
+            item.examName?.toLowerCase().includes(q) ||
+            item.class?.toLowerCase().includes(q) ||
+            item.division?.toLowerCase().includes(q) ||
+            item.subjectName?.toLowerCase().includes(q) ||
+            item.grade?.toLowerCase().includes(q)
+        );
+      }
     } else if (activeSection === 'custom') {
       if (activeCustomTable) {
         list = activeCustomTable.rows.map((r) => ({ id: r.id, ...r.data, createdAt: r.createdAt }));
@@ -284,6 +319,7 @@ export const AdminDataCenter: React.FC = () => {
     messages,
     students,
     teachers,
+    results,
     activeCustomTable,
     searchQuery,
     statusFilter,
@@ -364,6 +400,20 @@ export const AdminDataCenter: React.FC = () => {
           { key: 'email', label: 'Email' },
           { key: 'status', label: 'Status' },
         ];
+      case 'exam-results':
+        return [
+          { key: 'studentId', label: 'Student ID' },
+          { key: 'studentName', label: 'Student Name' },
+          { key: 'examName', label: 'Examination' },
+          { key: 'class', label: 'Class' },
+          { key: 'division', label: 'Division' },
+          { key: 'subjectName', label: 'Subject' },
+          { key: 'marksObtained', label: 'Marks' },
+          { key: 'maximumMarks', label: 'Max Marks' },
+          { key: 'percentage', label: 'Percentage (%)' },
+          { key: 'grade', label: 'Grade' },
+          { key: 'publishedStatus', label: 'Status' },
+        ];
       case 'custom':
         if (activeCustomTable) {
           return activeCustomTable.columns.map((c) => ({ key: c, label: c }));
@@ -415,6 +465,9 @@ export const AdminDataCenter: React.FC = () => {
       } else if (activeSection === 'teachers') {
         await deleteTeacher(activeRecord.id);
         setTeachers((prev) => prev.filter((t) => t.id !== activeRecord.id));
+      } else if (activeSection === 'exam-results') {
+        await deleteExamResultAdmin(activeRecord.id);
+        setResults((prev) => prev.filter((r) => r.id !== activeRecord.id));
       } else if (activeSection === 'custom' && activeCustomTable) {
         await deleteCustomTableRow(activeCustomTable.id, activeRecord.id);
         setCustomTables((prev) =>
@@ -459,6 +512,9 @@ export const AdminDataCenter: React.FC = () => {
       } else if (activeSection === 'teachers') {
         await bulkDeleteTeachers(ids);
         setTeachers((prev) => prev.filter((t) => !selectedIds.has(t.id)));
+      } else if (activeSection === 'exam-results') {
+        await bulkDeleteExamResultsAdmin(ids);
+        setResults((prev) => prev.filter((r) => !selectedIds.has(r.id)));
       } else if (activeSection === 'custom' && activeCustomTable) {
         await bulkDeleteCustomTableRows(activeCustomTable.id, ids);
         setCustomTables((prev) =>
@@ -494,6 +550,16 @@ export const AdminDataCenter: React.FC = () => {
       activeCustomTable?.columns.forEach((col) => {
         initial[col] = record[col] || '';
       });
+    } else if (activeSection === 'exam-results') {
+      initial.studentId = record.studentId || '';
+      initial.studentName = record.studentName || '';
+      initial.examName = record.examName || '';
+      initial.class = record.class || '';
+      initial.division = record.division || '';
+      initial.subjectName = record.subjectName || '';
+      initial.marksObtained = String(record.marksObtained ?? '');
+      initial.maximumMarks = String(record.maximumMarks ?? '100');
+      initial.published = record.published ? 'true' : 'false';
     } else {
       currentColumns.forEach((col) => {
         initial[col.key] = record[col.key] || '';
@@ -605,6 +671,48 @@ export const AdminDataCenter: React.FC = () => {
 
         setTeachers((prev) => {
           const idx = prev.findIndex((t) => t.id === saved.id);
+          if (idx >= 0) {
+            const next = [...prev];
+            next[idx] = saved;
+            return next;
+          }
+          return [saved, ...prev];
+        });
+      } else if (activeSection === 'exam-results') {
+        if (!formData.studentId || !formData.subjectName || formData.marksObtained === undefined || formData.marksObtained === '') {
+          showToast('Student ID, Subject Name, and Marks are required', 'error');
+          return;
+        }
+        const marks = Number(formData.marksObtained);
+        const maxMarks = Number(formData.maximumMarks) || 100;
+        if (isNaN(marks) || marks < 0) {
+          showToast('Marks obtained must be 0 or greater', 'error');
+          return;
+        }
+        if (marks > maxMarks) {
+          showToast(`Marks (${marks}) cannot exceed maximum marks (${maxMarks})`, 'error');
+          return;
+        }
+
+        const saved = await saveExamResultAdmin({
+          id: isEdit ? activeRecord.id : undefined,
+          examId: activeRecord?.examId || (examinations[0]?.id ?? `exm-${Date.now()}`),
+          examName: formData.examName?.trim() || (examinations[0]?.examName ?? 'Terminal Examination'),
+          academicYear: activeRecord?.academicYear || '2025–2026',
+          class: formData.class?.trim() || 'Class 5',
+          division: formData.division?.trim() || '',
+          studentUid: activeRecord?.studentUid || `uid-${formData.studentId.trim().toLowerCase()}`,
+          studentId: formData.studentId.trim().toUpperCase(),
+          studentName: formData.studentName?.trim() || 'Student',
+          subjectId: activeRecord?.subjectId || `subj-${formData.subjectName.toLowerCase().replace(/\s+/g, '-')}`,
+          subjectName: formData.subjectName.trim(),
+          marksObtained: marks,
+          maximumMarks: maxMarks,
+          published: formData.published === 'true',
+        });
+
+        setResults((prev) => {
+          const idx = prev.findIndex((r) => r.id === saved.id);
           if (idx >= 0) {
             const next = [...prev];
             next[idx] = saved;
@@ -883,6 +991,26 @@ export const AdminDataCenter: React.FC = () => {
 
             <button
               type="button"
+              onClick={() => setSection('exam-results')}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                activeSection === 'exam-results'
+                  ? 'bg-[#164e37] text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+              }`}
+            >
+              <Award className="w-3.5 h-3.5 text-[#c59b27]" />
+              <span>Exam Results</span>
+              <span
+                className={`ml-1 text-[10px] px-1.5 py-0.2 rounded-full font-mono ${
+                  activeSection === 'exam-results' ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-700'
+                }`}
+              >
+                {results.length}
+              </span>
+            </button>
+
+            <button
+              type="button"
               onClick={() => setSection('custom')}
               className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 activeSection === 'custom'
@@ -994,7 +1122,7 @@ export const AdminDataCenter: React.FC = () => {
           </div>
 
           {/* Status Filter Dropdown */}
-          {['admissions', 'messages', 'students', 'teachers'].includes(activeSection) && (
+          {['admissions', 'messages', 'students', 'teachers', 'exam-results'].includes(activeSection) && (
             <div className="flex items-center gap-1.5 shrink-0">
               <Filter className="w-3.5 h-3.5 text-slate-400 shrink-0" />
               <select
@@ -1032,6 +1160,12 @@ export const AdminDataCenter: React.FC = () => {
                     <option value="Active">Active</option>
                     <option value="On Leave">On Leave</option>
                     <option value="Inactive">Inactive</option>
+                  </>
+                )}
+                {activeSection === 'exam-results' && (
+                  <>
+                    <option value="Published">Published</option>
+                    <option value="Draft">Draft</option>
                   </>
                 )}
               </select>
@@ -1247,8 +1381,8 @@ export const AdminDataCenter: React.FC = () => {
             paginatedData.map((row) => {
               const isExpanded = expandedCardIds.has(row.id);
               const isSelected = selectedIds.has(row.id);
-              const title = row.applicantName || row.name || row.tableName || row.studentId || 'Record';
-              const status = row.status || row.accountStatus || 'Active';
+              const title = row.studentName || row.applicantName || row.name || row.tableName || row.studentId || 'Record';
+              const status = row.publishedStatus || row.status || row.accountStatus || 'Active';
 
               return (
                 <div
@@ -1278,7 +1412,7 @@ export const AdminDataCenter: React.FC = () => {
                         </div>
                         {/* Secondary line summary */}
                         <p className="text-[11px] text-slate-500 mt-0.5 truncate font-medium">
-                          {row.phone || row.email || row.class || row.subject || row.enquiryType || row.department || (row.createdAt ? new Date(row.createdAt).toLocaleDateString() : '')}
+                          {row.subjectName ? `${row.subjectName} · ${row.marksObtained}/${row.maximumMarks} (${row.grade})` : (row.phone || row.email || row.class || row.subject || row.enquiryType || row.department || (row.createdAt ? new Date(row.createdAt).toLocaleDateString() : ''))}
                         </p>
                       </div>
                     </div>
@@ -1771,6 +1905,124 @@ export const AdminDataCenter: React.FC = () => {
                       <option value="On Leave">On Leave</option>
                       <option value="Inactive">Inactive</option>
                     </select>
+                  </div>
+                </>
+              )}
+
+              {activeSection === 'exam-results' && (
+                <>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block font-semibold text-slate-700 mb-1">
+                        Student ID *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.studentId || ''}
+                        onChange={(e) => setFormData({ ...formData, studentId: e.target.value })}
+                        className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:ring-2 focus:ring-[#164e37] focus:outline-hidden font-mono uppercase"
+                        placeholder="SK-2025-001"
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-semibold text-slate-700 mb-1">
+                        Student Name
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.studentName || ''}
+                        onChange={(e) => setFormData({ ...formData, studentName: e.target.value })}
+                        className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:ring-2 focus:ring-[#164e37] focus:outline-hidden"
+                        placeholder="Student Full Name"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block font-semibold text-slate-700 mb-1">
+                        Examination
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.examName || ''}
+                        onChange={(e) => setFormData({ ...formData, examName: e.target.value })}
+                        className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:ring-2 focus:ring-[#164e37] focus:outline-hidden"
+                        placeholder="First Terminal Examination"
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-semibold text-slate-700 mb-1">
+                        Subject Name *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.subjectName || ''}
+                        onChange={(e) => setFormData({ ...formData, subjectName: e.target.value })}
+                        className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:ring-2 focus:ring-[#164e37] focus:outline-hidden"
+                        placeholder="Mathematics"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block font-semibold text-slate-700 mb-1">Class</label>
+                      <input
+                        type="text"
+                        value={formData.class || ''}
+                        onChange={(e) => setFormData({ ...formData, class: e.target.value })}
+                        className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:ring-2 focus:ring-[#164e37] focus:outline-hidden"
+                        placeholder="Class 5"
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-semibold text-slate-700 mb-1">Division</label>
+                      <input
+                        type="text"
+                        value={formData.division || ''}
+                        onChange={(e) => setFormData({ ...formData, division: e.target.value })}
+                        className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:ring-2 focus:ring-[#164e37] focus:outline-hidden"
+                        placeholder="A"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-3 gap-3">
+                    <div>
+                      <label className="block font-semibold text-slate-700 mb-1">Marks Obtained *</label>
+                      <input
+                        type="number"
+                        min="0"
+                        required
+                        value={formData.marksObtained || ''}
+                        onChange={(e) => setFormData({ ...formData, marksObtained: e.target.value })}
+                        className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:ring-2 focus:ring-[#164e37] focus:outline-hidden"
+                        placeholder="85"
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-semibold text-slate-700 mb-1">Maximum Marks *</label>
+                      <input
+                        type="number"
+                        min="1"
+                        required
+                        value={formData.maximumMarks || '100'}
+                        onChange={(e) => setFormData({ ...formData, maximumMarks: e.target.value })}
+                        className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:ring-2 focus:ring-[#164e37] focus:outline-hidden"
+                        placeholder="100"
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-semibold text-slate-700 mb-1">Portal Visibility</label>
+                      <select
+                        value={formData.published || 'false'}
+                        onChange={(e) => setFormData({ ...formData, published: e.target.value })}
+                        className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:ring-2 focus:ring-[#164e37] focus:outline-hidden"
+                      >
+                        <option value="false">Draft (Hidden)</option>
+                        <option value="true">Published (Live)</option>
+                      </select>
+                    </div>
                   </div>
                 </>
               )}

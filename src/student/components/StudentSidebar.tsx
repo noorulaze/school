@@ -9,7 +9,8 @@ import {
   Calendar,
   LogOut,
   ExternalLink,
-  GraduationCap
+  GraduationCap,
+  BookOpen
 } from 'lucide-react';
 import { logoutStudent } from '../../services/authService';
 
@@ -28,8 +29,9 @@ export const StudentSidebar: React.FC<StudentSidebarProps> = ({ onCloseMobile })
   const navItems = [
     { label: 'Portal Dashboard', path: '/student/dashboard', icon: LayoutDashboard },
     { label: 'Student Profile', path: '/student/profile', icon: User },
+    { label: 'My Results', path: '/student/results', icon: Award },
     { label: 'Attendance Records', path: '/student/attendance', icon: CheckSquare },
-    { label: 'Academic Evaluations', path: '/student/academics', icon: Award },
+    { label: 'Academic Evaluations', path: '/student/academics', icon: BookOpen },
     { label: 'Announcements', path: '/student/notices', icon: Bell },
     { label: 'Campus Events', path: '/student/events', icon: Calendar },
   ];

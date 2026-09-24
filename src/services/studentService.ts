@@ -13,10 +13,12 @@ import type {
   AttendanceRecord,
   AcademicRecord,
   NoticeItem,
-  EventItem
+  EventItem,
+  ExamResultItem
 } from '../types/firestore';
-import { getStudentsAdmin } from './adminService';
+import { getStudentsAdmin, getExaminationsAdmin } from './adminService';
 import { changeStudentPassword, setStudentFallbackPassword } from './authService';
+import { calculateGrade, calculatePercentage, calculateResultStatus } from '../utils/gradingUtils';
 
 // Fetch Current Student Profile by UID or Student ID
 export const getStudentProfile = async (
@@ -369,3 +371,134 @@ export const completeFirstLogin = async (
     }
   } catch {}
 };
+
+// ==================== PUBLISHED EXAM RESULTS (STUDENT VIEW) ====================
+
+export interface StudentExamSubjectScore {
+  id: string;
+  subjectName: string;
+  marksObtained: number;
+  maximumMarks: number;
+  percentage: number;
+  grade: string;
+}
+
+export interface StudentExamSummary {
+  examId: string;
+  examName: string;
+  academicYear: string;
+  className: string;
+  division?: string;
+  examDate?: string;
+  subjects: StudentExamSubjectScore[];
+  totalMarksObtained: number;
+  totalMaximumMarks: number;
+  overallPercentage: number;
+  overallGrade: string;
+  resultStatus: 'Distinction' | 'Passed' | 'Failed';
+}
+
+export const getStudentPublishedExamResults = async (
+  uid: string,
+  studentId?: string
+): Promise<StudentExamSummary[]> => {
+  let allResults: ExamResultItem[] = [];
+
+  if (isFirebaseConfigured && db) {
+    try {
+      const qUid = query(
+        collection(db, 'examResults'),
+        where('studentUid', '==', uid),
+        where('published', '==', true)
+      );
+      const snapUid = await getDocs(qUid);
+      if (!snapUid.empty) {
+        allResults = snapUid.docs.map((d) => ({ id: d.id, ...d.data() } as ExamResultItem));
+      } else if (studentId) {
+        const qId = query(
+          collection(db, 'examResults'),
+          where('studentId', '==', studentId.toUpperCase()),
+          where('published', '==', true)
+        );
+        const snapId = await getDocs(qId);
+        if (!snapId.empty) {
+          allResults = snapId.docs.map((d) => ({ id: d.id, ...d.data() } as ExamResultItem));
+        }
+      }
+    } catch (err) {
+      console.warn('[StudentService] Firestore examResults query error:', err);
+    }
+  }
+
+  // Fallback to local storage (strict privacy: published results for this student only)
+  if (allResults.length === 0) {
+    try {
+      const raw = localStorage.getItem('sharafiyya_admin_exam_results');
+      if (raw) {
+        const stored: ExamResultItem[] = JSON.parse(raw);
+        allResults = stored.filter(
+          (r) =>
+            (r.studentUid === uid || (studentId && r.studentId?.toUpperCase() === studentId.toUpperCase())) &&
+            r.published === true
+        );
+      }
+    } catch {}
+  }
+
+  // Group by examId
+  const examMap = new Map<string, ExamResultItem[]>();
+  for (const r of allResults) {
+    if (!examMap.has(r.examId)) {
+      examMap.set(r.examId, []);
+    }
+    examMap.get(r.examId)!.push(r);
+  }
+
+  const exams = await getExaminationsAdmin();
+  const examMetaMap = new Map(exams.map((e) => [e.id, e]));
+
+  const summaries: StudentExamSummary[] = [];
+
+  for (const [examId, results] of examMap.entries()) {
+    const meta = examMetaMap.get(examId);
+    let totalObtained = 0;
+    let totalMax = 0;
+
+    const subjects: StudentExamSubjectScore[] = results.map((r) => {
+      const obt = Number(r.marksObtained || 0);
+      const max = Number(r.maximumMarks || 0);
+      totalObtained += obt;
+      totalMax += max;
+      return {
+        id: r.id,
+        subjectName: r.subjectName,
+        marksObtained: obt,
+        maximumMarks: max,
+        percentage: Number(r.percentage || 0),
+        grade: r.grade,
+      };
+    });
+
+    const overallPercentage = calculatePercentage(totalObtained, totalMax);
+    const overallGrade = calculateGrade(overallPercentage);
+    const resultStatus = calculateResultStatus(overallPercentage);
+
+    summaries.push({
+      examId,
+      examName: meta?.examName || results[0].examName,
+      academicYear: meta?.academicYear || results[0].academicYear,
+      className: meta?.className || results[0].class,
+      division: meta?.division || results[0].division,
+      examDate: meta?.examDate || '',
+      subjects,
+      totalMarksObtained: totalObtained,
+      totalMaximumMarks: totalMax,
+      overallPercentage,
+      overallGrade,
+      resultStatus,
+    });
+  }
+
+  return summaries;
+};
+

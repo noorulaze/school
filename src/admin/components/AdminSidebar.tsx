@@ -14,7 +14,8 @@ import {
   FileSpreadsheet,
   Settings,
   LogOut,
-  ExternalLink
+  ExternalLink,
+  Award
 } from 'lucide-react';
 import { logoutAdmin } from '../../services/authService';
 
@@ -35,6 +36,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ onCloseMobile }) => 
     { label: 'Students', path: '/admin/students', icon: Users },
     { label: 'Teachers', path: '/admin/teachers', icon: GraduationCap },
     { label: 'Classes & Academics', path: '/admin/academics', icon: BookOpen },
+    { label: 'Exam Results', path: '/admin/exam-results', icon: Award },
     { label: 'Attendance', path: '/admin/attendance', icon: ClipboardCheck },
     { label: 'Notices', path: '/admin/notices', icon: Bell },
     { label: 'Events', path: '/admin/events', icon: Calendar },
