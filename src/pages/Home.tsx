@@ -13,7 +13,6 @@ import {
   Bell,
   ChevronRight,
   Play,
-  User,
 } from 'lucide-react';
 import { motion, type Variants } from 'framer-motion';
 import { NoticeTicker } from '../components/NoticeTicker';
@@ -151,9 +150,9 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
 
               {/* Main Headline */}
               <h1 className="text-xl sm:text-3xl lg:text-[2.45rem] xl:text-[2.85rem] font-black text-[#0f231c] tracking-tight leading-[1.15] sm:leading-[1.12]">
-                Nurturing Knowledge,{' '}
+                Knowledge Today,{' '}
                 <span className="text-[#164e37] block">
-                  Building Better Futures.
+                  A Brighter Tomorrow.
                 </span>
               </h1>
 
@@ -166,18 +165,18 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
               <div className="flex items-center gap-2 sm:gap-2.5 pt-0.5 sm:pt-1">
                 <Link
                   to="/about"
-                  className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 sm:gap-2 px-4 py-2.5 sm:px-6 sm:py-3 bg-[#164e37] hover:bg-[#0f3b29] text-white text-xs sm:text-sm font-bold rounded-xl sm:rounded-2xl shadow-xs hover:shadow-md transition-all duration-200 group min-h-[40px] sm:min-h-[46px]"
+                  className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 sm:gap-2 px-4 py-2.5 sm:px-6 sm:py-3 bg-[#164e37] hover:bg-[#0f3b29] text-white text-xs sm:text-sm font-bold rounded-xl sm:rounded-2xl shadow-xs hover:shadow-md transition-all duration-200 group min-h-[44px]"
                 >
-                  <span>Explore School</span>
+                  <span>Explore Our School</span>
                   <ArrowRight className="w-3.5 h-3.5 text-[#c59b27] group-hover:translate-x-1 transition-transform" />
                 </Link>
                 <button
                   type="button"
                   onClick={onOpenAdmissionModal}
-                  className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 py-2.5 sm:px-6 sm:py-3 bg-white hover:bg-[#fbfaf7] text-[#0f231c] border border-[#d2cabb] hover:border-[#164e37]/40 text-xs sm:text-sm font-bold rounded-xl sm:rounded-2xl shadow-2xs transition-all duration-200 min-h-[40px] sm:min-h-[46px]"
+                  className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 py-2.5 sm:px-6 sm:py-3 bg-white hover:bg-[#fbfaf7] text-[#0f231c] border border-[#d2cabb] hover:border-[#164e37]/40 text-xs sm:text-sm font-bold rounded-xl sm:rounded-2xl shadow-2xs transition-all duration-200 min-h-[44px]"
                 >
                   <GraduationCap className="w-3.5 h-3.5 text-[#164e37]" />
-                  <span>Enquiry</span>
+                  <span>Admission Enquiry</span>
                 </button>
               </div>
 
@@ -273,77 +272,76 @@ export const Home: React.FC<HomeProps> = ({ onOpenAdmissionModal }) => {
 
       {/* ══════════════════════════════════════════════════════════
           3. QUICK ACTION AREA
-          - Mobile: Compact 5-item App-style Quick Action Grid
+          - Mobile: 4-Item Compact App-style Quick Action Grid
           - Desktop: Floating Horizontal Navigation Strip
       ══════════════════════════════════════════════════════════ */}
-      {/* Mobile 5-Item Quick Action Grid */}
+      {/* Mobile 4-Item Quick Action Grid */}
       <section className="lg:hidden px-3.5 pt-3 pb-1">
-        <div className="grid grid-cols-5 gap-1.5 sm:gap-2 bg-white rounded-2xl border border-[#e5e0d5] p-2.5 shadow-2xs">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-white rounded-2xl border border-[#e5e0d5] p-2.5 shadow-2xs">
           {/* 1. Academics */}
           <Link
             to="/departments"
-            className="flex flex-col items-center justify-center p-1.5 rounded-xl hover:bg-[#f4f9f6] active:scale-95 transition-all group text-center"
+            className="flex items-center gap-2.5 p-2 rounded-xl bg-[#fcfbf9] hover:bg-[#f4f9f6] border border-[#eee9df] hover:border-[#164e37]/30 active:scale-98 transition-all group min-h-[48px]"
           >
-            <div className="w-10 h-10 rounded-xl bg-[#eef6f2] group-hover:bg-[#164e37] text-[#164e37] group-hover:text-white flex items-center justify-center transition-colors shadow-2xs">
-              <Layers className="w-4 h-4" />
+            <div className="w-9 h-9 rounded-lg bg-[#eef6f2] group-hover:bg-[#164e37] text-[#164e37] group-hover:text-white flex items-center justify-center transition-colors shrink-0 shadow-2xs">
+              <BookOpen className="w-4 h-4" />
             </div>
-            <span className="text-[10px] font-bold text-slate-700 mt-1.5 leading-tight group-hover:text-[#164e37]">
-              Academics
-            </span>
+            <div className="min-w-0">
+              <span className="text-xs font-bold text-slate-800 leading-tight block group-hover:text-[#164e37] truncate">
+                Academics
+              </span>
+              <span className="text-[9px] text-slate-400 font-medium">Curriculum</span>
+            </div>
           </Link>
 
-          {/* 2. Student Login */}
-          <Link
-            to="/student/login"
-            className="flex flex-col items-center justify-center p-1.5 rounded-xl hover:bg-[#f4f9f6] active:scale-95 transition-all group text-center"
-          >
-            <div className="w-10 h-10 rounded-xl bg-[#eef6f2] group-hover:bg-[#164e37] text-[#164e37] group-hover:text-white flex items-center justify-center transition-colors shadow-2xs">
-              <User className="w-4 h-4" />
-            </div>
-            <span className="text-[10px] font-bold text-slate-700 mt-1.5 leading-tight group-hover:text-[#164e37]">
-              Student
-            </span>
-          </Link>
-
-          {/* 3. Events */}
-          <Link
-            to="/events"
-            className="flex flex-col items-center justify-center p-1.5 rounded-xl hover:bg-[#f4f9f6] active:scale-95 transition-all group text-center"
-          >
-            <div className="w-10 h-10 rounded-xl bg-[#eef6f2] group-hover:bg-[#164e37] text-[#164e37] group-hover:text-white flex items-center justify-center transition-colors shadow-2xs">
-              <Calendar className="w-4 h-4" />
-            </div>
-            <span className="text-[10px] font-bold text-slate-700 mt-1.5 leading-tight group-hover:text-[#164e37]">
-              Events
-            </span>
-          </Link>
-
-          {/* 4. Gallery */}
-          <Link
-            to="/gallery"
-            className="flex flex-col items-center justify-center p-1.5 rounded-xl hover:bg-[#f4f9f6] active:scale-95 transition-all group text-center"
-          >
-            <div className="w-10 h-10 rounded-xl bg-[#eef6f2] group-hover:bg-[#164e37] text-[#164e37] group-hover:text-white flex items-center justify-center transition-colors shadow-2xs">
-              <ImageIcon className="w-4 h-4" />
-            </div>
-            <span className="text-[10px] font-bold text-slate-700 mt-1.5 leading-tight group-hover:text-[#164e37]">
-              Gallery
-            </span>
-          </Link>
-
-          {/* 5. Admissions */}
+          {/* 2. Admissions */}
           <button
             type="button"
             onClick={onOpenAdmissionModal}
-            className="flex flex-col items-center justify-center p-1.5 rounded-xl hover:bg-[#f4f9f6] active:scale-95 transition-all group text-center"
+            className="flex items-center gap-2.5 p-2 rounded-xl bg-[#fcfbf9] hover:bg-[#f4f9f6] border border-[#eee9df] hover:border-[#164e37]/30 active:scale-98 transition-all group min-h-[48px] text-left cursor-pointer"
           >
-            <div className="w-10 h-10 rounded-xl bg-[#164e37] text-[#c59b27] flex items-center justify-center transition-colors shadow-2xs">
+            <div className="w-9 h-9 rounded-lg bg-[#164e37] text-[#c59b27] flex items-center justify-center transition-colors shrink-0 shadow-2xs">
               <GraduationCap className="w-4 h-4" />
             </div>
-            <span className="text-[10px] font-bold text-[#164e37] mt-1.5 leading-tight">
-              Admissions
-            </span>
+            <div className="min-w-0">
+              <span className="text-xs font-bold text-[#164e37] leading-tight block truncate">
+                Admissions
+              </span>
+              <span className="text-[9px] text-[#164e37]/70 font-semibold">Enquire Now</span>
+            </div>
           </button>
+
+          {/* 3. Our Teachers */}
+          <Link
+            to="/teachers"
+            className="flex items-center gap-2.5 p-2 rounded-xl bg-[#fcfbf9] hover:bg-[#f4f9f6] border border-[#eee9df] hover:border-[#164e37]/30 active:scale-98 transition-all group min-h-[48px]"
+          >
+            <div className="w-9 h-9 rounded-lg bg-[#eef6f2] group-hover:bg-[#164e37] text-[#164e37] group-hover:text-white flex items-center justify-center transition-colors shrink-0 shadow-2xs">
+              <Users className="w-4 h-4" />
+            </div>
+            <div className="min-w-0">
+              <span className="text-xs font-bold text-slate-800 leading-tight block group-hover:text-[#164e37] truncate">
+                Our Teachers
+              </span>
+              <span className="text-[9px] text-slate-400 font-medium">Faculty</span>
+            </div>
+          </Link>
+
+          {/* 4. Campus Life */}
+          <Link
+            to="/gallery"
+            className="flex items-center gap-2.5 p-2 rounded-xl bg-[#fcfbf9] hover:bg-[#f4f9f6] border border-[#eee9df] hover:border-[#164e37]/30 active:scale-98 transition-all group min-h-[48px]"
+          >
+            <div className="w-9 h-9 rounded-lg bg-[#eef6f2] group-hover:bg-[#164e37] text-[#164e37] group-hover:text-white flex items-center justify-center transition-colors shrink-0 shadow-2xs">
+              <ImageIcon className="w-4 h-4" />
+            </div>
+            <div className="min-w-0">
+              <span className="text-xs font-bold text-slate-800 leading-tight block group-hover:text-[#164e37] truncate">
+                Campus Life
+              </span>
+              <span className="text-[9px] text-slate-400 font-medium">Gallery</span>
+            </div>
+          </Link>
         </div>
       </section>
 

@@ -10,6 +10,8 @@ import {
   ShieldCheck,
   Shield,
   CheckCircle2,
+  Eye,
+  EyeOff,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -21,10 +23,12 @@ export const StudentLogin: React.FC = () => {
   // Student login state
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   // Admin login state (temporary testing credentials)
   const [adminUsername, setAdminUsername] = useState('');
   const [adminPassword, setAdminPassword] = useState('');
+  const [showAdminPassword, setShowAdminPassword] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -127,18 +131,52 @@ export const StudentLogin: React.FC = () => {
               <span>{isAdminMode ? 'Administrator Workspace' : 'Private Access'}</span>
             </span>
 
-            <h1 className="text-lg sm:text-2xl font-black tracking-tight text-white">
-              {isAdminMode ? 'Admin Portal Login' : 'Student Digital Portal'}
+            <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white">
+              Welcome Back
             </h1>
             <p className="text-[11px] sm:text-xs text-emerald-100/80 mt-0.5 font-medium">
               {isAdminMode
-                ? 'Temporary Testing Access · Sharafiyya English Medium School'
-                : 'Sharafiyya English Medium School · Korangath, Tirur'}
+                ? 'Admin Workspace · Sharafiyya English Medium School'
+                : 'Sign in to access your student records & academic portal'}
             </p>
           </div>
 
           {/* Form Content */}
-          <div className="p-5 sm:p-7 space-y-3.5">
+          <div className="p-5 sm:p-7 space-y-4">
+            {/* Segmented Student / Admin Toggle Switch */}
+            <div className="grid grid-cols-2 p-1 bg-slate-100 rounded-2xl border border-slate-200">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsAdminMode(false);
+                  setError(null);
+                }}
+                className={`py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 min-h-[42px] cursor-pointer ${
+                  !isAdminMode
+                    ? 'bg-[#164e37] text-white shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <User className="w-3.5 h-3.5" />
+                <span>Student Login</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsAdminMode(true);
+                  setError(null);
+                }}
+                className={`py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 min-h-[42px] cursor-pointer ${
+                  isAdminMode
+                    ? 'bg-[#164e37] text-white shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <Shield className="w-3.5 h-3.5 text-[#c59b27]" />
+                <span>Admin Login</span>
+              </button>
+            </div>
+
             {error && (
               <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-start gap-2 leading-relaxed">
                 <AlertCircle className="w-4 h-4 shrink-0 text-rose-600 mt-0.5" />
@@ -152,7 +190,7 @@ export const StudentLogin: React.FC = () => {
             {!isAdminMode ? (
               /* STUDENT LOGIN FORM */
               <>
-                <form onSubmit={handleSubmit} className="space-y-3">
+                <form onSubmit={handleSubmit} className="space-y-3.5">
                   <div>
                     <label className="block text-[10px] sm:text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">
                       Student ID or Custom Username *
@@ -167,7 +205,7 @@ export const StudentLogin: React.FC = () => {
                         value={identifier}
                         onChange={(e) => setIdentifier(e.target.value)}
                         placeholder="Enter Student ID (e.g. SK-2025-001) or username"
-                        className="w-full pl-10 pr-3 py-2.5 bg-[#fcfbf9] border border-[#d8d3c5] rounded-xl text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#164e37] focus:bg-white transition-all font-medium"
+                        className="w-full pl-10 pr-3 py-2.5 bg-[#fcfbf9] border border-[#d8d3c5] rounded-xl text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#164e37] focus:bg-white transition-all font-medium min-h-[44px]"
                       />
                     </div>
                   </div>
@@ -186,13 +224,21 @@ export const StudentLogin: React.FC = () => {
                         <Lock className="w-4 h-4" />
                       </div>
                       <input
-                        type="password"
+                        type={showPassword ? 'text' : 'password'}
                         required
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="••••••••••••"
-                        className="w-full pl-10 pr-3 py-2.5 bg-[#fcfbf9] border border-[#d8d3c5] rounded-xl text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#164e37] focus:bg-white transition-all"
+                        className="w-full pl-10 pr-10 py-2.5 bg-[#fcfbf9] border border-[#d8d3c5] rounded-xl text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#164e37] focus:bg-white transition-all min-h-[44px]"
                       />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-700 cursor-pointer"
+                        aria-label={showPassword ? 'Hide password' : 'Show password'}
+                      >
+                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
                     </div>
                   </div>
 
@@ -200,7 +246,7 @@ export const StudentLogin: React.FC = () => {
                     <button
                       type="submit"
                       disabled={loading}
-                      className="w-full py-3 px-4 bg-[#164e37] hover:bg-[#0f3b29] active:scale-[0.99] text-white font-bold text-xs sm:text-sm rounded-xl shadow-xs hover:shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed min-h-[44px]"
+                      className="w-full py-3 px-4 bg-[#164e37] hover:bg-[#0f3b29] active:scale-[0.99] text-white font-bold text-xs sm:text-sm rounded-xl shadow-xs hover:shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed min-h-[46px]"
                     >
                       {loading ? (
                         <>
@@ -216,29 +262,11 @@ export const StudentLogin: React.FC = () => {
                     </button>
                   </div>
                 </form>
-
-                {/* Faculty & Staff Access Switcher */}
-                <div className="pt-4 border-t border-[#ede8de] flex items-center justify-between">
-                  <span className="text-xs text-slate-500 font-medium">
-                    Faculty & School Staff:
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsAdminMode(true);
-                      setError(null);
-                    }}
-                    className="text-xs font-bold text-[#164e37] hover:text-[#0f3b29] hover:bg-[#eef6f2] transition-colors inline-flex items-center gap-1.5 cursor-pointer py-1.5 px-3 rounded-xl border border-[#cbe3d5]"
-                  >
-                    <Shield className="w-3.5 h-3.5 text-[#c59b27]" />
-                    <span>Admin Login</span>
-                  </button>
-                </div>
               </>
             ) : (
               /* ADMIN LOGIN FORM */
               <>
-                <form onSubmit={handleAdminSubmit} className="space-y-4">
+                <form onSubmit={handleAdminSubmit} className="space-y-3.5">
                   <div>
                     <label className="block text-[10px] sm:text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">
                       Admin Username
@@ -253,7 +281,7 @@ export const StudentLogin: React.FC = () => {
                         value={adminUsername}
                         onChange={(e) => setAdminUsername(e.target.value)}
                         placeholder="Enter username"
-                        className="w-full pl-10 pr-3 py-2.5 bg-[#fcfbf9] border border-[#d8d3c5] rounded-xl text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#164e37] focus:bg-white transition-all"
+                        className="w-full pl-10 pr-3 py-2.5 bg-[#fcfbf9] border border-[#d8d3c5] rounded-xl text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#164e37] focus:bg-white transition-all min-h-[44px]"
                       />
                     </div>
                   </div>
@@ -269,13 +297,21 @@ export const StudentLogin: React.FC = () => {
                         <Lock className="w-4 h-4" />
                       </div>
                       <input
-                        type="password"
+                        type={showAdminPassword ? 'text' : 'password'}
                         required
                         value={adminPassword}
                         onChange={(e) => setAdminPassword(e.target.value)}
                         placeholder="••••••••••••"
-                        className="w-full pl-10 pr-3 py-2.5 bg-[#fcfbf9] border border-[#d8d3c5] rounded-xl text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#164e37] focus:bg-white transition-all"
+                        className="w-full pl-10 pr-10 py-2.5 bg-[#fcfbf9] border border-[#d8d3c5] rounded-xl text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#164e37] focus:bg-white transition-all min-h-[44px]"
                       />
+                      <button
+                        type="button"
+                        onClick={() => setShowAdminPassword(!showAdminPassword)}
+                        className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-700 cursor-pointer"
+                        aria-label={showAdminPassword ? 'Hide password' : 'Show password'}
+                      >
+                        {showAdminPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
                     </div>
                   </div>
 
@@ -283,7 +319,7 @@ export const StudentLogin: React.FC = () => {
                     <button
                       type="submit"
                       disabled={loading}
-                      className="w-full py-3 px-4 bg-[#164e37] hover:bg-[#0f3b29] active:scale-[0.99] text-white font-bold text-xs sm:text-sm rounded-xl shadow-xs hover:shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed min-h-[44px]"
+                      className="w-full py-3 px-4 bg-[#164e37] hover:bg-[#0f3b29] active:scale-[0.99] text-white font-bold text-xs sm:text-sm rounded-xl shadow-xs hover:shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed min-h-[46px]"
                     >
                       {loading ? (
                         <>
@@ -299,24 +335,6 @@ export const StudentLogin: React.FC = () => {
                     </button>
                   </div>
                 </form>
-
-                {/* Return to Student Login */}
-                <div className="pt-4 border-t border-[#ede8de] flex items-center justify-between">
-                  <span className="text-xs text-slate-500 font-medium">
-                    Student or Parent:
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsAdminMode(false);
-                      setError(null);
-                    }}
-                    className="text-xs font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-100 transition-colors inline-flex items-center gap-1.5 cursor-pointer py-1.5 px-3 rounded-xl border border-slate-300"
-                  >
-                    <User className="w-3.5 h-3.5 text-slate-500" />
-                    <span>Student Login</span>
-                  </button>
-                </div>
               </>
             )}
           </div>

@@ -347,37 +347,53 @@ export const StudentDashboard: React.FC = () => {
       )}
 
       {/* ── Welcome Banner ────────────────────────────────────────── */}
-      <div className="bg-gradient-to-r from-[#091f17] via-[#0e3827] to-[#164e37] rounded-3xl p-6 sm:p-8 text-white shadow-md border border-[#1b5038] relative overflow-hidden">
-        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-2xl bg-[#0e3827] border-2 border-[#c59b27]/80 flex items-center justify-center text-[#c59b27] font-black text-2xl shrink-0 shadow-md">
+      <div className="bg-gradient-to-r from-[#091f17] via-[#0e3827] to-[#164e37] rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 text-white shadow-md border border-[#1b5038] relative overflow-hidden">
+        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6">
+          <div className="flex items-center gap-3 sm:gap-4">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-[#0e3827] border-2 border-[#c59b27]/80 flex items-center justify-center text-[#c59b27] font-black text-xl sm:text-2xl shrink-0 shadow-md">
               {(profile?.name || user?.displayName || 'S').charAt(0).toUpperCase()}
             </div>
             <div className="min-w-0">
-              <div className="flex items-center gap-2 mb-1 flex-wrap">
-                <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-[#c59b27]/20 text-amber-300 border border-[#c59b27]/40 uppercase tracking-wider">
-                  Sharafiyya Student
+              <div className="flex items-center gap-1.5 sm:gap-2 mb-0.5 sm:mb-1 flex-wrap">
+                <span className="text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#c59b27]/20 text-amber-300 border border-[#c59b27]/40 uppercase tracking-wider">
+                  Student Portal
                 </span>
-                <span className="text-xs text-emerald-200/90 font-mono">
+                <span className="text-[11px] sm:text-xs text-emerald-200/90 font-mono">
                   {profile?.academicYear || '2025–2026'}
                 </span>
               </div>
-              <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white truncate">
+              <h1 className="text-lg sm:text-2xl font-black tracking-tight text-white truncate">
                 {profile?.name || user?.displayName || 'Enrolled Student'}
               </h1>
-              <p className="text-xs text-emerald-100/90 mt-0.5">
-                Student ID: <strong className="font-mono text-amber-300">{effectiveStudentId}</strong>
-                {profile?.className && ` · ${profile.className}`}
-                {profile?.section && ` (${profile.section})`}
-              </p>
+              <div className="flex items-center gap-2 mt-0.5 flex-wrap text-xs text-emerald-100/90">
+                <span>
+                  ID: <strong className="font-mono text-amber-300 font-bold">{effectiveStudentId}</strong>
+                </span>
+                {profile?.className && (
+                  <span className="text-emerald-300">· {profile.className} {profile?.section ? `(${profile.section})` : ''}</span>
+                )}
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigator.clipboard.writeText(effectiveStudentId);
+                    setCopiedId(true);
+                    setTimeout(() => setCopiedId(false), 2000);
+                  }}
+                  className="inline-flex items-center gap-1 text-[10px] font-mono font-bold bg-white/10 hover:bg-white/20 text-amber-200 px-2 py-0.5 rounded-md border border-white/15 transition-colors cursor-pointer"
+                  title="Copy permanent Student ID"
+                >
+                  {copiedId ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                  <span>{copiedId ? 'Copied' : 'Copy'}</span>
+                </button>
+              </div>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 shrink-0 self-start sm:self-center">
+          <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
             <button
               type="button"
               onClick={handleLogout}
-              className="inline-flex items-center gap-1.5 px-4 py-2 bg-white/10 hover:bg-white/20 text-white text-xs font-bold rounded-xl border border-white/20 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 sm:px-4 sm:py-2 bg-white/10 hover:bg-white/20 text-white text-xs font-bold rounded-xl border border-white/20 transition-colors cursor-pointer min-h-[40px]"
             >
               <LogOut className="w-3.5 h-3.5" />
               <span>Sign Out</span>

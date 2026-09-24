@@ -375,8 +375,8 @@ export const AdminDashboard: React.FC = () => {
         <div className="absolute right-0 top-0 bottom-0 w-72 bg-gradient-to-l from-emerald-50/60 to-transparent pointer-events-none hidden lg:block" />
       </motion.div>
 
-      {/* 2. Primary 4 Overview Statistic Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+      {/* 2. Primary 4 Overview Statistic Cards (2-col mobile, 4-col desktop) */}
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-5">
         {primaryStats.map((item, index) => {
           const Icon = item.icon;
           return (
@@ -388,36 +388,36 @@ export const AdminDashboard: React.FC = () => {
             >
               <Link
                 to={item.link}
-                className={`group block bg-white rounded-2xl p-5 border transition-all shadow-2xs hover:shadow-sm ${
+                className={`group block bg-white rounded-2xl p-3.5 sm:p-5 border transition-all shadow-2xs hover:shadow-sm ${
                   item.highlight
                     ? 'border-amber-300 ring-1 ring-amber-200/60'
                     : 'border-slate-200/90 hover:border-emerald-300'
                 }`}
               >
-                <div className="flex items-start justify-between gap-3">
-                  <div className="space-y-1">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 block">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="space-y-0.5 sm:space-y-1 min-w-0">
+                    <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500 block truncate">
                       {item.label}
                     </span>
                     <div className="flex items-baseline gap-2">
-                      <span className="text-3xl font-black text-slate-900 tracking-tight">
+                      <span className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
                         {loading ? '...' : item.value}
                       </span>
                     </div>
                   </div>
 
-                  <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border ${item.color}`}>
-                    <Icon className="w-5 h-5" />
+                  <div className={`w-9 h-9 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center shrink-0 border ${item.color}`}>
+                    <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
                 </div>
 
-                <div className="mt-3.5 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-                  <span className="text-slate-500 text-[11px] truncate">
+                <div className="mt-2.5 sm:mt-3.5 pt-2 sm:pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                  <span className="text-slate-500 text-[10px] sm:text-[11px] truncate hidden sm:inline">
                     {item.description}
                   </span>
-                  <span className="font-bold text-[#164e37] group-hover:text-emerald-950 inline-flex items-center gap-0.5 shrink-0 ml-1">
+                  <span className="font-bold text-[#164e37] group-hover:text-emerald-950 inline-flex items-center gap-0.5 text-[11px] sm:text-xs">
                     <span>Manage</span>
-                    <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </span>
                 </div>
               </Link>
@@ -440,20 +440,20 @@ export const AdminDashboard: React.FC = () => {
           </span>
         </div>
 
-        {/* Scrollable on small screens, grid on desktop */}
-        <div className="flex gap-2.5 overflow-x-auto pb-1 sm:pb-0 sm:grid sm:grid-cols-3 lg:grid-cols-6 scrollbar-none">
+        {/* 2-col on mobile, 3-col on tablet, 6-col on desktop */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-2.5">
           {quickActions.map((action) => {
             const Icon = action.icon;
             return (
               <Link
                 key={action.label}
                 to={action.link}
-                className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50/80 hover:bg-[#eef6f2] border border-slate-200/80 hover:border-emerald-300 transition-all text-slate-800 hover:text-[#164e37] shrink-0 min-w-[140px] sm:min-w-0"
+                className="flex items-center gap-2 sm:gap-2.5 p-2.5 sm:p-3 rounded-xl bg-slate-50/80 hover:bg-[#eef6f2] border border-slate-200/80 hover:border-emerald-300 transition-all text-slate-800 hover:text-[#164e37] min-h-[44px]"
               >
-                <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${action.color}`}>
-                  <Icon className="w-4 h-4" />
+                <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center shrink-0 ${action.color}`}>
+                  <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 </div>
-                <span className="text-xs font-bold leading-tight">{action.label}</span>
+                <span className="text-xs font-bold leading-tight truncate">{action.label}</span>
               </Link>
             );
           })}

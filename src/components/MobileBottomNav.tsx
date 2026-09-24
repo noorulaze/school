@@ -5,7 +5,6 @@ import {
   BookOpen,
   Bell,
   User,
-  Menu as MenuIcon,
   X,
   ChevronRight,
   GraduationCap,
@@ -47,14 +46,14 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ onOpenAdmissio
       {/* ── Fixed Mobile Bottom App Bar ───────────────────────────────── */}
       <nav
         aria-label="Mobile Navigation Bar"
-        className="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-[#fcfbf9]/95 backdrop-blur-lg border-t border-[#e2ddd1] shadow-[0_-4px_20px_rgba(0,0,0,0.06)] px-2 py-1.5 pb-[max(0.375rem,env(safe-area-inset-bottom))]"
+        className="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-[#fcfbf9]/98 backdrop-blur-lg border-t border-[#e2ddd1] shadow-[0_-4px_20px_rgba(0,0,0,0.08)] px-3 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))]"
       >
-        <div className="flex items-center justify-around max-w-md mx-auto">
+        <div className="grid grid-cols-4 max-w-md mx-auto items-center">
           {/* 1. HOME */}
           <Link
             to="/"
             onClick={() => setIsMoreOpen(false)}
-            className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all min-w-[56px] ${
+            className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all min-h-[44px] ${
               isActive('/')
                 ? 'text-[#164e37] font-bold'
                 : 'text-slate-500 hover:text-[#164e37]'
@@ -66,14 +65,14 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ onOpenAdmissio
                 <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-[#c59b27] rounded-full" />
               )}
             </div>
-            <span className="text-[10px] tracking-tight mt-1">Home</span>
+            <span className="text-[10px] tracking-tight mt-1 font-semibold">Home</span>
           </Link>
 
           {/* 2. ACADEMICS */}
           <Link
             to="/departments"
             onClick={() => setIsMoreOpen(false)}
-            className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all min-w-[56px] ${
+            className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all min-h-[44px] ${
               isAcademicsActive
                 ? 'text-[#164e37] font-bold'
                 : 'text-slate-500 hover:text-[#164e37]'
@@ -85,14 +84,14 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ onOpenAdmissio
                 <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-[#c59b27] rounded-full" />
               )}
             </div>
-            <span className="text-[10px] tracking-tight mt-1">Academics</span>
+            <span className="text-[10px] tracking-tight mt-1 font-semibold">Academics</span>
           </Link>
 
           {/* 3. UPDATES (EVENTS & NOTICES) */}
           <Link
             to="/events"
             onClick={() => setIsMoreOpen(false)}
-            className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all min-w-[56px] ${
+            className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all min-h-[44px] ${
               isUpdatesActive
                 ? 'text-[#164e37] font-bold'
                 : 'text-slate-500 hover:text-[#164e37]'
@@ -104,14 +103,14 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ onOpenAdmissio
                 <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-[#c59b27] rounded-full" />
               )}
             </div>
-            <span className="text-[10px] tracking-tight mt-1">Updates</span>
+            <span className="text-[10px] tracking-tight mt-1 font-semibold">Updates</span>
           </Link>
 
           {/* 4. STUDENT PORTAL */}
           <Link
             to="/student/login"
             onClick={() => setIsMoreOpen(false)}
-            className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all min-w-[56px] ${
+            className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all min-h-[44px] ${
               isStudentActive
                 ? 'text-[#164e37] font-bold'
                 : 'text-slate-500 hover:text-[#164e37]'
@@ -126,33 +125,11 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ onOpenAdmissio
                 <User className="w-3.5 h-3.5" />
               </div>
               {isStudentActive && (
-                <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-[#c59b27] rounded-full" />
+                <span className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-[#c59b27] rounded-full" />
               )}
             </div>
-            <span className="text-[10px] tracking-tight mt-0.5">Student</span>
+            <span className="text-[10px] tracking-tight mt-0.5 font-semibold">Student</span>
           </Link>
-
-          {/* 5. MORE (ACTIONS & DIRECTORY) */}
-          <button
-            type="button"
-            onClick={() => setIsMoreOpen(!isMoreOpen)}
-            className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all min-w-[56px] ${
-              isMoreOpen
-                ? 'text-[#164e37] font-bold'
-                : 'text-slate-500 hover:text-[#164e37]'
-            }`}
-            aria-label="Toggle full menu options"
-            aria-expanded={isMoreOpen}
-          >
-            <div className="relative">
-              {isMoreOpen ? (
-                <X className="w-5 h-5 text-[#164e37]" />
-              ) : (
-                <MenuIcon className="w-5 h-5" />
-              )}
-            </div>
-            <span className="text-[10px] tracking-tight mt-1">More</span>
-          </button>
         </div>
       </nav>
 

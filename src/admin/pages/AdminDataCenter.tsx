@@ -12,6 +12,8 @@ import {
   Edit2,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
+  ChevronUp,
   ArrowUpDown,
   ArrowUp,
   ArrowDown,
@@ -106,6 +108,19 @@ export const AdminDataCenter: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(15);
   const [mobileCardView, setMobileCardView] = useState(false);
+  const [expandedCardIds, setExpandedCardIds] = useState<Set<string>>(new Set());
+
+  const toggleCardExpanded = (id: string) => {
+    setExpandedCardIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  };
 
   // Notification Toast
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
@@ -891,10 +906,10 @@ export const AdminDataCenter: React.FC = () => {
           <button
             type="button"
             onClick={() => setMobileCardView(!mobileCardView)}
-            className="md:hidden shrink-0 inline-flex items-center gap-1 text-[11px] font-semibold text-slate-600 px-2.5 py-1.5 rounded-lg border border-slate-200"
+            className="md:hidden shrink-0 inline-flex items-center gap-1 text-[11px] font-semibold text-slate-600 px-2.5 py-1.5 rounded-lg border border-slate-200 cursor-pointer"
           >
             <SlidersHorizontal className="w-3 h-3 text-[#164e37]" />
-            <span>{mobileCardView ? 'Table Mode' : 'Card Mode'}</span>
+            <span>{mobileCardView ? 'Show Cards' : 'Show Table'}</span>
           </button>
         </div>
 
@@ -1068,8 +1083,8 @@ export const AdminDataCenter: React.FC = () => {
           </p>
         </div>
 
-        {/* Interactive Spreadsheet Table */}
-        <div className={`overflow-x-auto ${mobileCardView ? 'hidden md:block' : 'block'}`}>
+        {/* Desktop & Tablet: Interactive Spreadsheet Table */}
+        <div className={`overflow-x-auto ${mobileCardView ? 'block' : 'hidden md:block'}`}>
           <table className="w-full text-left border-collapse text-xs">
             {/* Sticky Table Header with column borders */}
             <thead>
@@ -1187,7 +1202,7 @@ export const AdminDataCenter: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => openEditModal(row)}
-                            className="p-1 rounded-md text-slate-500 hover:text-[#164e37] hover:bg-slate-100 transition-colors"
+                            className="p-1 rounded-md text-slate-500 hover:text-[#164e37] hover:bg-slate-100 transition-colors cursor-pointer"
                             title="Edit record"
                           >
                             <Edit2 className="w-3.5 h-3.5" />
@@ -1198,7 +1213,7 @@ export const AdminDataCenter: React.FC = () => {
                               setActiveRecord(row);
                               setIsDeleteModalOpen(true);
                             }}
-                            className="p-1 rounded-md text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
+                            className="p-1 rounded-md text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
                             title="Delete record"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -1213,71 +1228,125 @@ export const AdminDataCenter: React.FC = () => {
           </table>
         </div>
 
-        {/* Mobile Card View (Toggleable on small screens) */}
-        {mobileCardView && (
-          <div className="md:hidden divide-y divide-slate-100 p-3 space-y-3">
-            {paginatedData.length === 0 ? (
-              <div className="py-12 text-center text-xs text-slate-400">
-                No records found matching criteria.
-              </div>
-            ) : (
-              paginatedData.map((row) => (
+        {/* Mobile Phones: Expandable Records Card View (Default on mobile) */}
+        <div className={`p-3 space-y-2.5 ${mobileCardView ? 'hidden' : 'block md:hidden'}`}>
+          {loading ? (
+            <div className="py-12 text-center text-slate-400">
+              <RefreshCw className="w-6 h-6 animate-spin mx-auto mb-2 text-slate-300" />
+              <span className="text-xs">Loading records...</span>
+            </div>
+          ) : paginatedData.length === 0 ? (
+            <div className="py-10 text-center text-xs text-slate-400 bg-white rounded-2xl border border-slate-200 p-4">
+              <FileSpreadsheet className="w-8 h-8 mx-auto mb-2 text-slate-300" />
+              <p className="font-semibold text-slate-700">No records found</p>
+              <p className="text-[11px] text-slate-400 mt-0.5">
+                {searchQuery ? 'Try clearing your search query or filter.' : 'Tap "Add Record" to create a new entry.'}
+              </p>
+            </div>
+          ) : (
+            paginatedData.map((row) => {
+              const isExpanded = expandedCardIds.has(row.id);
+              const isSelected = selectedIds.has(row.id);
+              const title = row.applicantName || row.name || row.tableName || row.studentId || 'Record';
+              const status = row.status || row.accountStatus || 'Active';
+
+              return (
                 <div
                   key={row.id}
-                  className={`p-3.5 rounded-xl border border-slate-200 space-y-2 ${
-                    selectedIds.has(row.id) ? 'bg-emerald-50/40 border-emerald-300' : 'bg-white'
+                  className={`rounded-2xl border transition-all overflow-hidden ${
+                    isSelected
+                      ? 'bg-emerald-50/50 border-emerald-300 shadow-2xs'
+                      : 'bg-white border-slate-200 shadow-2xs'
                   }`}
                 >
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
+                  {/* Card Header (Always visible) */}
+                  <div className="p-3.5 flex items-center justify-between gap-2.5">
+                    <div className="flex items-center gap-2.5 min-w-0 flex-1">
                       <input
                         type="checkbox"
-                        checked={selectedIds.has(row.id)}
+                        checked={isSelected}
                         onChange={() => handleToggleRow(row.id)}
-                        className="rounded text-[#164e37]"
+                        className="rounded text-[#164e37] focus:ring-[#164e37] cursor-pointer"
+                        aria-label={`Select ${title}`}
                       />
-                      <span className="font-bold text-xs text-slate-900 truncate">
-                        {row.applicantName || row.name || row.tableName || row.studentId || 'Record'}
-                      </span>
-                    </div>
-                    {renderStatusBadge(row.status || row.accountStatus || 'Active')}
-                  </div>
-
-                  <div className="space-y-1 text-[11px] text-slate-600">
-                    {currentColumns.slice(1, 5).map((col) => (
-                      <div key={col.key} className="flex justify-between gap-2">
-                        <span className="text-slate-400">{col.label}:</span>
-                        <span className="font-medium text-slate-800 text-right truncate">
-                          {row[col.key] || '—'}
-                        </span>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <h4 className="font-bold text-xs text-slate-900 truncate">
+                            {title}
+                          </h4>
+                          {renderStatusBadge(status)}
+                        </div>
+                        {/* Secondary line summary */}
+                        <p className="text-[11px] text-slate-500 mt-0.5 truncate font-medium">
+                          {row.phone || row.email || row.class || row.subject || row.enquiryType || row.department || (row.createdAt ? new Date(row.createdAt).toLocaleDateString() : '')}
+                        </p>
                       </div>
-                    ))}
+                    </div>
+
+                    {/* Expand/Collapse Chevron Button */}
+                    <button
+                      type="button"
+                      onClick={() => toggleCardExpanded(row.id)}
+                      className="p-1.5 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer shrink-0"
+                      aria-label={isExpanded ? 'Collapse record details' : 'Expand record details'}
+                    >
+                      {isExpanded ? (
+                        <ChevronUp className="w-4 h-4 text-[#164e37]" />
+                      ) : (
+                        <ChevronDown className="w-4 h-4 text-slate-400" />
+                      )}
+                    </button>
                   </div>
 
-                  <div className="pt-2 border-t border-slate-100 flex items-center justify-end gap-2">
-                    <button
-                      type="button"
-                      onClick={() => openEditModal(row)}
-                      className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-50 text-slate-700 border border-slate-200"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setActiveRecord(row);
-                        setIsDeleteModalOpen(true);
-                      }}
-                      className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200"
-                    >
-                      Delete
-                    </button>
-                  </div>
+                  {/* Expandable Details Section */}
+                  {isExpanded && (
+                    <div className="px-3.5 pb-3.5 pt-1 border-t border-slate-100 bg-slate-50/60 space-y-2.5 text-xs animate-in fade-in duration-150">
+                      <div className="grid grid-cols-1 gap-1.5 pt-1">
+                        {currentColumns.map((col) => {
+                          const val = row[col.key];
+                          if (val === undefined || val === null || String(val).trim() === '') return null;
+                          return (
+                            <div key={col.key} className="flex justify-between items-start gap-2 py-0.5 border-b border-slate-100/80 last:border-b-0 text-[11px]">
+                              <span className="text-slate-500 font-medium shrink-0">{col.label}:</span>
+                              <span className="font-semibold text-slate-800 text-right break-words max-w-[65%]">
+                                {col.key === 'createdAt' || col.key === 'date'
+                                  ? new Date(val).toLocaleDateString()
+                                  : String(val)}
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {/* Card Action Buttons */}
+                      <div className="pt-2 flex items-center justify-end gap-2">
+                        <button
+                          type="button"
+                          onClick={() => openEditModal(row)}
+                          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 shadow-2xs transition-colors cursor-pointer min-h-[36px]"
+                        >
+                          <Edit2 className="w-3.5 h-3.5 text-[#164e37]" />
+                          <span>Edit</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setActiveRecord(row);
+                            setIsDeleteModalOpen(true);
+                          }}
+                          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-bold bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100 transition-colors cursor-pointer min-h-[36px]"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                          <span>Delete</span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
-              ))
-            )}
-          </div>
-        )}
+              );
+            })
+          )}
+        </div>
 
         {/* Spreadsheet Pagination Footer */}
         <div className="p-3.5 sm:p-4 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600 print:hidden">
