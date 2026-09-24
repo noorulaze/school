@@ -9,7 +9,7 @@ export const Footer: React.FC = () => {
     { name: 'About Us', path: '/about' },
     { name: 'Academics', path: '/departments' },
     { name: 'Faculty & Staff', path: '/teachers' },
-    { name: 'Student Portal', path: '/students' },
+    { name: 'Student Login', path: '/student/login' },
     { name: 'Events & Calendar', path: '/events' },
     { name: 'Photo Gallery', path: '/gallery' },
     { name: 'Admissions', path: '/admissions' },

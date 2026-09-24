@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, useLocation, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation, Link, Navigate } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { MobileBottomNav } from './components/MobileBottomNav';
@@ -10,7 +10,6 @@ import { Home } from './pages/Home';
 import { About } from './pages/About';
 import { Departments } from './pages/Departments';
 import { Teachers } from './pages/Teachers';
-import { Students } from './pages/Students';
 import { Events } from './pages/Events';
 import { Gallery } from './pages/Gallery';
 import { Contact } from './pages/Contact';
@@ -92,7 +91,7 @@ function MainLayout({ onOpenAdmissionModal }: { onOpenAdmissionModal: () => void
           <Route path="/departments" element={<Departments onOpenAdmissionModal={onOpenAdmissionModal} />} />
           <Route path="/academics" element={<Departments onOpenAdmissionModal={onOpenAdmissionModal} />} />
           <Route path="/teachers" element={<Teachers />} />
-          <Route path="/students" element={<Students onOpenAdmissionModal={onOpenAdmissionModal} />} />
+          <Route path="/students" element={<Navigate to="/student/login" replace />} />
           <Route path="/events" element={<Events />} />
           <Route path="/events/:id" element={<EventDetail />} />
           <Route path="/notice/:id" element={<NoticeDetail />} />

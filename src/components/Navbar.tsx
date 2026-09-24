@@ -51,11 +51,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAdmissionModal }) => {
     { name: 'About', path: '/about' },
     { name: 'Academics', path: '/departments', alias: ['/academics', '/departments'] },
     { name: 'Teachers', path: '/teachers' },
-    { name: 'Students', path: '/students' },
+    { name: 'Students', path: '/student/login', alias: ['/students', '/student/login'] },
     { name: 'Events', path: '/events' },
     { name: 'Gallery', path: '/gallery' },
-    { name: 'Admissions', path: '/admissions' },
     { name: 'Contact', path: '/contact' },
+    { name: 'Admissions', path: '/admissions' },
   ];
 
   const isActive = (path: string, alias?: string[]) => {
